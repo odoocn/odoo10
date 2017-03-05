@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="help_tree" model="ir.ui.view">
+            <field name="name">帮助主题</field>
+            <field name="model">help.first</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="name_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="help_form" model="ir.ui.view">
+            <field name="name">帮助主题</field>
+            <field name="model">help.first</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="type"/>
+                            <field name="name_id" options="{'no_create':True}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="help_action" model="ir.actions.act_window">
+            <field name="name">帮助主题</field>
+            <field name="res_model">help.first</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="help_tree"/>
+        </record>
+
+        <record id="helpsecond_tree" model="ir.ui.view">
+            <field name="name">帮助文档</field>
+            <field name="model">help.second</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="helpsecond_form" model="ir.ui.view">
+            <field name="name">帮助文档</field>
+            <field name="model">help.second</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="second_id" options="{'no_create':True}"/>
+                            <field name="context" />
+                            <field name="num"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="helpsecond_action" model="ir.actions.act_window">
+            <field name="name">帮助文档</field>
+            <field name="res_model">help.second</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="helpsecond_tree"/>
+        </record>
+        <menuitem id="help" name="帮助" parent="base.menu_administration" groups="base.group_no_one"/>
+        <menuitem id="help_data" name="帮助主题" parent="help" groups="base.group_no_one" action="help_action" sequence="0"/>
+        <menuitem id="help_menu" name="帮助文档" parent="help" groups="base.group_no_one" action="helpsecond_action" sequence="1"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </data>
+</openerp>

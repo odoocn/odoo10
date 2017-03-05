@@ -1,0 +1,30 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_category_user,hr.employee.category.user,model_hr_employee_category,group_hr_user,1,1,1,1
+access_hr_employee_category_emp,hr.employee.category.emp,model_hr_employee_category,base.group_user,1,0,0,0
+access_hr_employee_user,hr.employee user,model_hr_employee,group_hr_user,1,1,1,1
+access_hr_employee_system_user,hr.employee system user,model_hr_employee,base.group_user,1,0,0,0
+access_hr_employee_resource_user,resource.resource.user,resource.model_resource_resource,group_hr_user,1,1,1,1
+access_hr_department_user,hr.department.user,model_hr_department,group_hr_user,1,1,1,1
+access_hr_department_employee,hr.department.employee,model_hr_department,base.group_user,1,0,0,0
+access_hr_job_user,hr.job user,model_hr_job,group_hr_user,1,1,1,1
+access_ir_property_hr_user,ir_property hr_user,base.model_ir_property,group_hr_user,1,1,1,0
+access_res_users,id_access_res_users,base.model_res_users,group_hr_user,1,1,0,0
+
+access_ir_property_hr_history,ir_property hr_history,model_hr_history,group_hr_user,1,1,1,1
+access_ir_property_hr_history_user,ir_property hr_history_user,model_hr_history,base.group_user,1,0,0,0
+access_ir_property_hr_goaway,ir_property hr_goaway,model_hr_goaway,group_hr_user,1,1,1,1
+access_ir_property_hr_chreasion,ir_property hr_chreasion,model_hr_chreasion,group_hr_user,1,1,1,1
+access_ir_property_hr_level,ir_property hr_level,model_hr_level,group_hr_user,1,1,1,1
+access_ir_property_hr_level_user,ir_property hr_level_user,model_hr_level,base.group_user,1,0,0,0
+access_ir_property_hr_shbx,ir_property hr_shbx,model_hr_shbx,group_hr_user,1,1,1,1
+access_ir_property_hr_shbx_user,ir_property hr_shbx_user,model_hr_shbx,base.group_user,1,0,0,0
+access_ir_property_hr_file_line,ir_property hr_file_line,model_hr_file_line,group_hr_user,1,1,1,1
+access_ir_property_hr_file_line_user,ir_property hr_file_line_user,model_hr_file_line,base.group_user,1,0,0,0
+access_ir_property_hr_family,ir_property hr_family,model_hr_family,group_hr_user,1,1,1,1
+access_ir_property_hr_family_user,ir_property hr_family_user,model_hr_family,base.group_user,1,0,0,0
+access_ir_property_hr_work,ir_property hr_work,model_hr_work,group_hr_user,1,1,1,1
+access_ir_property_hr_work_user,ir_property hr_work_user,model_hr_work,base.group_user,1,0,0,0
+access_ir_property_hr_education,ir_property hr_education,model_hr_education,group_hr_user,1,1,1,1
+access_ir_property_hr_education_user,ir_property hr_education_user,model_hr_education,base.group_user,1,0,0,0
+access_ir_property_hr_diploma,ir_property hr_diploma,model_hr_diploma,group_hr_user,1,1,1,1
+access_ir_property_hr_diploma_user,ir_property hr_diploma_user,model_hr_diploma,base.group_user,1,0,0,0

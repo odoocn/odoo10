@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="maintenance_scrap_workflow_tree" model="ir.ui.view"  >
+            <field name="name">设备报废申请审核</field>
+            <field name="model">maintenance.scrap</field>
+            <field name="arch" type="xml">
+                <tree create="false" edit="false" delete="false" decoration-bf="message_needaction==True">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="maintenance_id"/>
+                    <field name="apply_user" />
+                    <field name="state" />
+                    <field name="scrap_reason" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="maintenance_scrap_workflow_back_view" model="ir.ui.view">
+			<field name="name">退回编辑</field>
+			<field name="type">form</field>
+			<field name="model">maintenance.scrap</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group string="原因">
+                            <field name="id" invisible="1"/>
+							<field name="handle_reason" nolabel="1"/>
+						</group>
+						<footer>
+							<button string="退回" name="button_reject" type="object" class="btn-primary"/>
+							<button string="取消" class="btn-default" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="maintenance_scrap_workflow_back_action" model="ir.actions.act_window">
+            <field name="name">退回动作</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">maintenance.scrap</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+			<field name="context">{'default_id': active_id}</field>
+            <field name="target">new</field>
+			<field name="view_id" ref="maintenance_scrap_workflow_back_view"/>
+        </record>
+
+        <record id="maintenance_scrap_workflow_form" model="ir.ui.view">
+            <field name="name">我的费用审核编辑</field>
+            <field name="model">maintenance.scrap</field>
+            <field name="arch" type="xml">
+                <form string="设备报废申请" create="false" delete="false" edit="false">
+                    <header>
+                        <button name="button_ok" type="object" string="通过" class="btn-primary" attrs="{'invisible': [('state', '!=', '2')]}"/>
+                        <button name="%(maintenance_scrap_workflow_back_action)d" type="action" string="退回" attrs="{'invisible': [('state', '!=', '2')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="2,3,4" statusbar_colors='{"2":"blue"}'/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box">
+                            <button name="%(action_viewworkflow_history)d" context="{'model': 'maintenance.scrap', 'res_id': active_id}"
+                                type="action"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                                <field name="workflow_history_count" widget="statinfo" string="审核记录"/>
+                            </button>
+                        </div>
+                        <field name="auditor_is_user" invisible="1"/>
+                        <field name="workflow_state" invisible="1" />
+                         <group>
+                            <group>
+                                <field name="maintenance_id" domain="[('state', '!=', '4')]"/>
+                            </group>
+                            <group>
+                                <field name="apply_user" />
+                            </group>
+                            <field name="maintenance_state" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="scrap_reason" />
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_maintenance_scrap_workflow" model="ir.actions.act_window">
+            <field name="name">设备报废申请审核</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">maintenance.scrap</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('auditor', '=', uid), ('state', '=', '2')]</field>
+        </record>
+
+        <record id="action_maintenance_scrap_workflow_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="maintenance_scrap_workflow_tree"/>
+            <field name="act_window_id" ref="action_view_maintenance_scrap_workflow"/>
+        </record>
+
+        <record id="action_maintenance_scrap_workflow_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="maintenance_scrap_workflow_form"/>
+            <field name="act_window_id" ref="action_view_maintenance_scrap_workflow"/>
+        </record>
+
+        <menuitem id="maintenance_scrap_workflow_menu" name="设备报废申请审核" parent="maintenance.menu_equipment" action="action_view_maintenance_scrap_workflow"/>
+
+    </data>
+</openerp>

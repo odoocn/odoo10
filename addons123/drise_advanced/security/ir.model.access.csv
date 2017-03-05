@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+id_inventory_account,name_inventory_account,model_inventory_account,base.group_user,1,1,1,1
+id_product_detail_account,name_product_detail_account,model_product_detail_account,base.group_user,1,1,1,1
+id_inventory_cost,name_inventory_cost,model_inventory_cost,base.group_user,1,1,1,1
+id_inventory_balance,name_inventory_balance,model_inventory_balance,base.group_user,1,1,1,1
+id_cost_input,name_cost_input,model_cost_input,account.group_account_invoice,1,1,1,1
+id_cost_input_line,name_cost_input_line,model_cost_input_line,account.group_account_invoice,1,1,1,1

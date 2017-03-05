@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+            string="分拣单"
+            id="action_report_wave_products"
+            model="stock.picking.wave"
+            report_type="qweb-pdf"
+            name="driserp.report_product"
+            file="driserp.report_product_template"
+        />
+
+        <report
+            string="分拣单"
+            id="action_report_wave_products_mark"
+            model="stock.picking.wave"
+            report_type="qweb-pdf"
+            name="driserp.report_product_mark"
+            file="driserp.report_product_template"
+        />
+
+        <report
+            string="分拣单"
+            id="action_report_order_dris"
+            model="sale.order"
+            report_type="qweb-pdf"
+            name="driserp.report_order_dris"
+            file="driserp.report_product_template"
+        />
+    </data>
+</openerp>

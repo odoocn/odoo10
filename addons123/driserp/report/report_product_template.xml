@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_product">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="stock.external_layout_barcode_right">
+                        <div class="page">
+                            <br/>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div t-if="o.user_id" name="partner_header">
+                                        <div t-field="o.user_id.name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <h1 t-field="o.name" class="mt0"/>
+                            <br/>
+                            <br/>
+                            <table class="table table-condensed" t-if="o.product_line">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>产品</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>数量</strong>
+                                        </th>
+                                        <th>
+                                            <strong>条码</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.product_line" t-as="products">
+                                        <td>
+                                            <span t-field="products.product_id"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="products.product_qty"/>
+                                            <span t-field="products.product_uom"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="products.product_id and products.product_id.barcode">
+                                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', products.product_id.barcode, 600, 100)"
+                                                     style="width:300px;height:50px"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_product_mark">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="stock.external_layout_barcode_right">
+                        <div class="page">
+                            <br/>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div t-if="o.user_id" name="partner_header">
+                                        <div t-field="o.user_id.name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <h1 t-field="o.name" class="mt0"/>
+                            <br/>
+                            <br/>
+                            <table class="table table-condensed" t-if="o.mark_line">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>大头笔</strong>
+                                        </th>
+                                        <th>
+                                            <strong>产品</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>数量</strong>
+                                        </th>
+                                        <th>
+                                            <strong>条码</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.mark_line" t-as="products">
+                                        <td>
+                                            <span t-field="products.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="products.product_id"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="products.product_qty"/>
+                                            <span t-field="products.product_uom"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="products.product_id and products.product_id.barcode">
+                                                <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', products.product_id.barcode, 600, 100)"
+                                                     style="width:300px;height:50px"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_order_dris">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <span>
+                                        <strong>客户:</strong>
+                                        <div t-field="o.partner_id"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-5">
+                                    <span>
+                                        <strong>
+                                            <div t-field="o.delivery_name"/>
+                                        </strong>
+                                        <div t-field="o.delivery_phone"/>
+                                    </span>
+                                </div>
+                                <div class="col-xs-5">
+                                    <div t-if="o.location_details">
+                                        <span>
+                                            <strong>地址:</strong>
+                                        </span>
+                                        <div t-if="o.location_province">
+                                            <div t-field="o.location_province"/>
+                                        </div>
+                                        <div t-if="o.location_city">
+                                            <div t-field="o.location_city"/>
+                                        </div>
+                                        <div t-if="o.location_district">
+                                            <div t-field="o.location_district"/>
+                                        </div>
+                                        <div t-field="o.location_details"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <h1 t-field="o.name" class="mt0"/>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>来源店铺</strong>
+                                        </th>
+                                        <th>
+                                            <strong>来源单号</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.source_shop"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.source_code"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+                            <table class="table table-condensed" t-if="o.order_line" rules="cols">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>条形码</strong>
+                                        </th>
+                                        <th>
+                                            <strong>商品编号</strong>
+                                        </th>
+                                        <th>
+                                            <strong>产品</strong>
+                                        </th>
+                                        <th>
+                                            <strong>采购数量</strong>
+                                        </th>
+                                        <th>
+                                            <strong>实发数量</strong>
+                                        </th>
+                                        <th>
+                                            <strong>箱号</strong>
+                                        </th>
+                                        <th>
+                                            <strong>备注</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.order_line" t-as="line">
+                                        <td>
+                                            <span t-field="line.product_id.barcode"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="line.item_id">
+                                                <span t-field="line.item_id.code"/>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.product_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.originalNum"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="line.qty_delivered">
+                                                <span t-field="line.qty_delivered"/>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="line.box_ids">
+                                                <span>
+                                                    <t t-foreach="line.box_ids" t-as="box">
+                                                        <span t-field="box.box_no"/>
+                                                        <t t-if="not box_last">,</t>
+                                                    </t>
+                                                </span>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <span/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p t-if="not o.order_line">
+                                You do not have any products reserved for this picking. Please click the 'Reserve'
+                                button
+                                to check if products are available.
+                            </p>
+                            <p t-if="o.order_line and o.order_line[0].box_ids">
+                                本次共<t t-esc="o.order_line[0].box_ids[0].box_num"/>箱
+                            </p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="inherit_view_picking_wave_form" model="ir.ui.view">
+            <field name="name">picking.wave.form</field>
+            <field name="model">stock.picking.wave</field>
+            <field name="inherit_id" ref="stock_picking_wave.view_picking_wave_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <div class="oe_button_box" name="button_box">
+                        <div class="dropdown" attrs="{'invisible':[('id','=',False)]}">
+                            <a name='print-pdf' href="#" class="dropdown-toggle-self" data-toggle="dropdown">
+                                导出
+                            </a>
+                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                                <!--<li class="li-mark" role="presentation">-->
+                                    <!--<button class="btn" type="object" name="print_pickings"-->
+                                            <!--string="按交货单打印pdf"/>-->
+                                <!--</li>-->
+                                <!--<li role="presentation">-->
+                                    <!--<button class='btn' type="object" name="print_product" string="按产品打印pdf"/>-->
+                                <!--</li>-->
+                                <!--<li role="presentation">-->
+                                    <!--<button class="btn" type="object" name="print_product_mark"-->
+                                            <!--string="按大头笔打印pdf"/>-->
+                                <!--</li>-->
+                                <!--<li role="presentation" class="divider"></li>-->
+                                <li role="presentation">
+                                    <a href="javascript:print_pickings_excel()">
+                                        按交货单打印excel
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="javascript:print_product()">
+                                        按产品打印excel
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="javascript:print_product_mark()">
+                                        按大头笔打印excel
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="javascript:print_express()">
+                        <button name="print_express" type="button" string="打印快递单"
+                                attrs="{'invisible':[('direct_group','!=','2C')]}"/>
+                    </a>
+                    <a href="javascript:print_box()">
+                        <button name="print_box" type="button" string="打印箱单"
+                                attrs="{'invisible':['|',('direct_group','!=','2B'),('state','!=','done')]}"/>
+                    </a>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="direct_group" attrs="{'readonly':[('state','!=','draft')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='picking_ids']" position="replace">
+                    <field name="id" invisible="1" class="wave_id"/>
+                    <field name="empty" invisible="1"/>
+                    <notebook>
+                        <page string="交货单">
+                            <field name="picking_ids" widget="many2many"
+                                   domain="[('state', 'not in', ('done', 'cancel'))]"
+                                   attrs="{'readonly':[('state','!=','draft')]}">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="backorder_id"/>
+                                    <field name="origin"/>
+                                    <field name="date"/>
+                                    <field name="min_date"/>
+                                    <field name="state"/>
+                                    <button name="action_assign" string="Confirm picking" type="object" icon="fa-check text-success"
+                                            attrs="{'invisible': [('state', 'in', ('done', 'cancel', 'confirmed', 'assigned'))]}"/>
+                                    <button name="force_assign" string="Force availability" type="object"
+                                            icon="fa-arrow-right text-success"
+                                            attrs="{'invisible': [('state', 'in', ('done', 'cancel', 'draft', 'assigned'))]}"/>
+                                    <button name="action_cancel" string="Cancel picking" type="object" icon="fa-times-circle text-danger"
+                                            attrs="{'invisible': [('state', 'in', ('done', 'cancel'))]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="产品" class="oe_read_only">
+                            <field name="product_line">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom"/>
+                                    <!--<field name="product_done"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="大头笔" class="oe_read_only">
+                            <field name="mark_line">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="product_id"/>
+                                    <field name="product_uom_qty"/>
+                                    <field name="product_uom"/>
+                                    <!--<field name="product_done"/>-->
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </xpath>
+                <xpath expr="//notebook" position="after">
+                    <script type="text/javascript" src="driserp/static/src/js/LodopFuncs.js"/>
+                    <script type="text/javascript">
+
+                        function print_express(){
+                        $.blockUI();
+                        $.ajax({
+                        url: "./get_expresses",
+                        type: "POST",
+                        dataType: "json",
+                        data: {'wave_id': $('.wave_id').children('.oe_form_char_content').html()},
+                        success: function (response){
+                        for(var key in response){
+                        Sprint(response[key]);
+                        // window.document.body.innerHTML=response[key];
+                        // window.print();
+                        };
+                        $.unblockUI();
+                        },
+                        fail: function(){
+                        alert('fail');
+                        }
+                        });
+                        };
+
+                        function print_pickings_excel(){
+                        window.open('/web/export/excel?wave_id='+$('.wave_id').children('.oe_form_char_content').html());
+                        };
+
+                        function print_product(){
+                        window.open('/web/export/excel2?wave_id='+$('.wave_id').children('.oe_form_char_content').html());
+                        };
+
+                        function print_product_mark(){
+                        window.open('/web/export/excel3?wave_id='+$('.wave_id').children('.oe_form_char_content').html());
+                        };
+
+                        function print_box(){
+                        $.blockUI();
+                        $.ajax({
+                        url: "./get_box",
+                        type: "POST",
+                        dataType: "json",
+                        data: {'wave_id': $('.wave_id').children('.oe_form_char_content').html()},
+                        success: function (response){
+                        for(var inner in response['result']){
+                        Sprint(inner);
+                        };
+                        $.unblockUI();
+                        },
+                        fail: function(){
+                        alert('fail');
+                        }
+                        });
+                        };
+                    </script>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

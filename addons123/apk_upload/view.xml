@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem id="menu_app" name="APP更新"/>
+        <record model="ir.ui.view" id="app_update_form_view">
+            <field name="name">APP更新</field>
+            <field name="type">form</field>
+            <field name="model">app.update</field>
+			<field name="arch" type="xml">
+			    <form string="APP更新">
+                    <sheet>
+                        <field name="image" widget='image' class="oe_avatar" options='{"preview_image":"image_medium"}'/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="应用名称"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="editable" invisible="1"/>
+                            <field name="boundleID" attrs="{'readonly':[('editable','=',False)]}"/>
+                            <field name="app_file_name" invisible="1"/>
+                            <field name="app" required="1" filename="app_file_name"/>
+                            <field name="url" widget="url" class="oe_read_only"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="version"/>
+                                <field name="update_time"/>
+                            </group>
+                            <group>
+                                <field name="platform" attrs="{'readonly':[('editable','=',False)]}"/>
+                                <field name="size" class="oe_read_only"/>
+                            </group>
+                        </group>
+                        <field name="describe" nolabel="1"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="app_update_tree_view">
+            <field name="name">APP更新</field>
+            <field name="type">tree</field>
+            <field name="model">app.update</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="platform"/>
+                     <field name="version"/>
+                     <field name="size"/>
+                     <field name="app"/>
+				 </tree>
+			</field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="app_update_action">
+	        <field name="name">APP更新</field>
+	        <field name="res_model">app.update</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="app_update_tree_view"/>
+            <field name="context">{'editable':True}</field>
+	    </record>
+	<!--定义菜单-->
+	    <menuitem action="app_update_action" id="menu_app_update" name="APP更新"/>
+    </data>
+</openerp>

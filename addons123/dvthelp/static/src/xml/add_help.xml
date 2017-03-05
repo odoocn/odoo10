@@ -1,0 +1,7 @@
+<templates id="template" xml:space="preserve">
+    <t t-extend="UserMenu" >
+        <t t-jquery=".dropdown-menu" t-operation="prepend">
+            <li><a href="/get" target='_blank'>帮助</a></li>
+        </t>
+    </t>
+</templates>

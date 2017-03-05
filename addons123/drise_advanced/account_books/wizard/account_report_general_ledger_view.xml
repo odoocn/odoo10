@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inherit_account_report_general_ledger_view" model="ir.ui.view">
+            <field name="name">General Ledger</field>
+            <field name="model">account.report.general.ledger</field>
+            <field name="inherit_id" ref="account.account_report_general_ledger_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='initial_balance']" position="replace">
+                        <field name="accounting_mode"/>
+                        <field name="account_chosen"
+                               attrs="{'invisible':[('display_account','!=','just')],'required':[('display_account','=','just')]}"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

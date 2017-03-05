@@ -1,0 +1,47 @@
+/* CSS Document */
+html,body,h1,h2,h3,h4,h5,h6,div,p,dl,dt,dd,ul,ol,li,form,fieldset,legend,button,submit,input,textarea,select,table,tr,th,td,hr,pre,sup,address,cite,dfn,em,var,blockquote { margin:0; padding:0}
+html { min-height:100%; background:#fff; border:none 0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+body { font:12px/1.5 Tahoma,"Hiragino Sans GB","Microsoft YaHei",arial,simsun,sans-serif;word-wrap:break-word;word-break:break-all;}
+ul,ol { list-style-type:none;}
+button,submit,input,select,textarea {font:12px/1.5 Tahoma,"Microsoft YaHei",arial,simsun,sans-serif; outline:none;}
+button,submit,input,select { vertical-align:middle;}
+button,submit { cursor:pointer;}
+textarea { resize:none; outline:none;}
+button::-moz-focus-inner,
+submit::-moz-focus-inner, 
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner, 
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner { padding:0; border:none;}
+table { border-collapse:separate;border-spacing:0;}
+th,td { text-align:left;}
+address,cite,dfn,em,var{font-style:normal; }
+img { border:none; vertical-align:middle;}
+a { outline:none;}
+a:link,a:visited { text-decoration:none; outline:none;}
+a:hover,a:active { text-decoration:underline; outline:none;}
+iframe {vertical-align: top;}
+*html{zoom:expression(function(ele){ele.style.zoom = "1";document.execCommand("BackgroundImageCache",false,true)}(this))}
+.ui_clear{*zoom:1}
+.ui_clear:after{content:'\20';display:block;clear:both;height:0;overflow: hidden;}
+.hide {display: none;}
+/* ====================================================================
+@ set common style
+======================================================================= */
+body { color:#333;}
+a:link,
+a:visited { color:#333;}
+a:hover,
+a:active { color:#EF4222; text-decoration:none;}
+
+.fn_clear:after {content:".";display:block;height:0;clear:both;visibility:hidden; overflow:hidden;}
+.fn_clear{ *zoom:1;}
+.fn_show { display:block; }
+.fn_hidden { display:none; }
+.fn_hl { color:#EF4222; }
+a.fn_hl,
+a.fn_hl:link,
+a.fn_hl:visited { color:#EF4222; }
+.fn_right { float:right;}
+.fn_left { float:left;}
+

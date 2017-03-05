@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="inherit_view_account_move_filter" model="ir.ui.view">
+            <field name="name">account.move.select</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_move_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="before">
+                    <field name="analytic_account_id"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

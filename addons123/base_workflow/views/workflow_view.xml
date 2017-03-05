@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="res_workflow_form">
+            <field name="name">流程配置</field>
+            <field name="type">form</field>
+            <field name="model">res.workflow</field>
+			<field name="arch" type="xml">
+			    <form string="流程">
+                    <sheet>
+                        <h1><field name="workflow_code" placeholder="流程编码"/></h1>
+                        <h1><field name="workflow_name" placeholder="流程名称"/></h1>
+                        <group string="规则信息">
+                            <field name="res_model"/>
+                        </group>
+                        <group string="流程启用规则">
+                            <field name="res_workflow_rule" nolabel="1" options="{'no_open': True}">
+                                <tree edit="false">
+                                    <field name="model_fields" />
+                                    <field name="model_fields_ttype" />
+                                    <field name="model_condition" />
+                                    <field name="model_fields_input" />
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="model_fields" domain="[('model', '=', parent.res_model)]" class="model_fields" on_change="change_model_fields(model_fields)"/>
+                                                <field name="model_fields_ttype" class="model_fields_ttype" invisible="1"/>
+                                                <field name="model_condition" class="db_model_condition" invisible="1"/>
+                                            </group>
+                                            <group>
+                                                <span class="oe_form_field oe_form_field_selection">
+                                                    <select class="model_condition">
+                                                        <option value="false">
+                                                        </option>
+                                                    </select>
+                                                </span>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <field name="model_fields_input" class="model_fields_input" invisible="1"/>
+                                            <field name="input_condition" class="input_condition" />
+                                        </group>
+                                    </sheet>
+                                    <script>
+                                        $("select.model_condition").change(function(){
+                                            if($("input.db_model_condition").length != 0){
+                                                $("input.db_model_condition").val($("select.model_condition").find("option:selected").text());
+                                            }
+                                        });
+                                        $("select.input_condition").change(function(){
+                                            $("input.model_fields_input").val($("select.input_condition").find("option:selected").text());
+                                        });
+                                        function select_change(thisz){
+                                            $("input.model_fields_input").val($(thisz).val());
+                                        }
+                                        function input_change(thisz){
+                                            $("input.model_fields_input").val($(thisz).val());
+                                        }
+
+                                    </script>
+                                </form>
+                            </field>
+                        </group>
+                        <group string="流程节点">
+                            <field name="res_workflow_dtl" nolabel="1">
+                                <tree>
+                                    <field name="sequence"/>
+                                    <field name="name" />
+                                    <field name="auditor"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <field name="sequence" invisible="1"/>
+                                            <field name="name" />
+                                            <field name="person_type" />
+                                            <field name="auditor" options="{'no_create': True, 'no_open': True}" attrs="{'invisible':[('person_type', '!=', '1')], 'required': [('person_type', '==', '1')]}" />
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </group>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+
+        <record model="ir.ui.view" id="res_workflow_tree">
+            <field name="name">流程配置</field>
+            <field name="type">tree</field>
+            <field name="model">res.workflow</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="workflow_code"/>
+                     <field name="workflow_name"/>
+                     <field name="res_model"/>
+				 </tree>
+			</field>
+        </record>
+
+	    <record model="ir.actions.act_window" id="res_workflow_action">
+	        <field name="name">流程配置</field>
+	        <field name="res_model">res.workflow</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="res_workflow_tree"/>
+	    </record>
+        <menuitem id="menu_res_workflow" name="流程配置" parent="base.menu_administration"/>
+        <menuitem id="menu_res_workflow_01" name="流程配置" parent="menu_res_workflow" action="res_workflow_action"/>
+
+    </data>
+</openerp>

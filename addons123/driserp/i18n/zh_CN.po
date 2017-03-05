@@ -1,0 +1,44 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * driserp
+#
+# Translators:
+
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo 9.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-17 08:21+0000\n"
+"PO-Revision-Date: 2016-08-31 03:07+0000\n"
+"Last-Translator: ChinaMaker <tiexinliu@126.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/odoo/odoo-9/language/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: account
+#: model:ir.ui.menu,name:account.menu_account_config
+msgid "Settings"
+msgstr "会计"
+
+#. module: base
+#: model:ir.ui.menu,name:base.menu_mrp_config
+msgid "Settings"
+msgstr "制造"
+
+#. module: base
+#: model:ir.ui.menu,name:base.menu_sale_general_settings
+msgid "Settings"
+msgstr "销售"
+
+#. module: stock
+#: model:ir.ui.menu,name:stock.menu_stock_general_settings
+msgid "Settings"
+msgstr "库存"
+
+#. module: purchase
+#: model:ir.ui.menu,name:purchase.menu_purchase_general_settings
+msgid "Settings"
+msgstr "采购"

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--销售订单审核-->
+        <record id="invoice_supplier_form_inventory_balance" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_cancel']" position="after">
+                        <button name="account_invoice_balance" type="object" attrs="{'invisible': ['|', ('balance_flg', '=', True), ('state', '!=', 'open')]}" string="结算" groups="account.group_account_invoice" class="oe_highlight"/>
+                </xpath>
+                <field name="type" position="after">
+                    <field name="balance_flg" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+
+   </data>
+</openerp>

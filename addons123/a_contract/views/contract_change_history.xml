@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--定义菜单-->
+    <record id="cm_contract_history_form" model="ir.ui.view">
+        <field name="name">合同 变更</field>
+        <field name="type">form</field>
+        <field name="model">cm.eco</field>
+        <field name="arch" type="xml">
+            <form string="合同历史">
+                <header>
+                    <button name="confirm_change" string="应用变更" type="object" class="oe_highlight"
+                            attrs="{'invisible': [ ('state', '!=', 'draft')]}"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="原始合同">
+                            <field name="contract_id" attrs="{'invisible':[('state','=','confirmed')]}"/>
+                            <field name="last_contract_id" attrs="{'invisible':[('state','=','draft')]}"/>
+                        </group>
+                        <group string="修改后合同" attrs="{'invisible':[('state','=','draft')]}">
+                            <field name="new_contract_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="合同标的变更">
+                            <field name="contract_change_obj" nolabel="1" readonly="1">
+                                <tree>
+                                    <field name="change_type" readonly="1"/>
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="upd_product_price"/>
+                                    <field name="upd_product_qty" readonly="1"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <field name="change_type" readonly="1"/>
+                                        <field name="product_id" readonly="1"/>
+                                        <field name="upd_product_price"/>
+                                        <field name="upd_product_qty" readonly="1"/>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="修改后的收付款条款">
+                            <field name="contract_pay" nolabel="1">
+                                <tree editable="tree">
+                                    <field name="name" string="付款说明"/>
+                                    <field name="pay_currency" string="金额"/>
+                                    <field name="pay_ratio" string="付款比例"/>
+                                    <field name="pay_date" string="付款时间"/>
+                                    <field name="note" string="详细描述"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--合同列表-->
+    <record model="ir.ui.view" id="cm_contract_history_tree">
+        <field name="name">合同 变更</field>
+        <field name="type">tree</field>
+        <field name="model">cm.eco</field>
+        <field name="arch" type="xml">
+            <tree string="合同">
+                <field name="contract_id" string="合同名称"/>
+                <!--<field name="new_contract_id"/>-->
+                <field name="state"/>
+                <!--<field name="code" string="合同编号"/>-->
+                <!--<field name="partner_id" string="对方单位"/>-->
+                <!--<field name="amount_total" string="合同总金额"/>-->
+                <!--<field name="user_id" string="业务员"/>-->
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="cm_contract_history_action">
+        <field name="name">合同 变更</field>
+        <field name="res_model">cm.eco</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_contract_form_view4" model="ir.actions.act_window.view">
+        <field eval="10" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="cm_contract_history_form"/>
+        <field name="act_window_id" ref="cm_contract_history_action"/>
+    </record>
+
+    <record id="action_contract_tree_view3" model="ir.actions.act_window.view">
+        <field name="sequence" eval="9"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="cm_contract_history_tree"/>
+        <field name="act_window_id" ref="cm_contract_history_action"/>
+    </record>
+
+    <menuitem id="menu_cm_contract_change_history" name="合同 变更"
+              parent="menu_contract_model" action="cm_contract_history_action" sequence="2"/>
+</odoo>

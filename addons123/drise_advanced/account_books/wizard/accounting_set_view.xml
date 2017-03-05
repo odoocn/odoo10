@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="accounting_set_view" model="ir.ui.view">
+        <field name="name">核算设置</field>
+        <field name="model">accounting.set</field>
+        <field name="arch" type="xml">
+        <form string="核算设置">
+            <field name="move_line_id" invisible="1"/>
+            <group>
+                <field name="account_id" readonly="1"/>
+            </group>
+            <group>
+                <field name="department_accounting" readonly="1" invisible="1"/>
+                <field name="department_id" options="{'no_create':1,'no_open':1}"
+                       attrs="{'invisible':[('department_accounting', '!=', True)]}"/>
+                <field name="analytic_accounting" readonly="1" invisible="1"/>
+                <field name="analytic_id" options="{'no_create':1,'no_open':1}"
+                       attrs="{'invisible':[('analytic_accounting', '!=', True)]}"/>
+                <field name="partner_accounting" readonly="1" invisible="1"/>
+                <field name="partner_id" options="{'no_create':1,'no_open':1}"
+                       attrs="{'invisible':[('partner_accounting', '!=', True)]}"/>
+                <field name="other_choice1" readonly="1" invisible="1"/>
+                <field name="other_accounting1" options="{'no_create':1}"
+                       attrs="{'invisible':[('other_choice1', '!=', True)]}"/>
+                <field name="other_choice2" readonly="1" invisible="1"/>
+                <field name="other_accounting2" options="{'no_create':1}"
+                       attrs="{'invisible':[('other_choice2', '!=', True)]}"/>
+                <field name="liquidityable" readonly="1" invisible="1"/>
+                <field name="cash_flow_item" options="{'no_create':1}"
+                       attrs="{'invisible':[('liquidityable', '!=', True)]}"/>
+            </group>
+            <footer>
+                <button name="confirm_setting" string="确定" type="object" default_focus="1" class="oe_highlight"/>
+                or
+                <button string="取消" class="oe_link" special="cancel" />
+            </footer>
+        </form>
+        </field>
+    </record>
+
+    <record id="action_accounting_set_menu" model="ir.actions.act_window">
+        <field name="name">核算设置</field>
+        <field name="res_model">accounting.set</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="accounting_set_view"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

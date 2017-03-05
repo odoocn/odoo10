@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--结算单列表-->
+        <record id="view_inventory_account_tree" model="ir.ui.view">
+            <field name="name">记账单列表</field>
+            <field name="model">inventory.account</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"></field>
+                    <field name="account_date"></field>
+                    <field name="write_uid" string="操作人"></field>
+                </tree>
+            </field>
+        </record>
+        <!--结算单form-->
+        <record id="view_inventory_account_form" model="ir.ui.view">
+            <field name="name">结算单维护</field>
+            <field name="model">inventory.account</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_account" states="draft" string="记账" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,account" readonly="1" />
+                    </header>
+                    <sheet>
+                        <notebook>
+                            <page string="出入库明细">
+                                <field name="stock_move_ids" nolabel="1" domain="[('send_receive_type.purchase_in', '!=', 'internal_transfers'), ('account_type', '!=', '2')]">
+                                    <tree>
+                                        <field name="supplier_or_customer" />
+                                        <field name="purchase_id" />
+                                        <field name="sale_id" />
+                                        <field name="send_receive_type" />
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="product_uom_qty" />
+                                        <field name="cost" string="成本"/>
+                                        <field name="estimated_price" string="预估单价"/>
+                                        <field name="state" invisible="1" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_move_tree_receipt_picking_001" model="ir.ui.view">
+            <field name="name">stock.move.tree01</field>
+            <field name="model">stock.move</field>
+            <field name="priority" eval="3"/>
+            <field name="arch" type="xml">
+                <tree string="Moves">
+                    <field name="supplier_or_customer" />
+                    <field name="purchase_id" />
+                    <field name="sale_id" />
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="product_uom_qty" />
+                    <!--<field name="cost" string="成本"/>-->
+                    <!--<field name="estimated_price" string="预估单价"/>-->
+                    <field name="state" invisible="1" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_move_search" model="ir.ui.view">
+            <field name="name">stock.move.search</field>
+            <field name="model">stock.move</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <search string="Stock Moves">
+                    <field name="origin" filter_domain="['|', '|', ('origin', 'ilike', self), ('name', 'ilike', self), ('picking_id', 'ilike', self)]" string="参考"/>
+                    <field name="date" groups="base.group_no_one"/>
+                    <separator/>
+                    <field name="product_id" string="产品"/>
+                    <field name="name" string="说明" filter_domain="['|',('location_id','ilike',self),('location_dest_id','ilike',self)]"/>
+                    <field name="partner_id" string="业务伙伴"  filter_domain="[('picking_id.partner_id','child_of',self)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="产品" name="by_product" domain="[]"  context="{'group_by':'product_id'}"/>
+                        <filter string="分拣" name="groupby_picking_id" domain="[]"  context="{'group_by':'picking_id'}"/>
+                        <filter string="原文" name="groupby_location_id" domain="[]" context="{'group_by':'location_id'}" groups="stock.group_locations"/>
+                        <filter string="目的" name="groupby_dest_location_id" domain="[]" context="{'group_by':'location_dest_id'}" groups="stock.group_locations"/>
+                        <filter string="创建日期" name="groupby_create_date" domain="[]" context="{'group_by':'create_date'}" groups="base.group_no_one"/>
+                        <filter string="计划日期" name="groupby_date" domain="[]" context="{'group_by':'date_expected'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_inventory_account" model="ir.actions.act_window">
+            <field name="name">记账单</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inventory.account</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="记账" id="menu_inventory_account_account" parent="menu_inventory_account" action="action_inventory_account"/>
+
+   </data>
+</openerp>

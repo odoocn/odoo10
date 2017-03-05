@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- account.account.type -->
+        <record model="account.account.type" id="data_account_type_receivable">
+          <field name="name">Receivable</field><!-- 应收账款 -->
+          <field name="type">receivable</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_payable">
+          <field name="name">Payable</field> <!-- 应付 -->
+          <field name="type">payable</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_liquidity">
+          <field name="name">Bank and Cash</field> <!-- 银行和现金 -->
+          <field name="type">liquidity</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_credit_card">
+          <field name="name">Credit Card</field> <!-- 信用卡 -->
+          <field name="type">liquidity</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_current_assets">
+          <field name="name">Current Assets</field> <!-- 流动资产 -->
+          <field name="type">other</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_non_current_assets">
+          <field name="name">Non-current Assets</field> <!-- 非流动资产 -->
+          <field name="type">other</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_prepayments">
+          <field name="name">Prepayments</field> <!-- 预付款 -->
+          <field name="type">other</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_fixed_assets">
+          <field name="name">Fixed Assets</field> <!-- 固定资产 -->
+          <field name="type">other</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_current_liabilities">
+          <field name="name">Current Liabilities</field> <!-- 流动负债 -->
+          <field name="type">other</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_non_current_liabilities">
+          <field name="name">Non-current Liabilities</field> <!-- 非流动负债 -->
+          <field name="type">other</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_equity">
+          <field name="name">Equity</field> <!-- 权益 -->
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_unaffected_earnings">
+          <field name="name">Current Year Earnings</field> <!-- 当年盈利 -->
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_other_income">
+          <field name="name">Other Income</field> <!-- 其他收入 -->
+          <field name="type">other</field>
+        </record>
+        <record model="account.account.type" id="data_account_type_revenue">
+          <field name="name">Income</field> <!-- 收入 -->
+          <field name="type">other</field>
+        </record>
+        <record model="account.account.type" id="data_account_type_depreciation">
+          <field name="name">Depreciation</field> <!-- 折旧 -->
+          <field name="type">other</field>
+        </record>
+        <record model="account.account.type" id="data_account_type_expenses">
+          <field name="name">Expenses</field> <!-- 费用 -->
+          <field name="type">other</field>
+        </record>
+        <record model="account.account.type" id="data_account_type_direct_costs">
+          <field name="name">Cost of Revenue</field> <!-- 业务成本 -->
+          <field name="type">other</field>
+        </record>
+    </data>
+</odoo>
+

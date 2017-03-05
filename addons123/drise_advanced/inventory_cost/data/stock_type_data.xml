@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+    <record model="type.account.relation" id="type_account_relation_02">
+      <field name="name">成品入库</field>
+      <field name="purchase_in">other_in</field>
+    </record>
+    <record model="type.account.relation" id="type_account_relation_03">
+      <field name="name">材料出库</field>
+      <field name="purchase_in">other_out</field>
+    </record>
+  </data>
+</openerp>

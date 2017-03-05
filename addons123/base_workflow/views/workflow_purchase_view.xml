@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--采购订单审核-->
+        <record id="workflow_inherit_purchase_order_form" model="ir.ui.view">
+            <field name="name">采购订单审核</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_confirm']" position="replace">
+                    <button name="button_submit" type="object" string="提交" states="draft,sent,cancel,reject"/>
+                </xpath>
+                <xpath expr="//button[@name='button_cancel']" position="replace">
+                    <button name="button_cancel" states="draft,to approve,sent,checking,purchase,reject" string="取消" type="object" />
+                </xpath>
+                <xpath expr="//button[@name='button_confirm']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_view_invoice']" position="before">
+                    <button name="%(action_viewworkflow_history)d"
+                            context="{'model': 'purchase.order', 'res_id': active_id}"
+                            type="action"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o">
+                        <field name="workflow_history_count" widget="statinfo" string="审核记录"/>
+                    </button>
+                    <!--<button name="%(action_viewworkflow_history)d" context="{'model': 'purchase.order', 'res_id': active_id}"-->
+                        <!--type="action"-->
+                        <!--class="oe_stat_button"-->
+                        <!--icon="fa-pencil-square-o"-->
+                        <!--attrs="{'invisible': ['|',('id', '=', False),('state', 'in', ('purchase', 'done', 'cancel'))]}">-->
+                        <!--<field name="workflow_history_count" widget="statinfo" string="审核记录" attrs="{'invisible': [('state', 'in', ('purchase', 'done', 'cancel'))]}"/>-->
+                    <!--</button>-->
+                </xpath>
+                <!--<xpath expr="//button[@name='action_view_invoice']" position="after">-->
+                    <!--<button name="%(action_viewworkflow_history)d"  context="{'model': 'purchase.order', 'res_id': active_id}"-->
+                        <!--type="action"-->
+                        <!--class="oe_stat_button"-->
+                        <!--icon="fa-pencil-square-o"-->
+                        <!--attrs="{'invisible': [('state', 'not in', ('purchase', 'done', 'cancel'))]}">-->
+                        <!--<field name="workflow_history_count_two" widget="statinfo" string="审核记录" attrs="{'invisible': [('state', 'not in', ('purchase', 'done', 'cancel'))]}"/>-->
+                    <!--</button>-->
+                <!--</xpath>-->
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="id" invisible="1" />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_order_workflow_tree" model="ir.ui.view"  >
+            <field name="name">采购订单审核列表</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree create="false" edit="false" delete="false" decoration-bf="message_needaction==True">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name" string="Reference"/>
+                    <field name="order_name" />
+                    <field name="order_code" />
+                    <field name="data_from" />
+                    <field name="partner_id"/>
+                    <field name="user_id" />
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <!--<field name="date_planned" invisible="context.get('quotation_only', False)"/>-->
+                    <field name="origin"/>
+                    <!--<field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary"/>-->
+                    <field name="amount_total" sum="Total amount" widget="monetary"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="purchase_order_workflow_back_view" model="ir.ui.view">
+			<field name="name">退回编辑</field>
+			<field name="type">form</field>
+			<field name="model">purchase.order</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group string="原因">
+                            <field name="id" invisible="1"/>
+							<field name="handle_reason" nolabel="1"/>
+						</group>
+						<footer>
+							<button string="退回" name="button_reject" type="object" class="btn-primary"/>
+							<button string="取消" class="btn-default" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="purchase_order_workflow_back_action" model="ir.actions.act_window">
+            <field name="name">退回动作</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+			<field name="context">{'default_id': active_id}</field>
+            <field name="target">new</field>
+			<field name="view_id" ref="purchase_order_workflow_back_view"/>
+        </record>
+
+        <record id="purchase_order_workflow_form" model="ir.ui.view">
+            <field name="name">采购订单审核</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <form string="采购订单" create="false" delete="false" edit="false">
+                    <header>
+                        <button name="button_ok" type="object" string="通过" class="btn-primary" attrs="{'invisible': ['|', ('state', '!=', 'checking'), '|', ('workflow_state', '!=', True), ('auditor_is_user', '!=', True)]}"/>
+                        <button name="%(purchase_order_workflow_back_action)d" type="action" string="退回" attrs="{'invisible': ['|', ('state', '!=', 'checking'), '|', ('workflow_state', '!=', True), ('auditor_is_user', '!=', True)]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,checking,done" statusbar_colors='{"checking":"blue"}'/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box">
+                            <button name="%(action_viewworkflow_history)d" context="{'model': 'purchase.order', 'res_id': active_id}"
+                                type="action"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                                <field name="workflow_history_count" widget="statinfo" string="审核记录"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label string="询价单"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                                <field name="auditor_is_user" invisible="1"/>
+                                <field name="workflow_state" invisible="1" />
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="order_name" />
+                                <field name="partner_id" context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}" domain="[('supplier','=',True)]"/>
+                                <field name="partner_ref"/>
+                                <field name="currency_id" groups="base.group_multi_currency"/>
+                                <field name="user_id" />
+                            </group>
+                            <group>
+                                <field name="order_code" />
+                                <field name="data_from"/>
+                                <field name="origin" attrs="{'invisible': [('origin','=',False)]}"/>
+                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="产品">
+                                <field name="order_line" options="{'no_open': True}">
+                                    <tree string="采购订单明细" create="false" edit="false" delete="false">
+                                        <field name="product_id" context="{'partner_id': parent.partner_id}"/>
+                                        <field name="name"/>
+                                        <field name="date_planned"/>
+                                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                        <field name="account_analytic_id" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting"/>
+                                        <field name="product_qty"/>
+                                        <field name="qty_received" invisible="not context.get('show_purchase', False)"/>
+                                        <field name="qty_invoiced" invisible="not context.get('show_purchase', False)"/>
+                                        <field name="product_uom" groups="product.group_uom"/>
+                                        <field name="price_unit"/>
+                                        <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase')]" context="{'default_type_tax_use': 'purchase'}"/>
+                                        <field name="price_subtotal" widget="monetary"/>
+                                    </tree>
+                                    <form string="Purchase Order Line">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="product_id"
+                                                           context="{'partner_id': parent.partner_id}"/>
+                                                    <label for="product_qty"/>
+                                                    <div>
+                                                        <field name="product_qty" class="oe_inline"/>
+                                                        <span class="oe_inline">&#160;</span>
+                                                        <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
+                                                    </div>
+                                                    <field name="price_unit"/>
+                                                </group>
+                                                <group>
+                                                    <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]"/>
+                                                    <field name="date_planned" widget="date"/>
+                                                    <field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting"/>
+                                                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                                </group>
+                                            </group>
+                                            <notebook>
+                                            <page string="备注">
+                                                <field name="name"/>
+                                            </page><page string="开票和入库">
+                                                <field name="invoice_lines"/>
+                                                <field name="move_ids"/>
+                                            </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <div class="oe_subtotal_footer_separator oe_inline">
+                                        <label for="amount_total"/>
+                                    </div>
+                                    <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <field name="notes" class="oe_inline" placeholder="An administrator can set up default Terms and conditions in your Company settings."/>
+                                <div class="oe_clear"/>
+                            </page>
+                            <page string="交货与发票">
+                                <group>
+                                    <group>
+                                        <field name="date_planned"/>
+                                        <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_locations"/>
+                                        <field name="dest_address_id" groups="stock.group_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>
+                                        <field name="default_location_dest_id_usage" invisible="1"/>
+                                        <field name="incoterm_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="invoice_status"/>
+                                        <field name="payment_term_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="fiscal_position_id" />
+                                        <field name="date_approve" groups="base.group_no_one"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_purchase_order_workflow" model="ir.actions.act_window">
+            <field name="name">采购订单审核</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('workflow_state', '=', True), ('auditor', '=', uid), ('state', '=', 'checking')]</field>
+            <field name="context">{'show_purchase': True,'form_no_edit': ['|','|', ('state','=','checking'), ('state','=','purchase'), ('state','=','done')]}</field>
+        </record>
+
+        <record id="action_purchase_order_workflow_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="purchase_order_workflow_tree"/>
+            <field name="act_window_id" ref="action_view_purchase_order_workflow"/>
+        </record>
+
+        <record id="action_purchase_order_workflow_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="purchase_order_workflow_form"/>
+            <field name="act_window_id" ref="action_view_purchase_order_workflow"/>
+        </record>
+
+        <menuitem id="purchase_order_workflow_menu" name="采购订单审核" parent="purchase.menu_procurement_management" action="action_view_purchase_order_workflow"/>
+
+    </data>
+</openerp>

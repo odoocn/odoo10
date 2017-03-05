@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="equipment_transfer_view_form" model="ir.ui.view">
+        <field name="name">equipment.transfer.form</field>
+        <field name="model">equipment.transfer</field>
+        <field name="arch" type="xml">
+            <form string="设备调动">
+                <sheet>
+                    <group>
+                        <field name="equipment" placeholder="设备名称"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="department_out"/>
+                            <field name="department_in"/>
+                        </group>
+                        <group>
+                            <field name="transfer_date"/>
+                            <field name="reason"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_transfer_view_tree" model="ir.ui.view">
+        <field name="name">equipment.transfer.tree</field>
+        <field name="model">equipment.transfer</field>
+        <field name="arch" type="xml">
+            <tree string="设备调动">
+                <field name="equipment"/>
+                <field name="department_out"/>
+                <field name="department_in"/>
+                <field name="transfer_date"/>
+                <field name="reason"/>
+                <field name="note"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_transfer_action" model="ir.actions.act_window">
+        <field name="name">设备调动</field>
+        <field name="res_model">equipment.transfer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_transfer_view_tree"/>
+    </record>
+
+    <record id="equipment_transfer_action_from_equipment" model="ir.actions.act_window">
+        <field name="name">设备调动</field>
+        <field name="res_model">equipment.transfer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_transfer_view_tree"/>
+        <field name="context">{
+            'default_equipment': active_id,
+            }
+        </field>
+        <field name="domain">[('equipment', '=', active_id)]</field>
+    </record>
+</odoo>

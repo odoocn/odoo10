@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+id_res_workflow_history,name_res_workflow_history,model_res_workflow_history,base.group_user,1,1,1,1
+id_res_workflow_dtl,name_res_workflow_dtl,model_res_workflow_dtl,base.group_user,1,1,1,1
+id_res_workflow,name_res_workflow,model_res_workflow,base.group_user,1,1,1,1
+id_res_workflow_rule,name_res_workflow_rule,model_res_workflow_rule,base.group_user,1,1,1,1
+id_analytic_report_rule,name_analytic_report_rule,model_analytic_report,account.group_account_invoice,1,1,1,1
+id_analytic_single_report_rule,name_analytic_single_report_rule,model_analytic_single_report,account.group_account_invoice,1,1,1,1
+id_analytic_sale_rule,name_analytic_sale_rule,model_analytic_sale,account.group_account_invoice,1,1,1,1
+id_analytic_purchase_rule,name_analytic_purchase_rule,model_analytic_purchase,account.group_account_invoice,1,1,1,1
+id_type_account_relation,name_type_account_relation,model_type_account_relation,base.group_user,1,1,1,1
+id_purchase_sale_type,name_purchase_sale_type,model_purchase_sale_type,base.group_user,1,1,1,1

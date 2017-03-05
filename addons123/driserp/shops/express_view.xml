@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="ecps_express_form_view">
+            <field name="name">快递</field>
+            <field name="type">form</field>
+            <field name="model">ecps.express</field>
+			<field name="arch" type="xml">
+			    <form string="快递">
+                    <sheet>
+                        <h1><field name="name" placeholder="名称"/></h1>
+                        <group>
+                            <field name="code"/>
+                            <field name="code_api"/>
+                            <field name="express_api"/>
+                            <field name="EBusinessID"/>
+                            <field name="appKey"/>
+                        </group>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="ecps_express_tree_view">
+            <field name="name">快递</field>
+            <field name="type">tree</field>
+            <field name="model">ecps.express</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="code"/>
+                     <field name="code_api"/>
+                     <field name="express_api"/>
+				 </tree>
+			</field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="ecps_express_action">
+	        <field name="name">快递</field>
+	        <field name="res_model">ecps.express</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="ecps_express_tree_view"/>
+	    </record>
+
+        <record model="ir.ui.view" id="ecps_box_form_view">
+            <field name="name">箱单</field>
+            <field name="type">form</field>
+            <field name="model">ecps.box</field>
+			<field name="arch" type="xml">
+			    <form string="箱单">
+                    <sheet>
+                        <h1><field name="name" placeholder="标题"/></h1>
+                        <group>
+                            <field name="to_place"/>
+                            <field name="address"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="contact_name"/>
+                            </group>
+                            <group>
+                                <field name="contact_phone"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="order_code"/>
+                            </group>
+                            <group>
+                                <field name="order_date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="item_id"/>
+                                <field name="barcode"/>
+                            </group>
+                            <group>
+                                <field name="origin_num"/>
+                                <field name="inner_num"/>
+                            </group>
+                        </group>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="ecps_box_tree_view">
+            <field name="name">箱单</field>
+            <field name="type">tree</field>
+            <field name="model">ecps.box</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="wave_id"/>
+                     <field name="picking_id"/>
+                     <field name="order_line_id"/>
+				 </tree>
+			</field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="ecps_box_action">
+	        <field name="name">箱单</field>
+	        <field name="res_model">ecps.box</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="ecps_box_tree_view"/>
+	    </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!--设备借用-->
+    <record id="equipment_borrow_view_form" model="ir.ui.view">
+        <field name="name">设备借用</field>
+        <field name="model">equipment.borrow</field>
+        <field name="arch" type="xml">
+            <form string="设备借用">
+                <sheet>
+                    <group>
+                        <field name="equipment" placeholder="设备名称"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="department"/>
+                            <field name="employee"/>
+                        </group>
+                        <group>
+                            <field name="borrow_date"/>
+                            <field name="reason"/>
+                            <field name="return_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_borrow_view_tree" model="ir.ui.view">
+        <field name="name">设备借用</field>
+        <field name="model">equipment.borrow</field>
+        <field name="arch" type="xml">
+            <tree string="设备借用">
+                <field name="equipment"/>
+                <field name="department"/>
+                <field name="employee"/>
+                <field name="borrow_date"/>
+                <field name="reason"/>
+                <field name="return_date"/>
+                <field name="note"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_borrow_action" model="ir.actions.act_window">
+        <field name="name">设备借用</field>
+        <field name="res_model">equipment.borrow</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_borrow_view_tree"/>
+    </record>
+
+    <record id="equipment_borrow_action_from_equipment" model="ir.actions.act_window">
+        <field name="name">设备借用</field>
+        <field name="res_model">equipment.borrow</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_borrow_view_tree"/>
+
+        <field name="context">{
+            'default_equipment': active_id,
+            }
+        </field>
+        <field name="domain">[('equipment', '=', active_id)]</field>
+
+    </record>
+
+    <record model="ir.actions.act_window.view"  id="equipment_borrow_action_tree">
+        <field name="view_mode">tree</field>
+        <field name="sequence">1</field>
+        <field name="view_id" ref="equipment_borrow_view_tree" />
+        <field name="act_window_id" ref="equipment_borrow_action"/>
+    </record>
+
+    <record model="ir.actions.act_window.view"  id="equipment_borrow_action_form">
+        <field name="view_mode">form</field>
+        <field name="sequence">2</field>
+        <field name="view_id" ref="equipment_borrow_view_form" />
+        <field name="act_window_id" ref="equipment_borrow_action"/>
+    </record>
+
+
+    <!--设备归还-->
+    <record id="equipment_return_view_form" model="ir.ui.view">
+        <field name="name">设备归还</field>
+        <field name="model">equipment.borrow</field>
+        <field name="arch" type="xml">
+            <form string="设备归还"  create="false" edit="false" delete="false">
+                <header>
+                    <button string="归还" type="object" name="return_equipment" class="oe_highlight" attrs="{'invisible' : [('state', '=', 'return')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="borrow, return"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <field name="equipment" placeholder="设备名称"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="department"/>
+                            <field name="employee"/>
+                        </group>
+                        <group>
+                            <field name="borrow_date"/>
+                            <field name="reason"/>
+                            <field name="return_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_return_view_tree" model="ir.ui.view">
+        <field name="name">设备归还</field>
+        <field name="model">equipment.borrow</field>
+        <field name="arch" type="xml">
+            <tree string="设备归还">
+                <field name="equipment"/>
+                <field name="department"/>
+                <field name="employee"/>
+                <field name="borrow_date"/>
+                <field name="reason"/>
+                <field name="return_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="equipment_return_view_search" model="ir.ui.view">
+        <field name="name">设备归还</field>
+        <field name="model">equipment.borrow</field>
+        <field name="arch" type="xml">
+            <search string="设备归还">
+                <filter name='state' string="借用中" domain="[('state','=','borrow')]"/>
+                <filter name='state' string="已归还" domain="[('state','=','return')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_state" string="状态" context="{'group_by':'state'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+
+    <record id="equipment_return_action" model="ir.actions.act_window">
+        <field name="name">设备归还</field>
+        <field name="res_model">equipment.borrow</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_return_view_tree"/>
+    </record>
+    <record model="ir.actions.act_window.view"  id="equipment_return_action_tree">
+        <field name="view_mode">tree</field>
+        <field name="sequence">1</field>
+        <field name="view_id" ref="equipment_return_view_tree" />
+        <field name="act_window_id" ref="equipment_return_action"/>
+    </record>
+
+    <record model="ir.actions.act_window.view"  id="equipment_return_action_form">
+        <field name="view_mode">form</field>
+        <field name="sequence">2</field>
+        <field name="view_id" ref="equipment_return_view_form" />
+        <field name="act_window_id" ref="equipment_return_action"/>
+    </record>
+
+
+</odoo>

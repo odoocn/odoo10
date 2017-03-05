@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_frontend" inherit_id="website.assets_frontend" name="dvt_portal">
+        <xpath expr="." position="inside">
+            <link rel='stylesheet' href='/dvt_portal/static/css/common.css'/>
+            <link rel='stylesheet' href='/dvt_portal/static/css/index.css'/>
+        </xpath>
+    </template>
+
+    <template id="contactus" name="联系我们">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="banner">
+                    <img src="/dvt_portal/static/img/banner1.jpg"/>
+                </div>
+                <div class="r-con fn_clear">
+                    <div class="r-lf fn_left">
+                        <h2 class="r-lfh2">
+                            联系我们
+                        </h2>
+                        <ul class="r-lful">
+                            <li><a href="/rsf/contactus">联系我们</a></li>
+                        </ul>
+                        <i class="r-lfbot"></i>
+                    </div>
+                    <div class="r-rg fn_left">
+                        <div class="r-rgtit fn_clear">
+                            <h2 class="r-rgtith2 fn_right">
+                                <img src="/dvt_portal/static/img/rgicon.png" class="r-rgimg"/>
+                                <span>您现在的位置:</span>
+                                <a href="#">首页</a>
+                                <em> > </em>
+                                <a href="#">联系我们</a>
+                                <em> > </em>
+                                <a href="/rsf/contactus" class="active">联系我们</a>
+                            </h2>
+                        </div>
+                        <div class="r-rgtop fn_clear">
+                            <span class="r-rgspan1">瑞斯福</span>
+                            <em> | </em>
+                            <span>专注质量，做优做强</span>
+                        </div>
+                        <div class="r-rgcontit">
+                            <a href="#" class="active">联系我们</a>
+                        </div>
+                        <div class="r-rgcon">
+                            <div class="r-rgconimg col-md-12 mb32" style="height:500px;">
+                                <div id="container"></div>
+                            </div>
+                            <div class="r-rgconfont">
+                                <p>公司名称：北京瑞斯福高新科技股份有限公司</p>
+                                <p>联系地址：北京市昌平区白福泉路10号北控科技大厦10层1006B</p>
+                                <p>联系电话：+86 01080726010-0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+        <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+        <script src="http://webapi.amap.com/maps?v=1.3&amp;key=5e497a9d2d12b4fc8d3980d06f3f0673"></script>
+        <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+        <script>
+            var map = new AMap.Map('container', {
+                resizeEnable: true,
+                center: [116.235036,40.199448 ],
+                zoom: 13
+            });
+            var marker = new AMap.Marker({
+                position: map.getCenter()
+            });
+            marker.setMap(map);
+            // 设置鼠标划过点标记显示的文字提示
+            marker.setTitle('我们在这里');
+
+            // 设置label标签
+            marker.setLabel({//label默认蓝框白底左上角显示，样式className为：amap-marker-label
+                offset: new AMap.Pixel(20, 20),//修改label相对于maker的位置
+                content: "我们在这里"
+            });
+        </script>
+    </template>
+
+    <template id="first" name="瑞斯福">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <t t-if="first_content.type == 'details'" t-raw="first_content.html"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="second" name="瑞斯福">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="banner">
+                    <img t-att-src="'data:image/png;base64,'+first_content.picture"/>
+                </div>
+                <div class="r-con fn_clear">
+                    <div class="r-lf fn_left">
+                        <h2 class="r-lfh2">
+                            <t t-raw="first_content.name"/>
+                        </h2>
+                        <ul class="r-lful">
+                            <t t-foreach="second_content" t-as="second">
+                                <li>
+                                    <a t-attf-href="/rsf/#{first_content.url}/#{second.url}" t-att-class="'active' if active_content.url == second.url else None">
+                                        <t t-raw="second.name"/>
+                                    </a>
+                                </li>
+                            </t>
+                        </ul>
+                        <i class="r-lfbot"></i>
+                    </div>
+                    <div class="r-rg fn_left">
+                        <div class="r-rgtit fn_clear">
+                            <h2 class="r-rgtith2 fn_right">
+                                <img src="/dvt_portal/static/img/rgicon.png" class="r-rgimg"/>
+                                <span>您现在的位置:</span>
+                                <a href="/">首页</a>
+                                <em> > </em>
+                                <a href="#"><t t-raw="first_content.name"/></a>
+                                <em> > </em>
+                                <a t-attf-href="/rsf/#{first_content.url}/#{active_content.url}" class="active"><t t-raw="active_content.name"/></a>
+                            </h2>
+                        </div>
+                        <div class="r-rgtop fn_clear">
+                            <span class="r-rgspan1"><t t-raw="first_content.name"/></span>
+                            <em> | </em>
+                            <span>专注质量，做优做强</span>
+                        </div>
+                        <div class="r-rgcon">
+                            <t t-if="active_content.type == 'details'" t-raw="active_content.html"/>
+                            <ul id="lists" t-if="active_content.type == 'content'" class="r-rgul">
+                                <t t-foreach="third_content" t-as="third">
+                                    <li t-att-id="third.id"><a t-att-id="third.url" onclick="run_python(this.id)"><font class="fn_left"><t t-raw="third.name"/></font><font class="fn_right"><t t-raw="third.date"/></font></a></li>
+                                </t>
+                            </ul>
+                            <div t-if="pages" class="r-page">
+                                <div class="r-pagelist fn_right">
+                                    <t t-foreach="pages" t-as="page">
+                                        <a t-att-id="'%s/%s'%(active_content.url,page)" onclick="turn_to(this.id)"><t t-raw="page"/></a>
+                                    </t>
+                                    <a href="#">下一页</a>
+                                </div>
+                            </div>
+                            <div id="third_details" style="display: none;"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+        <script>
+            function run_python(id) {
+                var url = "/run_python/"+id
+                $.getJSON(url, function (data) {
+                    self.display(data);
+                })
+            }
+            function turn_to(url) {
+                var url = "/turn_to/"+url
+                $.getJSON(url, function (data) {
+                    self.show_page(data);
+                })
+            }
+            function show_page(data) {
+                document.getElementById('lists').innerHTML="";
+                var page = "";
+                for (var i= 0; i&lt;data['third_content'].length; i++){
+                    var the_data = data['third_content'][i]
+                    var this_page = "&lt;li id=" + the_data["id"] + ">&lt;a onclick='run_python(this.id)' id='" + data["url"] + "'>&lt;font class='fn_left'>'" + the_data["name"] + "'&lt;/font>&lt;font class='fn_right'>" + the_data["date"] + "&lt;/font>&lt;/a>&lt;/li>";
+                    page = page + this_page;
+                }
+                document.getElementById('lists').innerHTML=page;
+            }
+            function display(data) {
+                var return_tag = "&lt;a onclick='hide()'>返回&lt;/a>"
+                document.getElementById('third_details').innerHTML=return_tag+data["html"];
+                $("#lists").hide();
+                $("#third_details").show();
+            }
+            function hide() {
+                $("#lists").show();
+                $("#third_details").hide();
+            }
+        </script>
+    </template>
+
+
+    <template id="" name="">
+        <t t-call="website.layout">
+            <div id="wrap">
+
+            </div>
+        </t>
+    </template>
+</odoo>

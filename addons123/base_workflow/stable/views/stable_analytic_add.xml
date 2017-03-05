@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--add by mlp==================================================-->
+
+
+        <record id="action_orders_analytic" model="ir.actions.act_window">
+            <field name="name">Sales Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+            <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale"/>
+            <field name="context">{'show_sale': True, 'form_no_edit': ['|','|', ('state','=','checking'), ('state','=','sale'), ('state','=','done')]}</field>
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel')),('project_id','=',active_id)]</field>
+        </record>
+
+        <record id="view_account_analytic_account_form_inherit" model="ir.ui.view">
+            <field name="name">analytic.analytic.account.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <button class="oe_stat_button" type="object" name="find_sale_invoice_order" icon="fa-ticket" >
+                        <field name="sale_invoice_order_num" widget="statinfo" string="开票申请"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="find_purchase_invoice_order" icon="fa-ticket" >
+                        <field name="purchase_invoice_order_num" widget="statinfo" string="付款申请"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="find_purchase_order" icon="fa-ticket" >
+                        <field name="purchase_num" widget="statinfo" string="采购订单"/>
+                    </button>
+                    <button class="oe_stat_button" type="object" name="find_sale_order" icon="fa-ticket" >
+                        <field name="sale_order_num" widget="statinfo" string="销售订单"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

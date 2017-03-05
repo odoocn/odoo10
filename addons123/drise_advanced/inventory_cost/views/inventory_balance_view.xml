@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--结算单列表-->
+        <record id="view_inventory_balance_tree" model="ir.ui.view">
+            <field name="name">结算单列表</field>
+            <field name="model">inventory.balance</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"></field>
+                    <field name="balance_date"></field>
+                    <field name="write_uid" string="操作人"></field>
+                </tree>
+            </field>
+        </record>
+        <!--结算单form-->
+        <record id="view_inventory_balance_form" model="ir.ui.view">
+            <field name="name">结算单维护</field>
+            <field name="model">inventory.balance</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_balance" states="draft" string="结算" type="object" />
+                        <button name="button_cancel" states="balance" string="设为草稿" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,balance" readonly="1" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="share_type" widget='radio'/>
+                        </group>
+                        <notebook>
+                            <page string="开票明细">
+                                <field name="invoice_line_ids" nolabel="1" domain="[('invoice_id.state', 'in', ('open', 'paid')), ('invoice_id.balance_flg', '=', False), ('invoice_id.type', 'in', ('in_invoice', 'in_refund'))]">
+                                    <tree>
+                                        <field name="partner_id" />
+                                        <field name="purchase_id" />
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                        <field name="price_subtotal"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <notebook>
+                            <page string="入库单明细">
+                                <field name="stock_move_ids" nolabel="1" domain="[('send_receive_type.purchase_in', '=', 'purchase_in'), ('state', '=', 'done'), ('account_type', '=', '0')]">
+                                    <tree>
+                                        <field name="supplier_or_customer" />
+                                        <field name="purchase_id" />
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="product_uom_qty" />
+                                        <field name="cost_test" string="成本"/>
+                                        <field name="state" invisible="1" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_inventory_account_invoice_tree_001" model="ir.ui.view">
+            <field name="name">inventory_account_invoice_001</field>
+            <field name="model">account.invoice.line</field>
+            <field name="priority" eval="3"/>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="partner_id" />
+                    <field name="purchase_id" />
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="quantity"/>
+                    <field name="price_unit"/>
+                    <field name="price_subtotal"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_inventory_balance" model="ir.actions.act_window">
+            <field name="name">结算单</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">inventory.balance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'form_no_edit': ['|','|', ('state','=','balance'), ('state','=','account')]}</field>
+        </record>
+        <menuitem name="存货核算" id="menu_inventory_account" parent="account.menu_finance" sequence="4"/>
+        <menuitem name="结算" id="menu_inventory_account_balance" parent="menu_inventory_account" action="action_inventory_balance"/>
+
+   </data>
+</openerp>

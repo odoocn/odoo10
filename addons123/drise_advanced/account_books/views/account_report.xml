@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- QWeb Reports -->
+        <report
+            id="action_report_subsidiary_ledger"
+            model="account.report.subsidiary.ledger"
+            string="Subsidiary Ledger"
+            report_type="qweb-pdf"
+            name="drise_advanced.report_subsidiaryledger"
+            file="drise_advanced.report_subsidiaryledger"
+            />
+        <report
+            id="action_report_balance_sheet"
+            model="account.report.balance.sheet"
+            string="Balance Sheet"
+            report_type="qweb-pdf"
+            name="drise_advanced.report_balancesheet"
+            file="drise_advanced.report_balancesheet"
+            />
+        <report
+            id="action_report_cash_flow"
+            model="account.report.cash.flow"
+            string="Cash Flow"
+            report_type="qweb-pdf"
+            name="drise_advanced.report_cashflow"
+            file="drise_advanced.report_cashflow"
+            />
+    </data>
+</odoo>

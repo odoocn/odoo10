@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="return_form_view">
+            <field name="name">退货单</field>
+            <field name="type">form</field>
+            <field name="model">return.order</field>
+			<field name="arch" type="xml">
+			    <form string="退货单">
+                    <header>
+                        <button name="confirm" type="object" string="确认数量" class="btn-primary" states="draft"/>
+                        <button name="return_item" type="object" string="退货确认" class="btn-primary" states="confirmed"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                    </header>
+                    <sheet>
+                        <h1><field name="name" placeholder="退货单号"/></h1>
+                        <group>
+                            <group>
+                                <field name="provider_code"/>
+                                <field name="provider_name"/>
+                                <field name="source_shop"/>
+                            </group>
+                            <group>
+                                <field name="from_place"/>
+                                <field name="to_place"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="from_name"/>
+                                <field name="from_phone"/>
+                            </group>
+                            <group>
+                                <field name="from_address"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="balance_state"/>
+                            </group>
+                            <group>
+                                <field name="balance_date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="stock_name"/>
+                            </group>
+                            <group>
+                                <field name="out_time"/>
+                            </group>
+                        </group>
+                        <!--<group>-->
+                            <!--<field name="sale_id" required="1" options="{'no_create': 1, 'no_open':1}"/>-->
+                            <!--<field name="order_id" required="1" domain="[('sale_id', '=', sale_id)]" options="{'no_create':1,'no_open':1}"/>-->
+                        <!--</group>-->
+                        <field name="line_ids">
+                            <form>
+                                <sheet>
+                                    <h1><field name="product_id"/></h1>
+                                    <group>
+                                        <field name="item"/>
+                                        <field name="return_num"/>
+                                        <field name="return_actual"/>
+                                        <field name="return_price"/>
+                                        <field name="total_price"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                            <tree editable="bottom" create="false" delete="false">
+                                <field name="product_id"/>
+                                <field name="return_num"/>
+                                <field name="return_actual"/>
+                                <field name="return_price"/>
+                                <field name="total_price"/>
+                            </tree>
+                        </field>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="return_tree_view">
+            <field name="name">退货单</field>
+            <field name="type">tree</field>
+            <field name="model">return.order</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="state"/>
+                     <field name="source_shop"/>
+				 </tree>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="return_order_search_view">
+            <field name="name">退货单</field>
+            <field name="model">ecps.items</field>
+            <field name="arch" type="xml">
+                <search>
+                    <group expand="0">
+                        <filter string="店铺" domain="[]" context="{'group_by':'source_shop'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="return_action">
+	        <field name="name">退货单</field>
+	        <field name="res_model">return.order</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="return_tree_view"/>
+            <field name="search_view_id" ref="return_order_search_view"/>
+	    </record>
+    </data>
+</openerp>

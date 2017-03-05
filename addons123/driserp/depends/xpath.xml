@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="driserp assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/driserp/static/src/js/highcharts.js"/>
+                <script type="text/javascript" src="/driserp/static/src/js/sale_buttons.js"/>
+                <script type="text/javascript" src="/driserp/static/src/js/print.js"/>
+                <!--<script type="text/javascript" src="/driserp/static/src/js/bootstrap.js"/>-->
+                <!--<script type="text/javascript" src="/driserp/static/src/js/bootstrap.min.js"/>-->
+                <link rel="stylesheet" href="driserp/static/src/css/button.css"/>
+                <!--<link rel="stylesheet" href="driserp/static/src/css/bootstrap.min.css"/>-->
+            </xpath>
+        </template>
+    </data>
+</openerp>

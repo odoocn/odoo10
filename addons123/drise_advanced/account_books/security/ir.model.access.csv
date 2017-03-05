@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+read_accounting1_none,read_accounting1 none,model_account_other_accounting1,,1,0,0,0
+all_accounting1_adviser,all_accounting1 adviser,model_account_other_accounting1,account.group_account_manager,1,1,1,1
+read_accounting2_none,read_accounting2 none,model_account_other_accounting2,,1,0,0,0
+all_accounting2_adviser,all_accounting2 adviser,model_account_other_accounting2,account.group_account_manager,1,1,1,1
+read_account_cash_flow_none,read_account_cash_flow none,model_account_cash_flow,,1,0,0,0
+all_account_cash_flow_adviser,all_account_cash_flow adviser,model_account_cash_flow,account.group_account_manager,1,1,1,1
+read_cash_flow_type_none,read_cash_flow_type none,model_cash_flow_type,,1,0,0,0
+all_cash_flow_type_adviser,all_cash_flow_type adviser,model_cash_flow_type,account.group_account_manager,1,1,1,1

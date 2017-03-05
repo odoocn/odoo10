@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="dvt_crm_source_form_view">
+            <field name="name">来源</field>
+            <field name="type">form</field>
+            <field name="model">dvt.crm.source</field>
+			<field name="arch" type="xml">
+			    <form string="来源">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="others"/>
+                            </group>
+                        </group>
+                        <!--<label for="situation" string="详情"/>-->
+                        <field name="situation" nolabel="1" placeholder="详情..."/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="dvt_crm_source_tree_view">
+            <field name="name">来源</field>
+            <field name="type">tree</field>
+            <field name="model">dvt.crm.source</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="situation"/>
+                     <field name="others"/>
+				 </tree>
+			</field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window"  id="dvt_crm_source_action">
+	        <field name="name">来源</field>
+	        <field name="res_model">dvt.crm.source</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">form,tree</field>
+	        <field name="view_id" ref="dvt_crm_source_tree_view"/>
+	    </record>
+	<!--定义菜单-->
+	    <menuitem id="menu2_dvt_crm_source" name="来源" parent="sales_team.menu_sale_config" action="dvt_crm_source_action" sequence="0" groups="sales_team.group_sale_department_manager"/>
+
+    </data>
+</odoo>

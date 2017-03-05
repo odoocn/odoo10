@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="workflow_account_move_form" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_cancel']" position="after">
+                    <button name="button_workflow_report" states="posted" string="生成pdf" type="object" />
+                </xpath>
+            </field>
+        </record>
+
+
+        <template id="workflow_report">
+            <t t-foreach="docs" t-as="o">
+                <div class="page">
+                    <t t-foreach="o.line_ids" t-as="line">
+                        <t t-if="(line_index+1)%5==1">
+                            <table border='0' width="99%" height="49%" cellspacing="1" cellpadding="1" style="border-collapse:collapse;">
+                                <tr height="15%">
+                                    <td   align="center" style="height:50px; line-height:50px; font-size:30px;"> 记账凭证</td>
+                                </tr>
+                                <tr height="10%">
+                                    <td width="100%" >
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="33.3%" style=" line-height:50px;font-size:18px;">核算单位:<t t-esc="res_company.name"/></td>
+                                                <td width="33.3%" alitn="center" style="font-size:18px;">日期:<span t-field="o.date" class="tab-font"   style="margin:0 0 0 3px;"/></td>
+                                                <td width="33.3%" align="right" style="font-size:18px;">凭证号<span t-field="o.name" class="tab-font"   style="margin:0 0 0 10px;"/>- <span name="xhnum" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr height="60%">
+                                    <td width="100%">
+                                        <table  border='0'  width="100%" cellspacing="1" cellpadding="1" style="border-collapse:collapse; border:1px solid #000;">
+                                            <tr>
+                                                <td style="border-collapse:collapse; border:1px solid #000; line-height:50px;padding:0 0 0 5px; font-size:18px;">摘要</td>
+                                                <td style="border-collapse:collapse; border:1px solid #000;padding:0 0 0 5px; font-size:18px;">科目</td>
+                                                <td style="border-collapse:collapse; border:1px solid #000;padding:0 0 0 5px; font-size:18px;">借方</td>
+                                                <td style="border-collapse:collapse; border:1px solid #000;padding:0 0 0 5px; font-size:18px;">贷方</td>
+                                            </tr>
+                                            <t t-foreach="o.line_ids" t-as="move">
+                                                <t t-if="(move_index+1)> 5*((line_index+1)/5)" >
+                                                    <t t-if="(move_index+1) &lt;= 5*(((line_index+1)/5)+1)" >
+                                                        <tr>
+                                                            <td style="border-collapse:collapse; border:1px solid #000; line-height:50px;padding:0 0 0 5px; font-size:18px;"><t t-esc="move.name"/></td>
+                                                            <td style="border-collapse:collapse; border:1px solid #000;padding:0 0 0 5px; font-size:18px;"><t t-esc="move.account_id.name"/></td>
+                                                            <td style="border-collapse:collapse; border:1px solid #000;padding:0 0 0 5px; font-size:18px;"><span t-esc="move.debit" class="tab-font" name ="jf"/></td>
+                                                            <td style="border-collapse:collapse; border:1px solid #000;padding:0 0 0 5px; font-size:18px;"><span t-esc="move.credit" class="tab-font"  name ="df"/></td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                            <tbody name="tradd">
+
+                                            </tbody>
+                                            <tr>
+                                                <td colspan="2" style="border-collapse:collapse; border:1px solid #000; line-height:30px;">合计：<span name ='allsum'/></td>
+                                                <td  style="border-collapse:collapse; border:1px solid #000;padding:0 0 0 5px; font-size:18px;">
+                                                    <span name="jfsum" />
+                                                </td>
+                                                <td  style="border-collapse:collapse; border:1px solid #000;padding:0 0 0 5px; font-size:18px;">
+                                                    <span name="dfsum" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr height="10%">
+                                    <td width="100%">
+                                        <table border='0'  width="100%" cellspacing="1" cellpadding="1" style="border-collapse:collapse;">
+                                            <tr>
+                                                <td style="border-collapse:collapse; line-height:50px;padding:0 0 0 5px; font-size:18px;">记账：</td>
+                                                <td style="border-collapse:collapse;padding:0 0 0 5px; font-size:18px;">审核：</td>
+                                                <td style="border-collapse:collapse;padding:0 0 0 5px; font-size:18px;">出纳：</td>
+                                                <td style="border-collapse:collapse;padding:0 0 0 5px; font-size:18px;">制单：</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height:50px;"></td>
+                                </tr>
+                                <tr>
+                                    <td width="100%" style="height:70px;">
+                                        _______________________________________________________________________________________________________________________
+                                    </td>
+                                </tr>
+                            </table>
+                            <script type="text/javascript" src="/web/static/lib/jquery/jquery.js"></script>
+                            <script type="text/javascript" src="/base_workflow/static/src/js/workflow_report.js"></script>
+                        </t>
+                    </t>
+                 </div>
+                <!--<script type="text/javascript" src="/web/static/lib/jquery/jquery.js"></script>
+                <script type="text/javascript" src="/da_data_manager/static/src/js/ldxx_report.js"></script>-->
+             </t>
+
+        </template>
+    </data>
+</openerp>

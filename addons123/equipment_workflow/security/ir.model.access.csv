@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+id_res_workflow_history,name_res_workflow_history,model_res_workflow_history,base.group_user,1,1,1,1
+id_res_workflow_dtl,name_res_workflow_dtl,model_res_workflow_dtl,base.group_user,1,1,1,1
+id_res_workflow,name_res_workflow,model_res_workflow,base.group_user,1,1,1,1
+id_res_workflow_rule,name_res_workflow_rule,model_res_workflow_rule,base.group_user,1,1,1,1

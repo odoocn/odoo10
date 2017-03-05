@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="inherit_purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_cancel']" position="before">
+                    <button name="%(action_requisition_reg)d" states="purchase" string="付款申请"
+                            type="action" class="btn-primary" context="{'default_purchase_ids': active_ids}"/>
+                </xpath>
+                <xpath expr="//button[@name='action_view_invoice']" position="after">
+                    <button type="action"  name="%(action_requisition_po)d"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o">
+                            <field name="requisition_count" widget="statinfo" string="付款申请" context="{'po_id': active_id}"/>
+                    </button>
+                    <button type="button" name="button_order_paid"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o"
+                            attrs="{'invisible':[('state', 'not in', ('purchase', 'done')),('invoice_ids','=',[])]}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="order_paid" widget="monetary" readonly="1"
+                                       options="{'currency_field': 'currency_id'}"/>
+                            </span>
+                            <span class="o_stat_text">订单已付</span>
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.values" id="purchase_order_requisition_reg_menu">
+            <field name="model_id" ref="purchase.model_purchase_order" />
+            <field name="name">付款申请</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_requisition_reg'))" />
+            <field name="key">action</field>
+            <field name="model">purchase.order</field>
+        </record>
+    </data>
+</openerp>

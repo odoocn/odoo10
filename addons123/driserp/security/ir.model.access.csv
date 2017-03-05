@@ -1,0 +1,23 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+none_access_shop,access_shop none,model_ecps_shop,,1,0,0,0
+none_access_plate,access_plate none,model_ecps_plate,,1,0,0,0
+user_access_shop,access_shop user,model_ecps_shop,driserp.shop_user,1,1,1,0
+manager_access_shop,access_shop manager,model_ecps_shop,driserp.shop_manager,1,1,1,1
+user_access_items,access_items user,model_ecps_items,driserp.shop_user,1,1,1,1
+user_access_brand,access_brand user,model_ecps_brand,driserp.shop_user,1,1,1,1
+user_access_category,access_category user,model_ecps_category,driserp.shop_user,1,1,1,1
+user_access_express,access_express user,model_ecps_express,driserp.shop_user,1,1,1,1
+user_access_express_config,access_express_config user,model_ecps_express_config,driserp.shop_user,1,1,1,1
+user_access_box,access_box user,model_ecps_box,driserp.shop_user,1,1,1,1
+user_access_order_track,access_order_track user,model_order_track,driserp.shop_user,1,1,1,1
+user_access_order_track_line,access_order_track_line user,model_order_track_line,driserp.shop_user,1,1,1,1
+user_access_qty_confirm_line,access_qty_confirm_line user,model_qty_confirm_line,driserp.shop_user,1,1,1,1
+user_access_qty_confirm,access_qty_confirm user,model_qty_confirm,driserp.shop_user,1,1,1,1
+user_access_return_order,access_return_order user,model_return_order,driserp.shop_user,1,1,1,1
+user_access_return_order_line,access_return_order_line user,model_return_order_line,driserp.shop_user,1,1,1,1
+error_info_access,error_info all,model_error_info,,1,1,1,0
+alert_access,alert all,model_tools_alert_dialog,,1,1,1,1
+stock_access_wave_line,access_wave_line stock,model_stock_picking_wave_line,stock.group_stock_user,1,1,1,1
+stock_access_wave_mark,access_wave_mark stock,model_stock_picking_wave_mark,stock.group_stock_user,1,1,1,1
+write_res_users manager,write_res_users_name manager,model_res_users,shop_manager,1,1,0,0
+read_ecps_items_stock,read_ecps_items stock,model_ecps_items,stock.group_stock_user,1,0,0,0

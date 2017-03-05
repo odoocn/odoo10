@@ -1,0 +1,12 @@
+.dropdown-toggle-self,.open .dropdown-toggle-self{color: #fff;
+    background-color: #428bca;
+    border-color: #357ebd;
+    padding: 4px 7px;
+    border-radius: 3px;
+    text-decoration:none;}
+.dropdown-toggle-self:hover,.open .dropdown-toggle-self:hover{color:#fff;text-decoration:none;}
+a .btn-mark span{ font-size:14px;}
+.btn-mark:hover, .btn-mark:focus {
+    background:none; border:none;
+}
+.oe_button.btn-mark{ background:transparent;border:none}

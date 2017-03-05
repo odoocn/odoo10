@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="maintenance_scrap_view_form" model="ir.ui.view">
+        <field name="name">maintenance.scrap.view.form</field>
+        <field name="model">maintenance.scrap</field>
+        <field name="arch" type="xml">
+            <form string="设备报废申请单">
+                <header>
+                    <button name="button_ok" type="object" string="确认报废" class="btn-primary" attrs="{'invisible': [('state', '!=', '1')]}"/>
+                    <!--<button name="button_cancel" type="object" string="取消" attrs="{'invisible': [('state', '!=', '2')]}"/>-->
+                    <field name="state" widget="statusbar" statusbar_visible="1,5" statusbar_colors='{"1": "blue"}'/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="maintenance_id" domain="[('state', '!=', '4')]" opptions="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="apply_user" />
+                        </group>
+                        <field name="maintenance_state" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="scrap_reason" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="maintenance_scrap_view_tree" model="ir.ui.view">
+        <field name="name">maintenance.scrap.view.tree</field>
+        <field name="model">maintenance.scrap</field>
+        <field name="arch" type="xml">
+            <tree string="设备报废申请列表">
+                <field name="maintenance_id"/>
+                <field name="apply_user" />
+                <field name="state" />
+                <field name="scrap_reason" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="maintenance_scrap_view_action" model="ir.actions.act_window">
+        <field name="name">设备报废申请</field>
+        <field name="res_model">maintenance.scrap</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+
+</odoo>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="website_download" name="Application Download">
+            <t t-call="website.layout">
+				<style type="text/css">
+					ul,li{ list-style:none;}
+					@media (min-width: 320px){
+						.y_main .y_con{width:91%;}
+						.y_contant .y_pcon{ width:97%;}
+						.y_contant{ padding:30px 0 50px 0;}
+					}
+					@media (min-width: 768px){
+						.y_main .y_con{width:96%;}
+						.y_main,.y_contant{ width:750px;}
+					}
+					@media (min-width: 1200px){
+						.y_main,.y_contant{ width:1107px;} 
+						.y_main .y_con{width:30%;}
+						.y_contant{ padding:30px 0 240px 0;}
+					}
+					.y_main,.y_contant{ margin:0 auto;	
+									clear:both;overflow:hidden;display:block;}
+					
+					.y_main .y_con{ float:left; border:1px solid #ccc; 
+					border-radius:5px; margin:10px 10px 0 10px;padding:10px;}
+					.y_p{ font-size:18px; font-weight:bold; height:55px; line-height:55px; margin:0; padding-left:15px;}
+					.y_img,.y_right{ float:left;}
+					.y_right{ margin-left:15px; width:70%;}
+					.y_li{ font-weight:bold; font-size:14px;}
+					.y_li1{ font-size:12px;}
+					.y_sub{ background:url(/website/static/src/img/pic3.png) no-repeat; display:block; text-align: center;text-indent:-9999px; float:right; width:78px; height:30px;}
+					.y_contant .y_pcon{ font-size:12px; line-height:30px; color:#777; padding:0 10px;}
+					.y_sub1{ background:url(/website/static/src/img/button.png) no-repeat; display:block; text-align: center;text-indent:-9999px; width:100px; height:30px;}
+				</style>
+				<div class="y_main">
+					<p class="y_p">Andorid</p>
+					<t t-foreach="result" t-as="item">
+						<div class="y_con">
+							<a t-att="('href', item[u'url'])"><img t-att="('src',item[u'img_url'])" class="y_img"/></a>
+							<div class="y_right">
+								<li class="y_li"><t t-esc="item[u'name']"/></li>
+								<li class="y_li1"><t t-esc="item[u'description']"/></li>
+								<li class="y_li1">更新日期：2016年8月15日</li>
+								<a t-att="('href', item[u'url'])" class="y_sub">下载</a>
+							</div>
+						</div>
+					</t>
+				</div>
+				<div class="y_contant">
+					<p class="y_p">iOS</p>
+					<p class="y_pcon">由于苹果公司在IOS9系统上对企业证书进行了使用政策调整，打开应用程序如果出现要求进行 证书信任的提示，需要按照以下步骤设置手机，点击设置——通用——描述文件，选HUANENG POWER INTERNATIONAL,INC./证书，点击信任此证书即可。 </p>
+					
+					<p class="y_pcon">注：该操作只需进行一次 </p>
+					<p class="y_pcon"><a href="#" class="y_sub1">证书安装</a></p>
+				</div>
+            </t>
+        </template>
+     </data>
+</openerp>

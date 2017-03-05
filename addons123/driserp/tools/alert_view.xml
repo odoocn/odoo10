@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_alert_dialog_form" model="ir.ui.view">
+            <field name="name">提示</field>
+            <field name="model">tools.alert.dialog</field>
+            <field name="arch" type="xml">
+                <form string="提示">
+                    <field name="name" readonly="1" nolabel="1"/>
+                    <footer>
+                        <button name="finish" string="确定" type="object" class="btn-primary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="act_alert_dialog_new" model="ir.actions.act_window">
+            <field name="name">提示</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tools.alert.dialog</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_alert_dialog_form"/>
+        </record>
+    </data>
+</openerp>

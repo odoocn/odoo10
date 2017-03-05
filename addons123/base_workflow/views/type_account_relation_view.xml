@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="type_account_relation_view_form">
+            <field name="name">收发类型</field>
+            <field name="type">form</field>
+            <field name="model">type.account.relation</field>
+			<field name="arch" type="xml">
+			    <form string="收发类型">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="purchase_in"/>
+                            </group>
+                        </group>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+
+        <record model="ir.ui.view" id="type_account_relation_view_tree">
+            <field name="name">收发类型</field>
+            <field name="type">tree</field>
+            <field name="model">type.account.relation</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="purchase_in"/>
+				 </tree>
+			</field>
+        </record>
+
+	    <record model="ir.actions.act_window" id="type_account_relation_view_action">
+	        <field name="name">收发类型</field>
+	        <field name="res_model">type.account.relation</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="type_account_relation_view_tree"/>
+	    </record>
+        <menuitem id="menu_type_account_relation" name="收发类型" parent="stock.menu_stock_config_settings" sequence="0"
+                  action="type_account_relation_view_action"/>
+
+        <record model="ir.ui.view" id="purchase_sale_type_view_form">
+            <field name="name">采购/销售分类</field>
+            <field name="type">form</field>
+            <field name="model">purchase.sale.type</field>
+			<field name="arch" type="xml">
+			    <form string="收发类型">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="type"/>
+                            </group>
+                            <group>
+                                <field name="send_receive_type" />
+                            </group>
+                        </group>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+
+        <record model="ir.ui.view" id="purchase_sale_type_view_tree">
+            <field name="name">采购/销售类型</field>
+            <field name="type">tree</field>
+            <field name="model">purchase.sale.type</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="type"/>
+                     <field name="send_receive_type" />
+				 </tree>
+			</field>
+        </record>
+
+	    <record model="ir.actions.act_window" id="purchase_sale_type_view_action">
+	        <field name="name">采购/销售类型</field>
+	        <field name="res_model">purchase.sale.type</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="purchase_sale_type_view_tree"/>
+	    </record>
+        <menuitem id="menu_purchase_sale_type_sale" name="采购/销售分类" parent="sales_team.menu_sale_config" sequence="0"
+                  action="purchase_sale_type_view_action"/>
+        <menuitem id="menu_purchase_sale_type_pur" name="采购/销售分类" parent="purchase.menu_purchase_config" sequence="0"
+                  action="purchase_sale_type_view_action"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="shops_plate_form_view">
+            <field name="name">平台</field>
+            <field name="type">form</field>
+            <field name="model">ecps.plate</field>
+            <field name="arch" type="xml">
+                <form string="平台">
+                    <header>
+                        <button name="get_api" type="object" string="同步检查" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="名称"/>
+                        </h1>
+                        <group>
+                            <field name="plate_api"/>
+                        </group>
+                        <group>
+                            <field name="auth_type"/>
+                            <field name="auth_url"/>
+                            <field name="token_url" required="1"/>
+                            <field name="refresh_url" required="1"/>
+                        </group>
+                        <group>
+                            <field name="appKey" required="1"/>
+                            <field name="secret" required="1"/>
+                            <field name="register_url" required="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="shops_plate_tree_view">
+            <field name="name">平台</field>
+            <field name="type">tree</field>
+            <field name="model">ecps.plate</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="plate_api"/>
+                </tree>
+            </field>
+        </record>
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="shops_plate_action">
+            <field name="name">平台</field>
+            <field name="res_model">ecps.plate</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="shops_plate_tree_view"/>
+        </record>
+
+        <record model="ir.ui.view" id="shops_shop_form_view">
+            <field name="name">店铺</field>
+            <field name="type">form</field>
+            <field name="model">ecps.shop</field>
+            <field name="arch" type="xml">
+                <form string="店铺">
+                    <field name="token_out" invisible="1"/>
+                    <script type="text/javascript" src="driserp/static/src/js/new_token.js"/>
+                    <header>
+                        <a href='javascript:new_token()'><button name="new_token" type="button" string="获取新授权" class="btn-primary"
+                                                                 attrs="{'invisible': [('token_out','=',False)]}"/></a>
+                        <button name="syn_order_by_hand" type="object" string="更新订单" class="btn-primary" attrs="{'invisible': [('token_out','=',True)]}"/>
+                        <button name="syn_return_by_hand" type="object" string="更新退货单" class="btn" attrs="{'invisible': [('token_out','=',True)]}"/>
+                        <button name="syn_shops_by_hand" type="object" string="更新信息" class="btn" attrs="{'invisible': [('token_out','=',True)]}"/>
+                        <button name="refresh_t" type="object" string="更新授权" class="btn" attrs="{'invisible': [('token_out','=',True)]}"/>
+                        <!--<button name="refresh_all" type="object" string="更新" class="btn" attrs="{'invisible': [('token_out','=',True)]}"/>-->
+                        <button name="cancel_t" type="object" string="取消授权" class="btn" attrs="{'invisible': [('token_out','=',True)]}"/>
+                    </header>
+                    <sheet>
+                        <field name="id" invisible="1" class="shops_id_field"/>
+                        <h1><field name="name" placeholder="名称"/></h1>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="plate_id"/>
+                                <field name="partner_id"/>
+                                <field name="account_id"/>
+                                <field name="default_warehouse"/>
+                            </group>
+                            <group>
+                                <field name="uid" readonly="1"/>
+                                <field name="access_in" readonly="1"/>
+                                <field name="expires_in" readonly="1"/>
+                                <field name="direct_group"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="商品目录">
+                                <field name="items" nolabel="1" options="{'no_create': True}">
+                                    <tree create="false">
+                                        <field name="name"/>
+                                        <field name="item_sku"/>
+                                        <field name="product_id"/>
+                                    </tree>
+                                    <form string="商品">
+                                        <header>
+                                            <button name="sychronize_info" type="object" string="同步信息"
+                                                    class="btn-primary"/>
+                                        </header>
+                                        <sheet>
+                                            <h1>
+                                                <field name="name" placeholder="名称"/>
+                                            </h1>
+                                            <group>
+                                                <group>
+                                                    <field name="product_id"/>
+                                                </group>
+                                                <group>
+                                                    <field name="active_status"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="market_price"/>
+                                                    <field name="purchase_price"/>
+                                                </group>
+                                                <group>
+                                                    <field name="member_price"/>
+                                                    <field name="item_type" invisible="1"/>
+                                                    <field name="weight"
+                                                           attrs="{'invisible':[('item_type','=','2B')]}"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="plate_id"/>
+                                                    <field name="category_id"/>
+                                                    <field name="item_sku"/>
+                                                </group>
+                                                <group>
+                                                    <field name="shop_id"/>
+                                                    <field name="brand_id"/>
+                                                    <field name="barcode"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <field name="url" widget="url"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="绑定三级品类">
+                                <field name="categories" nolabel="1"/>
+                            </page>
+                            <page string="绑定品牌">
+                                <field name="brands" nolabel="1"/>
+                            </page>
+                            <page string="管理用户">
+                                <field name="admin_users" nolabel="1" options="{'no_create': True}"/>
+                            </page>
+                            <page string="寄件人信息">
+                                <group>
+                                    <group>
+                                        <field name="delivery_name"/>
+                                        <field name="location_province"/>
+                                        <field name="location_district"/>
+                                    </group>
+                                    <group>
+                                        <field name="delivery_phone"/>
+                                        <field name="location_city"/>
+                                        <field name="location_details"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="快递规则配置" attrs="{'invisible':[('direct_group','!=','2C')]}">
+                                <group>
+                                    <field name="express_default" attrs="{'required':[('direct_group','=','2C')]}"/>
+                                    <field name="express_config" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="sequence" widget="handle"/>
+                                            <field name="express_id"/>
+                                            <field name="province_ids" widget="many2many_tags"/>
+                                            <field name="weight"/>
+                                            <field name="weight_condition"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="shops_shop_tree_view">
+            <field name="name">店铺</field>
+            <field name="type">tree</field>
+            <field name="model">ecps.shop</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="plate_id"/>
+                    <field name="account_id"/>
+                </tree>
+            </field>
+        </record>
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="shops_shop_action">
+            <field name="name">店铺</field>
+            <field name="res_model">ecps.shop</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="shops_shop_tree_view"/>
+        </record>
+
+        <record model="ir.ui.view" id="shops_items_form_view">
+            <field name="name">商品</field>
+            <field name="type">form</field>
+            <field name="model">ecps.items</field>
+            <field name="arch" type="xml">
+                <form string="商品">
+                    <header>
+                        <button name="sychronize_info" type="object" string="同步信息" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" placeholder="名称"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="product_id"/>
+                            </group>
+                            <group>
+                                <field name="active_status"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="market_price"/>
+                                <field name="purchase_price"/>
+                            </group>
+                            <group>
+                                <field name="member_price"/>
+                                <field name="item_type" invisible="1"/>
+                                <field name="weight" attrs="{'invisible':[('item_type','=','2B')]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="plate_id"/>
+                                <field name="category_id"/>
+                                <field name="item_sku"/>
+                            </group>
+                            <group>
+                                <field name="shop_id"/>
+                                <field name="brand_id"/>
+                                <field name="barcode"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="url" widget="url"/>
+                        </group>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="shops_items_tree_view">
+            <field name="name">商品</field>
+            <field name="type">tree</field>
+            <field name="model">ecps.items</field>
+			<field name="arch" type="xml">
+                 <tree decoration-danger="product_id==False">
+                     <field name="name" readonly="1"/>
+                     <field name="item_sku" readonly="1"/>
+                     <field name="product_id"/>
+                     <field name="plate_id" readonly="1"/>
+                     <field name="shop_id"/>
+				 </tree>
+			</field>
+        </record>
+
+        <record model="ir.ui.view" id="shops_items_search_view">
+            <field name="name">商品搜索</field>
+            <field name="model">ecps.items</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="item_sku"/>
+                    <field name="product_id"/>
+                    <group expand="0">
+                        <filter string="平台店铺" domain="[]" context="{'group_by':'shop_id'}"/>
+                        <filter string="品牌" domain="[]" context="{'group_by':'brand_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="shops_items_action">
+            <field name="name">商品</field>
+            <field name="res_model">ecps.items</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="shops_items_tree_view"/>
+            <field name="search_view_id" ref="shops_items_search_view"/>
+        </record>
+
+        <record model="ir.ui.view" id="shops_items_editlist">
+            <field name="name">商品</field>
+            <field name="type">tree</field>
+            <field name="model">ecps.items</field>
+			<field name="arch" type="xml">
+                 <tree editable="bottom" decoration-danger="product_id==False" create="false">
+                     <field name="name" readonly="1"/>
+                     <field name="item_sku" readonly="1"/>
+                     <field name="product_id"/>
+                     <field name="brand_id" domain="[('shop_id','=',shop_id)]"/>
+                     <field name="category_id" domain="[('shop_id','=',shop_id)]"/>
+                     <field name="plate_id" readonly="1"/>
+                     <field name="shop_id" readonly="1"/>
+				 </tree>
+			</field>
+        </record>
+        <!--定义视图动作-->
+        <record model="ir.actions.act_window" id="shops_items_edit">
+            <field name="name">商品</field>
+            <field name="res_model">ecps.items</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="shops_items_editlist"/>
+            <field name="domain">[('product_id','=',False)]</field>
+            <field name="search_view_id" ref="shops_items_search_view"/>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem id="menu_base_plus" name="基础信息" parent="base.menu_administration"/>
+        <record model="ir.ui.view" id="res_province_form_view">
+            <field name="name">省</field>
+            <field name="type">form</field>
+            <field name="model">res.province</field>
+			<field name="arch" type="xml">
+			    <form string="省">
+                    <sheet>
+                        <h1><field name="name" placeholder="名称"/></h1>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                        <label for="city"/>
+                        <field name="city"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="res_province_tree_view">
+            <field name="name">省</field>
+            <field name="type">tree</field>
+            <field name="model">res.province</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="code"/>
+				 </tree>
+			</field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="res_province_action">
+	        <field name="name">省</field>
+	        <field name="res_model">res.province</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="res_province_tree_view"/>
+	    </record>
+	<!--定义菜单-->
+        <menuitem id="menu_res_place" name="地区" parent="menu_base_plus"/>
+	    <menuitem action="res_province_action" id="menu2_res_province" name="省" parent="menu_res_place"/>
+
+
+        <record model="ir.ui.view" id="res_city_form_view">
+            <field name="name">市</field>
+            <field name="type">form</field>
+            <field name="model">res.city</field>
+			<field name="arch" type="xml">
+			    <form string="市">
+                    <sheet>
+                        <h1><field name="name" placeholder="名称"/></h1>
+                        <group>
+                            <field name="code"/>
+                            <field name="province_id"/>
+                        </group>
+                        <label for="district"/>
+                        <field name="district"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="res_city_tree_view">
+            <field name="name">市</field>
+            <field name="type">tree</field>
+            <field name="model">res.city</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="code"/>
+                     <field name="province_id"/>
+				 </tree>
+			</field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="res_city_action">
+	        <field name="name">市</field>
+	        <field name="res_model">res.city</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="res_city_tree_view"/>
+	    </record>
+	<!--定义菜单-->
+	    <menuitem action="res_city_action" id="menu2_res_city" name="市" parent="menu_res_place"/>
+
+
+        <record model="ir.ui.view" id="res_district_form_view">
+            <field name="name">县</field>
+            <field name="type">form</field>
+            <field name="model">res.district</field>
+			<field name="arch" type="xml">
+			    <form string="县">
+                    <sheet>
+                        <h1><field name="name" placeholder="名称"/></h1>
+                        <group>
+                            <field name="code"/>
+                            <field name="city_id"/>
+                        </group>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="res_district_tree_view">
+            <field name="name">县</field>
+            <field name="type">tree</field>
+            <field name="model">res.district</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="code"/>
+                     <field name="city_id"/>
+				 </tree>
+			</field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="res_district_action">
+	        <field name="name">县</field>
+	        <field name="res_model">res.district</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="res_district_tree_view"/>
+	    </record>
+	<!--定义菜单-->
+	    <menuitem action="res_district_action" id="menu2_res_district" name="县" parent="menu_res_place"/>
+
+    </data>
+</openerp>

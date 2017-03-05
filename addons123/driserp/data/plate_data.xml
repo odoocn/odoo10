@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="plate_jd" model="ecps.plate">
+            <field name="name">京东供应商</field>
+            <field name="plate_api">jd</field>
+            <field name="auth_type">oauth</field>
+            <field name="auth_url">https://oauth.jd.com/oauth/authorize?</field>
+            <field name="token_url">https://oauth.jd.com/oauth/token?</field>
+            <field name="refresh_url">https://oauth.jd.com/oauth/token?</field>
+            <field name="appKey">F2191330BF77ECB6C579FC76E65F41A5</field>
+            <field name="secret">72b1d3bbc9734596bb239750fe69b7ee</field>
+            <field name="register_url">http://www.drissaas.com/</field>
+        </record>
+
+        <record id="plate_jdpop" model="ecps.plate">
+            <field name="name">京东POP</field>
+            <field name="plate_api">jd_pop</field>
+            <field name="auth_type">oauth</field>
+            <field name="auth_url">https://oauth.jd.com/oauth/authorize?</field>
+            <field name="token_url">https://oauth.jd.com/oauth/token?</field>
+            <field name="refresh_url">https://oauth.jd.com/oauth/token?</field>
+            <field name="appKey">F2191330BF77ECB6C579FC76E65F41A5</field>
+            <field name="secret">72b1d3bbc9734596bb239750fe69b7ee</field>
+            <field name="register_url">http://www.drissaas.com/</field>
+        </record>
+
+        <record id="plate_yhd_vcp" model="ecps.plate">
+            <field name="name">一号店供应商</field>
+            <field name="plate_api">yhd</field>
+            <field name="auth_type">oauth</field>
+            <field name="auth_url">https://member.yhd.com/login/authorize.do?</field>
+            <field name="token_url">https://member.yhd.com/login/token.do?</field>
+            <field name="refresh_url">https://member.yhd.com/login/refreshToken.do?</field>
+            <field name="appKey">10410016102000004227</field>
+            <field name="secret">9ac3b585e467db3bcc9a3f9a280c1431</field>
+            <field name="register_url">http://www.drissaas.com/</field>
+        </record>
+
+        <record id="plate_tb" model="ecps.plate">
+            <field name="name">淘宝</field>
+            <field name="plate_api">taobao</field>
+            <field name="auth_type">oauth</field>
+            <field name="auth_url">https://oauth.taobao.com/authorize?</field>
+            <field name="token_url">https://oauth.taobao.com/token?</field>
+            <field name="refresh_url">https://oauth.taobao.com/token?</field>
+            <field name="appKey">23552593</field>
+            <field name="secret">16b46aed8620ec9d43092e77d91e48d0</field>
+            <field name="register_url">http://www.drissaas.com/</field>
+        </record>
+
+        <record id="plate_tb_sandbox" model="ecps.plate">
+            <field name="name">淘宝沙箱</field>
+            <field name="plate_api">tb_sandbox</field>
+            <field name="auth_type">oauth</field>
+            <field name="auth_url">https://oauth.tbsandbox.com/authorize?</field>
+            <field name="token_url">https://oauth.tbsandbox.com/token?</field>
+            <field name="refresh_url">https://oauth.tbsandbox.com/token</field>
+            <field name="appKey">1023552593</field>
+            <field name="secret">sandbox345a035737bb29a7a048a7348</field>
+            <field name="register_url">http://www.drissaas.com/</field>
+        </record>
+
+        <record id="plate_vip" model="ecps.plate">
+            <field name="name">唯品会</field>
+            <field name="plate_api">vip</field>
+            <field name="auth_type">oauth</field>
+            <field name="auth_url">https://auth.vip.com/oauth2/authorize?</field>
+            <field name="token_url">https://auth.vip.com/oauth2/token?</field>
+            <field name="refresh_url">https://auth.vip.com/oauth2/token?</field>
+            <field name="appKey">2c789db2</field>
+            <field name="secret">B50751E39B0201FD375E0147ED29086C</field>
+            <field name="register_url">http://www.drissaas.com/</field>
+        </record>
+
+        <record id="plate_suning" model="ecps.plate">
+            <field name="name">苏宁易购</field>
+            <field name="plate_api">suning</field>
+            <field name="auth_type">oauth</field>
+            <field name="auth_url">http://open.suning.com/api/oauth/authorize?</field>
+            <field name="token_url">http://open.suning.com/api/oauth/token?</field>
+            <field name="refresh_url">http://open.suning.com/api/oauth/token?</field>
+            <field name="appKey">2c789db2</field>
+            <field name="secret">B50751E39B0201FD375E0147ED29086C</field>
+            <field name="register_url">http://www.drissaas.com/</field>
+        </record>
+    </data>
+</openerp>

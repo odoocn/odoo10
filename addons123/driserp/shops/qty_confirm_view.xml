@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="qty_confirm_form_view">
+            <field name="name">回告</field>
+            <field name="type">form</field>
+            <field name="model">qty.confirm</field>
+			<field name="arch" type="xml">
+			    <form string="回告">
+                    <header>
+                        <button name="button_confirm" string="确认回告数量" states="draft" type="object"/>
+                        <button name="button_send" string="发送回报" states="confirmed" type="object"/>
+                        <!--<button name="button_done" string="完成"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                    </header>
+                    <sheet>
+                        <h1><field name="name" readonly="1"/></h1>
+                        <group col="4">
+                            <field name="order_id" readonly="1"/>
+                            <field name="delivery_time" required="1"/>
+                            <field name="r_success" readonly="1"/>
+                        </group>
+                        <label for="line_ids" string="明细"/>
+                        <field name="line_ids">
+                            <form string="明细">
+                                <sheet>
+                                    <h1><field name="product_id" readonly="1"/></h1>
+                                    <group>
+                                        <field name="item_id" readonly="1"/>
+                                    </group>
+                                    <group>
+                                        <group>
+                                            <field name="deliverCenterName" readonly="1"/>
+                                        </group>
+                                        <group>
+                                            <field name="originalNum" readonly="1"/>
+                                            <field name="confirmedNum"/>
+                                        </group>
+                                    </group>
+                                </sheet>
+                            </form>
+                            <tree editable="bottom" delete="false" create="false" decoration-danger="confirmedNum&gt;=forecastNum">
+                                <field name="product_id" readonly="1"/>
+                                <field name="originalNum" readonly="1"/>
+                                <field name="confirmedNum"/>
+                                <field name="availableNum" readonly="1"/>
+                                <field name="forecastNum" readonly="1"/>
+                            </tree>
+                        </field>
+                        <field name="description" placeholder="备注"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="qty_confirm_tree_view">
+            <field name="name">回告</field>
+            <field name="type">tree</field>
+            <field name="model">qty.confirm</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="order_id"/>
+                     <field name="delivery_time"/>
+				 </tree>
+			</field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="qty_confirm_action">
+	        <field name="name">回告</field>
+	        <field name="res_model">qty.confirm</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="qty_confirm_tree_view"/>
+	    </record>
+    </data>
+</openerp>

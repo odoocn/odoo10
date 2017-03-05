@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+id_requisition_pay,name_requisition_pay,model_requisition_pay,purchase.group_purchase_user,1,1,1,1
+id_requisition_invoice,name_requisition_invoice,model_requisition_invoice,sales_team.group_sale_salesman,1,1,1,1
+id_account_payment,name_account_payment,model_account_payment,purchase.group_purchase_user,1,0,0,0

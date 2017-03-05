@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_report_balance_sheet_view" model="ir.ui.view">
+        <field name="name">余额表</field>
+        <field name="model">account.report.balance.sheet</field>
+        <field name="inherit_id" ref="account.account_common_report_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='target_move']" position="after">
+                    <field name="sortby" widget="radio"/>
+                    <field name="display_account" widget="radio"/>
+                    <field name="accounting_mode"/>
+                    <field name="account_chosen"
+                           attrs="{'invisible':[('display_account','!=','just')],'required':[('display_account','=','just')]}"/>
+                    <newline/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="action_account_balance_sheet_menu" model="ir.actions.act_window">
+        <field name="name">余额表</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.report.balance.sheet</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_report_balance_sheet_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_account_balance_sheet_values" model="ir.values">
+        <field name="model_id" ref="account.model_account_account" />
+        <field name="name">余额表</field>
+        <field name="key2">client_print_multi</field>
+        <field name="value" eval="'ir.actions.act_window,' +str(ref('action_account_balance_sheet_menu'))" />
+        <field name="key">action</field>
+        <field name="model">account.account</field>
+    </record>
+
+    <menuitem
+        id="menu_balance_sheet"
+        name="余额表"
+        parent="account.menu_finance_legal_statement"
+        action="action_account_balance_sheet_menu"
+        groups="account.group_account_manager,account.group_account_user"
+       />
+
+</odoo>

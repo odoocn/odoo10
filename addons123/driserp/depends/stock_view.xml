@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="inherit_view_picking_tree" model="ir.ui.view">
+            <field name="name">stock.picking.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="plate_code"/>
+                    <field name="source_shop"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="inherit_view_picking_form" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="online_type" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='quant_reserved_exist']" position="after">
+                    <field name="direct_group" attrs="{'invisible': [('online_type', '!=', 'online')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='location_dest_id']" position="after">
+                    <field name="source_shop" attrs="{'invisible': [('online_type', '!=', 'online')]}"/>
+                    <field name="location_details" attrs="{'invisible': [('online_type', '!=', 'online')]}"/>
+                    <field name="destination_mark" attrs="{'invisible': [('online_type', '!=', 'online')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="before">
+                    <field name="express_code" attrs="{'invisible':[('direct_group','!=','2C')]}"/>
+                    <field name="plate_code" attrs="{'invisible': [('online_type', '!=', 'online')]}"/>
+                    <field name="warehouse" attrs="{'invisible': [('online_type', '!=', 'online')]}"/>
+                    <field name="check_person" required="1"/> <!-- xuwentao -->
+                </xpath>
+                <xpath expr="//button[@name='put_in_pack']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//button[@name='do_print_picking']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_see_move_scrap']" position="before">
+                    <div class="dropdown"
+                         attrs="{'invisible':['|',('id','=',False),('picking_type_code','!=','outgoing')]}">
+                        <a name='print-pdf' href="#" class="dropdown-toggle-self" data-toggle="dropdown"
+                           attrs="{'invisible':[('online_type','!=','online')]}">
+                            导出
+                        </a>
+                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a href="javascript:print_pickings_ready()">
+                                    打印备货单
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a href="javascript:print_pickings_delivery()">
+                                    打印交货单
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </xpath>
+                <xpath expr="//div[@class='oe_chatter']" position="after">
+                    <field name="id" invisible="1" class="picking_id"/>
+                    <script type="text/javascript">
+                        function print_pickings_ready(){
+                        window.open('/web/export/picking_ready?picking_id='+$('.picking_id').html());
+                        };
+                        function print_pickings_delivery(){
+                        window.open('/web/export/picking?picking_id='+$('.picking_id').html());
+                        };
+                    </script>
+                </xpath>
+            </field>
+        </record>
+        <record id="inherit_view_picking_internal_search" model="ir.ui.view">
+            <field name="name">stock.picking.internal.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="plate_code" string="平台订单号"/>
+                </xpath>
+                <xpath expr="//filter[@name='picking_type']" position="after">
+                    <filter string="来源店铺" name="source_shop" domain="[]" context="{'group_by':'source_shop'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="stock.menu_stock_warehouse_mgmt" name="作业" parent="stock.menu_stock_root" sequence="2" groups=""/>
+    </data>
+</openerp>

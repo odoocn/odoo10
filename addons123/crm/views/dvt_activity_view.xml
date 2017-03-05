@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--compare-->
+        <record model="ir.ui.view" id="dvt_activity_form_view">
+            <field name="name">活动</field>
+            <field name="type">form</field>
+            <field name="model">dvt.activity</field>
+			<field name="arch" type="xml">
+			    <form string="活动">
+                    <sheet>
+                        <!-- <div name="button_box" class="oe_button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" 
+                                    icon="fa-archive">
+                                <field name="state" readonly="1"/>
+                            </button>
+                        </div> -->
+                        <div class="oe_title">
+                            <label for="name" class="oe_read_only"/>
+                            <h1>
+                                <field name="name" placeholder="活动目的"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="executor" widget="many2many_tags"
+                                       domain="[('customer','!=',True),('supplier','!=',True)]"/>
+                                <field name="partner_id" domain="[('customer','=',True)]"/>
+                                <field name="start_time"/>
+                            </group>
+                            <group>
+                                <field name="way"/>
+                                <field name="meeting"/>
+                                <field name="end_time"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="place"/>
+                            <field name="crm_lead_id" widget="selection"/>
+                        </group>
+                        <label for="evaluation" string="活动效果自我评价"/>
+                        <field name="evaluation" nolabel="1"/>
+                        <label for="next_plan" string="下一步计划"/>
+                        <field name="next_plan" nolabel="1"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="dvt_activity_tree_view">
+            <field name="name">活动</field>
+            <field name="type">tree</field>
+            <field name="model">dvt.activity</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="executor" widget="many2many_tags"/>
+                     <field name="way"/>
+                     <field name="start_time"/>
+                     <field name="end_time"/>
+				 </tree>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="dvt_activity_calendar_view">
+            <field name="name">活动</field>
+            <field name="model">dvt.activity</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <calendar string="活动" date_stop="end_time" quick_add="0" use_contacts="True"
+                    date_start="start_time" color="executor" attendee="executor" avatar_model="res.partner"
+                          create="false" edit="false">
+                    <field name="name"/>
+                    <field name="executor"/>
+                </calendar>
+            </field>
+        </record>
+	<!--定义视图动作-->
+
+	    <record model="ir.actions.act_window"  id="dvt_action_tree">
+	        <field name="name">活动</field>
+	        <field name="res_model">dvt.activity</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">calendar,form,tree</field>
+	        <field name="view_id" ref="dvt_activity_calendar_view"/>
+	    </record>
+
+        <record model="ir.actions.act_window"  id="dvt_action_tree2">
+	        <field name="name">活动</field>
+	        <field name="res_model">dvt.activity</field>
+	        <field name="view_type">form</field>
+            <field name="domain">[('crm_lead_id','=',active_id)]</field>
+	        <field name="view_mode">calendar,form,tree</field>
+	        <field name="view_id" ref="dvt_activity_tree_view"/>
+	    </record>
+
+        <record model="ir.actions.act_window"  id="dvt_activity_action">
+	        <field name="name">活动</field>
+	        <field name="res_model">dvt.activity</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">calendar,form,tree</field>
+	        <field name="view_id" ref="dvt_activity_form_view"/>
+	    </record>
+
+
+	<!--定义菜单-->
+	    <menuitem id="menu2_dvt_activity" name="活动" parent="sales_team.menu_sales" action="dvt_action_tree"/>
+    </data>
+</openerp>

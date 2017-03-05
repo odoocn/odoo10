@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_expense_page">
+        <t t-call="report.html_container">
+            <t t-call="report.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <h2>支出凭证</h2>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-xs-2">
+                                <strong>部门:</strong>
+                                <p t-field="o.sheet_id.department_id.name"/>
+                            </div>
+                            <div class="col-xs-2">
+                                <strong>员工:</strong>
+                                <p t-field="o.sheet_id.employee_id.name"/>
+                            </div>
+                            <div class="col-xs-3">
+                                <strong>描述:</strong>
+                                <p t-field="o.sheet_id.name"/>
+                            </div>
+                        </div>
+                        <table class="table table-condensed">
+                            <thread>
+                                <tr>
+                                    <th>产品</th>
+                                    <th>支出说明</th>
+                                    <th>金额</th>
+                                </tr>
+                            </thread>
+                            <tbody>
+                                <t t-foreach="o.line_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.product_id"/></td>
+                                        <td></td>
+                                        <td class="text-right">
+                                            <span t-field="line.amount"
+                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>合计</td>
+                                    <td></td>
+                                    <td class="text-right">
+                                        <span t-field="o.total_amount"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+        <report
+            id="action_report_hr_expense_page"
+            string="支出凭证"
+            model="hr.expense.print.page"
+            report_type="qweb-pdf"
+            name="hr_expense.report_expense_page"
+            file="hr_expense.report_expense_page"
+        />
+</odoo>

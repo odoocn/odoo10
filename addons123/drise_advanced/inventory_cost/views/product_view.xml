@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--销售订单审核-->
+        <record id="inventory_inherit_product_form" model="ir.ui.view">
+            <field name="name">产品</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="taxes_id" position="before">
+                        <field name="inventory_method" />
+                </field>
+            </field>
+        </record>
+   </data>
+</openerp>

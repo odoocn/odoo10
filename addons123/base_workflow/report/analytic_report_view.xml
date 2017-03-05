@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="analytic_report_view_tree" model="ir.ui.view">
+            <field name="name">analytic_tree</field>
+            <field name="model">analytic.report</field>
+            <field name="arch" type="xml">
+                <tree string="分析帐户总览表" create="false" delete="false" edit="false">
+                    <field name="lead_id"/>
+                    <field name="opportunity" groups="crm.group_use_analytic"/>
+                    <field name="partner_id" groups="crm.group_use_analytic"/>
+                    <field name="user_id" groups="crm.group_use_analytic"/>
+                    <field name="sale_amount"/>
+                    <button name="sale_search" type="object" string="查看" icon="fa-sign-in text-muted"/>
+                    <field name="purchase_amount"/>
+                    <button name="purchase_search" type="object" string="查看" icon="fa-sign-in text-muted"/>
+                    <field name="expense_amount"/>
+                    <button name="expense_search" type="object" string="查看" icon="fa-sign-in text-muted"/>
+                    <field name="invoice_amount"/>
+                    <button name="invoice_search" type="object" string="查看" icon="fa-sign-in text-muted"/>
+                    <field name="invoice_pay"/>
+                    <button name="payment_search" type="object" string="查看" icon="fa-sign-in text-muted"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="analytic_report_action" model="ir.actions.act_window">
+            <field name="name">分析帐户总览表</field>
+            <field name="res_model">analytic.report</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="analytic_report_view_tree"/>
+        </record>
+
+        <menuitem id="analytic_report_menu" name="分析帐户总览表"
+            parent="account.menu_finance_reports" action="analytic_report_action" sequence="6"/>
+
+        <record id="analytic_single_report_view_pivot" model="ir.ui.view">
+            <field name="name">analytic_single_pivot</field>
+            <field name="model">analytic.single.report</field>
+            <field name="arch" type="xml">
+                <pivot string="业务明细表">
+                    <field name="line_type" type="col"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="analytic_single_report_view_tree" model="ir.ui.view">
+            <field name="name">analytic_single_tree</field>
+            <field name="model">analytic.single.report</field>
+            <field name="arch" type="xml">
+                <tree string="业务明细表" create="false" delete="false" edit="false">
+                    <field name="partner_name"/>
+                    <field name="re_name"/>
+                    <field name="line_date"/>
+                    <field name="line_type"/>
+                    <field name="product"/>
+                    <field name="qty"/>
+                    <field name="amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="analytic_single_report_filter" model="ir.ui.view">
+            <field name="name">analytic_single_search</field>
+            <field name="model">analytic.single.report</field>
+            <field name="arch" type="xml">
+                <search string="Search Analytic Report">
+                    <field name="product"/>
+                    <filter string="销售" domain="[('line_type','=','sale')]"/>
+                    <filter string="采购" domain="[('line_type','=','purchase')]"/>
+                    <filter string="客户发票" domain="[('line_type','=','invoice')]"/>
+                    <filter string="供应商帐单" domain="[('line_type','=','bills')]"/>
+                    <filter string="收款" domain="[('line_type','=','in_pay')]"/>
+                    <filter string="付款" domain="[('line_type','=','out_pay')]"/>
+                    <filter string="费用" domain="[('line_type','=','expense')]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_partner" string="业务对象" domain="[]" context="{'group_by':'partner_name'}"/>
+                        <filter name="group_name" string="名称" domain="[]" context="{'group_by':'re_name'}"/>
+                        <filter string="类型" domain="[]" context="{'group_by':'line_type'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="analytic_single_report_action" model="ir.actions.act_window">
+            <field name="name">业务明细表</field>
+            <field name="res_model">analytic.single.report</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="view_id" ref="analytic_single_report_view_tree"/>
+        </record>
+
+        <menuitem id="analytic_single_report_menu" name="业务明细表"
+            parent="account.menu_finance_reports" action="analytic_single_report_action" sequence="7"/>
+
+        <record id="analytic_sale_report_view_tree" model="ir.ui.view">
+            <field name="name">analytic_sale_tree</field>
+            <field name="model">analytic.sale</field>
+            <field name="arch" type="xml">
+                <tree string="销售分析" create="false" delete="false">
+                    <field name="order_id"/>
+                    <button string="查看" name="view_sale" type="object" icon="fa-sign-in text-muted" help="查看"/>
+                    <field name="order_name"/>
+                    <field name="order_date"/>
+                    <field name="partner_id"/>
+                    <field name="amount"/>
+                    <field name="invoice_amount"/>
+                    <field name="payment_amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="analytic_sale_action" model="ir.actions.act_window">
+            <field name="name">销售分析</field>
+            <field name="res_model">analytic.sale</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="analytic_sale_report_view_tree"/>
+        </record>
+
+        <menuitem id="analytic_sale_menu" name="销售分析"
+            parent="account.menu_finance_reports" action="analytic_sale_action" sequence="8"/>
+
+        <record id="analytic_purchase_report_view_tree" model="ir.ui.view">
+            <field name="name">analytic_purchase_tree</field>
+            <field name="model">analytic.purchase</field>
+            <field name="arch" type="xml">
+                <tree string="采购分析" create="false" delete="false">
+                    <field name="order_id"/>
+                    <button string="查看" name="view_purchase" type="object" icon="fa-sign-in text-muted" help="查看"/>
+                    <field name="order_name"/>
+                    <field name="order_date"/>
+                    <field name="partner_id"/>
+                    <field name="amount"/>
+                    <field name="bills_amount"/>
+                    <field name="payment_amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="analytic_purchase_action" model="ir.actions.act_window">
+            <field name="name">采购分析</field>
+            <field name="res_model">analytic.purchase</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="analytic_purchase_report_view_tree"/>
+        </record>
+
+        <menuitem id="analytic_purchase_menu" name="采购分析"
+            parent="account.menu_finance_reports" action="analytic_purchase_action" sequence="9"/>
+    </data>
+</openerp>

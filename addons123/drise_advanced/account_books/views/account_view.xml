@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inherit_view_account_form" model="ir.ui.view">
+            <field name="name">account.account.form</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='internal_type']" position="after">
+                        <newline/>
+                        <label for="accounting_uneditable" attrs="{'invisible':[('accounting_uneditable', '=', False)]}"/>
+                        <div attrs="{'invisible':[('accounting_uneditable', '=', False)]}">
+                            <field name="accounting_uneditable" invisible="1"/>
+                            已经在凭证中使用的科目不可再变更辅助核算方式
+                        </div>
+                        <field name="department_accounting" attrs="{'readonly':[('accounting_uneditable', '=', True)]}"/>
+                        <field name="analytic_accounting" attrs="{'readonly':[('accounting_uneditable', '=', True)]}"/>
+                        <field name="partner_accounting" attrs="{'readonly':[('accounting_uneditable', '=', True)]}"/>
+                        <field name="other_accounting1"
+                                   attrs="{'readonly':[('accounting_uneditable', '=', True)]}"/>
+                        <field name="other_accounting2"
+                                   attrs="{'readonly':[('accounting_uneditable', '=', True)]}"/>
+                        <newline/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+        <record id="inherit_view_move_form" model="ir.ui.view">
+            <field name="name">account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_ids']" position="replace">
+                    <field name="line_ids" widget="one2many_list"
+                           context="{'line_ids': line_ids, 'journal_id': journal_id }">
+                        <tree editable="bottom" string="会计分录">
+                            <field name="name" string="摘要"/>
+                            <field name="account_id" options="{'no_create': True}"
+                                   domain="[('company_id', '=', parent.company_id), ('deprecated', '=', False)]"/>
+                            <field name="partner_id" invisible="1" options="{'no_create': True}"
+                                   domain="['|', ('parent_id', '=', False), ('is_company', '=', True)]"/>
+                            <field name="analytic_account_id" groups="analytic.group_analytic_accounting" invisible="1"/>
+                            <field name="accounting_details" readonly="1"/>
+                            <button name="action_accounting_set" type="object" icon="fa-list"/>
+                            <field name="amount_currency" groups="base.group_multi_currency"/>
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>
+                            <field name="debit" sum="借方总计"/>
+                            <field name="credit" sum="贷方总计"/>
+                        </tree>
+                    </field>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="other_accounting_setting_menu" name="扩展辅助核算项"
+                  parent="account.menu_finance_configuration" sequence="6"/>
+        <!--# Other Accounting1-->
+        <record model="ir.ui.view" id="other_accounting1_form">
+            <field name="name">扩展辅助核算项1</field>
+            <field name="type">form</field>
+            <field name="model">account.other.accounting1</field>
+			<field name="arch" type="xml">
+			    <form string="扩展辅助核算项1">
+                    <sheet>
+                        <h1><field name="name" nolabel="1" placeholder="名称"/> </h1>
+                        <field name="description" nolabel="1" placeholder="描述"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="other_accounting1_tree">
+            <field name="name">扩展辅助核算项1</field>
+            <field name="type">tree</field>
+            <field name="model">account.other.accounting1</field>
+			<field name="arch" type="xml">
+                 <tree string="扩展辅助核算项1" editable="bottom">
+                     <field name="name"/>
+                     <field name="description"/>
+				 </tree>
+			</field>
+        </record>
+	    <record model="ir.actions.act_window" id="other_accounting1_action">
+	        <field name="name">扩展辅助核算项1</field>
+	        <field name="res_model">account.other.accounting1</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="other_accounting1_tree"/>
+	    </record>
+        <menuitem id="other_accounting1_menu" name="扩展辅助核算项1" parent="other_accounting_setting_menu"
+                  action="other_accounting1_action"
+                  groups="account.group_account_manager" sequence="1"/>
+
+        <!--# Other Accounting2-->
+        <record model="ir.ui.view" id="other_accounting2_form">
+            <field name="name">扩展辅助核算项</field>
+            <field name="type">form</field>
+            <field name="model">account.other.accounting2</field>
+			<field name="arch" type="xml">
+			    <form string="扩展辅助核算项2">
+                    <sheet>
+                        <h1><field name="name" nolabel="1" placeholder="名称"/> </h1>
+                        <field name="description" nolabel="1" placeholder="描述"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="other_accounting2_tree">
+            <field name="name">扩展辅助核算项2</field>
+            <field name="type">tree</field>
+            <field name="model">account.other.accounting2</field>
+			<field name="arch" type="xml">
+                 <tree string="扩展辅助核算项2" editable="bottom">
+                     <field name="name"/>
+                     <field name="description"/>
+				 </tree>
+			</field>
+        </record>
+	    <record model="ir.actions.act_window" id="other_accounting2_action">
+	        <field name="name">扩展辅助核算项2</field>
+	        <field name="res_model">account.other.accounting2</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="other_accounting2_tree"/>
+	    </record>
+        <menuitem id="other_accounting2_menu" name="扩展辅助核算项2" parent="other_accounting_setting_menu"
+                  action="other_accounting2_action"
+                  groups="account.group_account_manager" sequence="2"/>
+
+        <menuitem id="cash_flow_setting_menu" name="现金流动项" parent="account.menu_finance_configuration" sequence="7"/>
+        <!--# Cash Flow Items-->
+        <record model="ir.ui.view" id="cash_flow_item_form">
+            <field name="name">现金流量项</field>
+            <field name="type">form</field>
+            <field name="model">account.cash.flow</field>
+			<field name="arch" type="xml">
+			    <form string="现金流量项">
+                    <sheet>
+                        <h1><field name="name" nolabel="1" placeholder="名称"/></h1>
+                        <label for="type_id"/>
+                        <field name="type_id" nolabel="1" options="{'no_create':1}"/>
+                        <field name="description" nolabel="1" placeholder="描述"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="cash_flow_item_tree">
+            <field name="name">现金流量项</field>
+            <field name="type">tree</field>
+            <field name="model">account.cash.flow</field>
+			<field name="arch" type="xml">
+                 <tree string="现金流量项" editable="bottom">
+                     <field name="name"/>
+                     <field name="type_id" options="{'no_create':1}"/>
+                     <field name="description"/>
+				 </tree>
+			</field>
+        </record>
+	    <record model="ir.actions.act_window" id="cash_flow_item_action">
+	        <field name="name">现金流量项</field>
+	        <field name="res_model">account.cash.flow</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="cash_flow_item_tree"/>
+	    </record>
+        <menuitem id="cash_flow_item_menu" name="现金流量项" parent="cash_flow_setting_menu"
+                  action="cash_flow_item_action"
+                  groups="account.group_account_manager" sequence="1"/>
+
+        <!--# Cash Flow Items Type-->
+        <record model="ir.ui.view" id="cash_flow_type_item_form">
+            <field name="name">现金流量项类型</field>
+            <field name="type">form</field>
+            <field name="model">cash.flow.type</field>
+			<field name="arch" type="xml">
+			    <form string="现金流量项类型">
+                    <sheet>
+                        <h1><field name="name" nolabel="1" placeholder="名称"/></h1>
+                        <field name="description" nolabel="1" placeholder="描述"/>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="cash_flow_type_item_tree">
+            <field name="name">现金流量项类型</field>
+            <field name="type">tree</field>
+            <field name="model">cash.flow.type</field>
+			<field name="arch" type="xml">
+                 <tree string="现金流量项类型" editable="bottom">
+                     <field name="name"/>
+                     <field name="description"/>
+				 </tree>
+			</field>
+        </record>
+	    <record model="ir.actions.act_window" id="cash_flow_type_item_action">
+	        <field name="name">现金流量项类型</field>
+	        <field name="res_model">cash.flow.type</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="cash_flow_type_item_tree"/>
+	    </record>
+        <menuitem id="cash_flow_type_item_menu" name="现金流量项类型" parent="cash_flow_setting_menu"
+                  action="cash_flow_type_item_action"
+                  groups="account.group_account_manager" sequence="2"/>
+    </data>
+</odoo>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="action_fault_repair_order_form" model="ir.actions.act_window">
+            <field name="name">修理单</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.repair</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    <record id="equipment_fault_view_form" model="ir.ui.view">
+        <field name="name">equipment.fault.form</field>
+        <field name="model">equipment.fault</field>
+        <field name="arch" type="xml">
+            <form string="设备故障">
+                <header>
+                    <button string="已处理" type="object" name="ignore" class="oe_highlight" attrs="{'invisible' : [('state', '=', 'ed')]}"/>
+                    <button name="%(action_fault_repair_order_form)d" string="生成修理单" type="action" class="btn-primary" attrs="{'invisible' : [('state', '=', 'ed')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="ing, ed"/>
+                    <field name="state" widget="statusbar" statusbar_visible="ing, ed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                    </group>
+                    <group>
+                        <group>
+                            <field name="equipment" placeholder="设备名称"/>
+                            <field name="equipment_check" domain="[('equipment', '=', equipment)]"/>
+                            <field name="reporter"/>
+                            <field name="report_time"/>
+                        </group>
+                        <group>
+                            <field name="fault_type" />
+                            <field name="transactor"/>
+                            <field name="transact_time"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_fault_view_tree" model="ir.ui.view">
+        <field name="name">equipment.fault.tree</field>
+        <field name="model">equipment.fault</field>
+        <field name="arch" type="xml">
+            <tree string="设备故障">
+                <field name="name" />
+                <field name="equipment"/>
+                <field name="fault_type" />
+                <field name="reporter"/>
+                <field name="report_time"/>
+                <field name="transactor"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_equipment_fault_view_pivot" model="ir.ui.view">
+        <field name="name">equipment.fault.pivot</field>
+        <field name="model">equipment.fault</field>
+        <field name="arch" type="xml">
+            <pivot string="maintenance Request">
+                <field name="equipment"/>
+                <field name="state"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="hr_equipment_fault_view_graph" model="ir.ui.view">
+        <field name="name">equipment.fault.graph</field>
+        <field name="model">equipment.fault</field>
+        <field name="arch" type="xml">
+            <graph string="maintenance Request">
+                <field name="equipment"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="equipment_fault_action" model="ir.actions.act_window">
+        <field name="name">设备故障</field>
+        <field name="res_model">equipment.fault</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="equipment_fault_view_tree"/>
+    </record>
+
+    <record id="equipment_fault_action_from_equipment" model="ir.actions.act_window">
+        <field name="name">设备故障</field>
+        <field name="res_model">equipment.fault</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_fault_view_tree"/>
+
+        <field name="context">{
+            'default_equipment': active_id,
+            }
+        </field>
+        <field name="domain">[('equipment', '=', active_id)]</field>
+    </record>
+
+    <record id="equipment_fault_type_view_form" model="ir.ui.view">
+        <field name="name">equipment.fault.type.form</field>
+        <field name="model">equipment.fault.type</field>
+        <field name="arch" type="xml">
+            <form string="故障类型">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_fault_type_view_tree" model="ir.ui.view">
+        <field name="name">equipment.fault.type.tree</field>
+        <field name="model">equipment.fault.type</field>
+        <field name="arch" type="xml">
+            <tree string="故障类型">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_fault_type_action" model="ir.actions.act_window">
+        <field name="name">故障类型</field>
+        <field name="res_model">equipment.fault.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_fault_type_view_tree"/>
+    </record>
+
+</odoo>

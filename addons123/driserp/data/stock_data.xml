@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record model="ir.ui.menu" id="stock.menu_stock_warehouse_mgmt">
+            <field eval="[(6, 0, [])]" name="groups_id"/>
+        </record>
+    </data>
+</openerp>

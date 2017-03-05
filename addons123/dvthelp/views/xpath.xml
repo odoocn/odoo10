@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="dvthelp assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" type="text/css" href="/dvthelp/static/css/common.css"></link>
+                <link rel="stylesheet" type="text/css" href="/dvthelp/static/css/help.css"></link>
+                <!--<script type="text/javascript" src="dvthelp/static/js/button_view.js"></script>-->
+            </xpath>
+        </template>
+
+    </data>
+</openerp>

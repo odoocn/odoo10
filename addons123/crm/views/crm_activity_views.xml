@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="crm_activity_view_search" model="ir.ui.view">
+        <field name="name">crm.activity.view.search</field>
+        <field name="model">crm.activity</field>
+        <field name="arch" type="xml">
+            <search string="Action Search">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="partner_id"/>
+                <field name="opportunity"/>
+                <separator/>
+                <filter string="今天" name="today"
+                        domain="[('start_date', '=', context_today().strftime('%Y-%m-%d')),('start_time','=',False)]"/>
+                <filter string="本周" name="this_week"
+                        domain="['&amp;', ('start_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                                     ('start_date', '&lt;=', (context_today()+datetime.timedelta(days=7)).strftime('%Y-%m-%d'))
+                            ]"/>
+                <filter string="逾期" name="overdue"
+                        domain="[('start_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="逾期" name="overdue"
+                        domain="[('start_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="未完成" name="undone"
+                        domain="[('start_time','=',False)]"/>
+                <filter string="完成" name="done"
+                        domain="[('start_time','!=',False)]"/>
+                <separator/>
+                <filter string="活动方式" context="{'group_by': 'way'}"/>
+                <filter string="商机" context="{'group_by': 'opportunity'}"/>
+                <filter string="客户" context="{'group_by': 'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="crm_activity_view_form" model="ir.ui.view">
+        <field name="name">crm.activity.view.form</field>
+        <field name="model">crm.activity</field>
+        <field name="arch" type="xml">
+            <form string="活动">
+                <sheet>
+                    <field name="state" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_read_only"/>
+                        <h1>
+                            <field name="name" placeholder="活动目的"/>
+                        </h1>
+                    </div>
+                    <div class="label label-success pull-right" attrs="{'invisible': [('state', '!=', 'finished')]}">活动完成</div>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="partner_id" domain="[('customer','=',True)]"/>
+                        </group>
+                        <group>
+                            <field name="way"/>
+                            <field name="meeting"/>
+                        </group>
+                    </group>
+                    <group string="计划时间">
+                        <group>
+                            <field name="plane_start_time"/>
+                            <field name="cal_start_time" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="plane_end_time"/>
+                            <field name="cal_end_time" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="执行时间">
+                        <group>
+                            <field name="start_time" attrs="{'required': [('end_time', '!=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="end_time" attrs="{'required': [('start_time', '!=', False)]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="place"/>
+                        <field name="opportunity" widget="selection"/>
+                    </group>
+                    <notebook>
+                        <page string="活动效果自我评价">
+                            <field name="evaluation" nolabel="1"/>
+                        </page>
+                        <page string="下一步计划">
+                            <field name="next_plan" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+			</form>
+        </field>
+    </record>
+
+    <record id="crm_activity_view_tree" model="ir.ui.view">
+        <field name="name">crm.activity.view.tree</field>
+        <field name="model">crm.activity</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="way"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+			</tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="crm_activity_calendar_view_month">
+        <field name="name">活动</field>
+        <field name="model">crm.activity</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <calendar string="活动" date_stop="cal_end_time" quick_add="0" use_contacts="False"
+                      display="[user_id] 执行 [name] ([state])" mode="month"
+                date_start="cal_start_time" color="user_id" attendee="u_idid" avatar_model="res.users">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="u_idid"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="crm_activity_calendar_view_day">
+        <field name="name">活动</field>
+        <field name="model">crm.activity</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <calendar string="活动" date_stop="cal_end_time" quick_add="0" use_contacts="False"
+                      display="[user_id] 执行 [name] ([state])" mode="day"
+                date_start="cal_start_time" color="user_id" attendee="u_idid" avatar_model="res.users">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="u_idid"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="crm_activity_calendar_view">
+        <field name="name">活动</field>
+        <field name="model">crm.activity</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <calendar string="活动" date_stop="cal_end_time" quick_add="0" use_contacts="False"
+                      display="[user_id] 执行 [name] ([state])"
+                date_start="cal_start_time" color="user_id" attendee="u_idid" avatar_model="res.users">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="u_idid"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="crm_activity_action" model="ir.actions.act_window">
+        <field name="name">活动</field>
+        <field name="res_model">crm.activity</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_id" ref="crm.crm_activity_calendar_view"/>
+        <field name="search_view_id" ref="crm.crm_activity_view_search"/>
+        <field name="context">{'search_default_undone': 1}</field>
+        <field name="domain">[]</field>
+    </record>
+    <record id="crm_activity_action_month" model="ir.actions.act_window">
+        <field name="name">活动</field>
+        <field name="res_model">crm.activity</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_id" ref="crm.crm_activity_calendar_view_month"/>
+        <field name="search_view_id" ref="crm.crm_activity_view_search"/>
+        <field name="context">{'search_default_undone': 1}</field>
+        <field name="domain">[]</field>
+    </record>
+    <record id="crm_activity_action_month_done" model="ir.actions.act_window">
+        <field name="name">活动</field>
+        <field name="res_model">crm.activity</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_id" ref="crm.crm_activity_calendar_view_month"/>
+        <field name="search_view_id" ref="crm.crm_activity_view_search"/>
+        <field name="context">{'search_default_done': 1}</field>
+        <field name="domain">[]</field>
+    </record>
+    <record id="crm_activity_action_day" model="ir.actions.act_window">
+        <field name="name">活动</field>
+        <field name="res_model">crm.activity</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_id" ref="crm.crm_activity_calendar_view_day"/>
+        <field name="search_view_id" ref="crm.crm_activity_view_search"/>
+        <field name="context">{'search_default_undone': 1}</field>
+        <field name="domain">[]</field>
+    </record>
+
+    <record id="crm_activity_action_oppor" model="ir.actions.act_window">
+        <field name="name">活动</field>
+        <field name="res_model">crm.activity</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="domain">[('opportunity', '=', active_id)]</field>
+        <field name="search_view_id" ref="crm_activity_view_search"/>
+    </record>
+
+    <!--<menuitem id="crm_activity_menu" action="crm_activity_action"-->
+        <!--name="Activities" parent="base.menu_crm_config_lead"/>-->
+</odoo>

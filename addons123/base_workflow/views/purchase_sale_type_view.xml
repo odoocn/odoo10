@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--采购订单-->
+        <record id="inventory_inherit_purchase_order_form" model="ir.ui.view">
+            <field name="name">采购订单</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="data_from" position="before">
+                    <field name="purchase_type" />
+                </field>
+            </field>
+        </record>
+        <!--销售订单-->
+        <record id="inventory_inherit_sale_order_form" model="ir.ui.view">
+            <field name="name">销售订单</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="validity_date" position="before">
+                    <field name="sale_type" />
+                </field>
+            </field>
+        </record>
+
+                <!--采购订单-->
+        <record id="inventory_inherit_workflow_purchase_order_form" model="ir.ui.view">
+            <field name="name">采购订单</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="base_workflow.purchase_order_workflow_form"/>
+            <field name="arch" type="xml">
+                <field name="data_from" position="before">
+                    <field name="purchase_type" />
+                </field>
+            </field>
+        </record>
+        <!--销售订单-->
+        <record id="inventory_inherit_workflow_sale_order_form" model="ir.ui.view">
+            <field name="name">销售订单</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="base_workflow.sale_order_workflow_form"/>
+            <field name="arch" type="xml">
+                <field name="validity_date" position="before">
+                    <field name="sale_type" />
+                </field>
+            </field>
+        </record>
+
+   </data>
+</openerp>

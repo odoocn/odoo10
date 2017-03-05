@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="transceivers_summary_view_tree">
+            <field name="name">收发存汇总</field>
+            <field name="type">tree</field>
+            <field name="model">transceivers.summary</field>
+			<field name="arch" type="xml">
+                 <tree create="false" edit="false" delete="false">
+                     <field name="product_id"/>
+                     <field name="uom_id"/>
+                     <field name="beginning_qty"/>
+                     <field name="beginning_price"/>
+                     <field name="beginning_amount"/>
+                     <field name="in_qty"/>
+                     <field name="in_cost_price"/>
+                     <field name="in_cost_amount"/>
+                     <field name="out_qty"/>
+                     <field name="out_cost_price"/>
+                     <!--<field name="out_cost_amount"/>-->
+                     <field name="balance_qty"/>
+                     <field name="balance_price"/>
+                     <field name="balance_amount"/>
+				 </tree>
+			</field>
+        </record>
+
+	    <record model="ir.actions.act_window" id="transceivers_summary_view_action">
+	        <field name="name">收发存汇总</field>
+	        <field name="res_model">transceivers.summary</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree</field>
+	        <field name="view_id" ref="transceivers_summary_view_tree"/>
+	    </record>
+        <menuitem id="menu_transceivers_summary_relation" name="收发存汇总表" parent="menu_inventory_account" action="transceivers_summary_view_action"/>
+
+        <record model="ir.ui.view" id="transceivers_summary_in_view_tree">
+            <field name="name">入库汇总</field>
+            <field name="type">tree</field>
+            <field name="model">transceivers.summary</field>
+			<field name="arch" type="xml">
+                 <tree create="false" edit="false" delete="false">
+                     <field name="product_id"/>
+                     <field name="uom_id"/>
+                     <field name="in_qty"/>
+                     <field name="in_cost_price"/>
+                     <field name="in_cost_amount"/>
+				 </tree>
+			</field>
+        </record>
+
+	    <record model="ir.actions.act_window" id="transceivers_summary_in_view_action">
+	        <field name="name">入库汇总</field>
+	        <field name="res_model">transceivers.summary</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree</field>
+            <field name="domain">[("send_receive_type.purchase_in", "in", ("purchase_in", "other_in"))]</field>
+	        <field name="view_id" ref="transceivers_summary_in_view_tree"/>
+	    </record>
+        <menuitem id="menu_transceivers_summary_in" name="入库汇总表" parent="menu_inventory_account" action="transceivers_summary_in_view_action"/>
+
+        <record model="ir.ui.view" id="transceivers_summary_out_view_tree">
+            <field name="name">出库汇总</field>
+            <field name="type">tree</field>
+            <field name="model">transceivers.summary</field>
+			<field name="arch" type="xml">
+                 <tree create="false" edit="false" delete="false">
+                     <field name="product_id"/>
+                     <field name="uom_id"/>
+                     <field name="out_qty"/>
+                     <field name="out_cost_price"/>
+                     <!--<field name="out_cost_amount"/>-->
+				 </tree>
+			</field>
+        </record>
+
+	    <record model="ir.actions.act_window" id="transceivers_summary_out_view_action">
+	        <field name="name">出库汇总</field>
+	        <field name="res_model">transceivers.summary</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree</field>
+            <field name="domain">[("send_receive_type.purchase_in", "in", ("sale_out", "other_out"))]</field>
+	        <field name="view_id" ref="transceivers_summary_out_view_tree"/>
+	    </record>
+        <menuitem id="menu_transceivers_summary_out" name="出库汇总表" parent="menu_inventory_account" action="transceivers_summary_out_view_action"/>
+
+    </data>
+</openerp>

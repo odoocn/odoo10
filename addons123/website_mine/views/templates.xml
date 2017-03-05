@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_frontend" inherit_id="website.assets_frontend" name="dvt_portal">
+        <xpath expr="." position="inside">
+            <link rel='stylesheet' href='/dvt_portal/static/css/common.css'/>
+            <link rel='stylesheet' href='/dvt_portal/static/css/index.css'/>
+        </xpath>
+    </template>
+
+    <template id="product" name="">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div>
+
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="" name="">
+        <t t-call="website.layout">
+            <div id="wrap">
+
+            </div>
+        </t>
+    </template>
+</odoo>

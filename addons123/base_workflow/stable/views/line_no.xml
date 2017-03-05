@@ -1,0 +1,57 @@
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="custom_sale_order_line_number_view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="before">
+                    <field name="line_no" string="序号 " readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='sequence']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_purchase_order_line_number_view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="before">
+                    <field name="line_no" string="序号 " readonly="1"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_stock_move_line_number_view">
+            <field name="name">inherit.stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='barcode']" position="before">
+                    <field name="line_no" string="序号 " readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="custom_stock_init_move_line_number_view">
+            <field name="name">inherit.stock.move.no</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='barcode']" position="before">
+                    <field name="line_no" string="序号 " readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
+        <!--xuwentao-->
+
+

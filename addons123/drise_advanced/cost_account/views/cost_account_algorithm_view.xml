@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_cost_account_algorithm_tree" model="ir.ui.view">
+            <field name="name">cost.account.algorithm.tree</field>
+            <field name="model">cost.account.algorithm</field>
+            <field name="arch" type="xml">
+                <tree string="成本核算">
+                    <field name="execute_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_cost_account_algorithm_form" model="ir.ui.view">
+            <field name="name">cost.account.algorithm.form</field>
+            <field name="model">cost.account.algorithm</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="cost_account_algorithm" string="成本核算" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="execute_date"/>
+                            <field name="state"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_cost_account_algorithm" model="ir.actions.act_window">
+            <field name="name">成本核算</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cost.account.algorithm</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_cost_account_algorithm_tree"/>
+        </record>
+
+        <menuitem action="action_cost_account_algorithm" id="menu_action_cost_account_algorithm" parent="cost_root_main"
+                  name='成本核算' sequence="101"/>
+    </data>
+</odoo>

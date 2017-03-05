@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="help_download" name="Application Download">
+			<link rel="stylesheet" type="text/css" href="/dvthelp/static/css/common.css"></link>
+			<link rel="stylesheet" type="text/css" href="/dvthelp/static/css/help.css"></link>
+			<div class="help-title">
+				<div class="help-title-lf fn-left">
+					<img src="/dvthelp/static/img/drislogo.png" width="106" height="31"/>
+					<a href="">帮助文档</a>
+				</div>
+				<div class="fn-clear"></div>
+			</div>
+			<div class="help-section">
+				<div class="help-section-lf fn-left">
+					<div class="help-sec-lfbox">
+							<t t-foreach="result" t-as="item">
+								<t t-if="item[u'type'] == 'Routineproblem'">
+									<div class="help-sec-lftit">
+									<t t-esc="item[u'name']"/>
+									</div>
+									<ul class="help-sec-ul">
+										<t t-foreach="item[u'title']" t-as="pro">
+											<li>
+												<a t-att-href='"/second/?name=%s"%pro[u"secname"]' target="_blank">
+													<t t-esc="pro[u'secname']"/>
+												</a>
+											</li>
+										</t>
+									</ul>
+								</t>
+							</t>
+					</div>
+				</div>
+				<div class="help-section-rg fn-right">
+					<h2 class="help-sec-rgh2">所有内容</h2>
+					<div class="help-sec-box">
+						<t t-foreach="result" t-as="item">
+							<t t-if="item[u'type'] == 'Newproblems'">
+								<div class="help-sec-tit">
+									<t t-esc="item[u'name']"/>
+								</div>
+								<ul class="help-sec-ul">
+									<t t-foreach="item[u'title']" t-as="pro">
+										<li>
+											<a t-att-href='"/second/?name=%s"%pro[u"secname"]' target="_blank">
+												<t t-esc="pro[u'secname']"/>
+											</a>
+										</li>
+									</t>
+								</ul>
+							</t>
+						</t>
+					</div>
+					<div class="help-sec-box">
+						<ul class="help-sec-ul">
+							<t t-foreach="result" t-as="item">
+								<t t-if="item[u'type'] == 'Classicalproblem'">
+									<div class="help-sec-tit">
+										<t t-esc="item[u'name']"/>
+									</div>
+									<ul class="help-sec-ul">
+										<t t-foreach="item[u'title']" t-as="pro">
+											<li>
+												<a t-att-href='"/second/?name=%s"%pro[u"secname"]' target="_blank">
+													<t t-esc="pro[u'secname']"/>
+												</a>
+											</li>
+										</t>
+									</ul>
+								</t>
+							</t>
+						</ul>
+					</div>
+				</div>
+				<div class="fn-clear"></div>
+			</div>
+			<div class="help-footer">
+				Copyright © 北京迪威特科技有限公司
+			</div>
+		</template>
+		<template id="help_first" name="Application fist">
+			<link rel="stylesheet" type="text/css" href="/dvthelp/static/css/common.css"></link>
+			<link rel="stylesheet" type="text/css" href="/dvthelp/static/css/help.css"></link>
+			<div class="help-section">
+				<div class="help-section-lf fn-left">
+					<div class="help-sec-lfbox">
+						<div class="help-sec-lftit">
+							<t t-foreach="result" t-as="item">
+									<t t-esc="item[u'name']"/>
+									<ul class="help-sec-ul">
+										<t t-foreach="item[u'title']" t-as="pro">
+											<li>
+												<a t-att-href='"/second/?name=%s"%%pro[u"secname"]' target="_blank">
+													<t t-esc="pro[u'secname']"/>
+												</a>
+											</li>
+										</t>
+									</ul>
+							</t>
+						</div>
+					</div>
+				</div>
+				<div class="help-section-rg fn-right">
+					<h2 class="help-sec-rgh2">所有内容</h2>
+					<div class="help-sec-box">
+						<div class="help-sec-tit">
+							最新问题
+						</div>
+						<ul class="help-sec-ul">
+							<t t-foreach="cont" t-as="item">
+								<t t-if="item[u'type'] == 'Newproblems'">
+									<li>
+									<a t-att-href='"/context/?name=%s"%item[u"name"]' target="_blank">
+										<t t-esc="item[u'name']"/>
+									</a>
+									</li>
+								</t>
+							</t>
+						</ul>
+					</div>
+					<div class="help-sec-box">
+						<div class="help-sec-tit">
+							经典问题
+						</div>
+						<ul class="help-sec-ul">
+							<t t-foreach="cont" t-as="item">
+								<t t-if="item[u'type'] == 'Classicalproblem'">
+									<li>
+									<a t-att-href='"/context/?name=%s"%item[u"name"]' target="_blank">
+										<t t-esc="item[u'name']"/>
+									</a>
+									</li>
+								</t>
+							</t>
+						</ul>
+					</div>
+				</div>
+				<div class="fn-clear"></div>
+			</div>
+
+		</template>
+		<template id="help_second" name="Application second">
+			<link rel="stylesheet" type="text/css" href="/dvthelp/static/css/common.css"></link>
+			<link rel="stylesheet" type="text/css" href="/dvthelp/static/css/help.css"></link>
+			<div class="help-title">
+				<div class="help-title-lf fn-left">
+					<img src="/dvthelp/static/img/drislogo.png" width="106" height="31"/>
+					<a href="">帮助文档</a>
+				</div>
+				<div class="fn-clear"></div>
+			</div>
+			<div class="help-section">
+				<div class="help-section-lf fn-left">
+					<t t-foreach="result" t-as="item">
+						<div class="help-sec-lfcontit">
+							<t t-esc="item[u'name']"/>
+						</div>
+						<div class="help-sec-lfbox">
+							<t t-raw="item['context']"/>
+						</div>
+					</t>
+				</div>
+				<div class="help-section-rg fn-right">
+					<h2 class="help-sec-rgh2">所有内容</h2>
+					<div class="help-sec-box">
+						<t t-foreach="cont" t-as="item">
+							<t t-if="item[u'type'] == 'Newproblems'">
+								<div class="help-sec-tit">
+									<t t-esc="item[u'name']"/>
+								</div>
+								<ul class="help-sec-ul">
+									<t t-foreach="item[u'title']" t-as="pro">
+										<li>
+											<a t-att-href='"/second/?name=%s"%pro[u"secname"]' target="_blank">
+												<t t-esc="pro[u'secname']"/>
+											</a>
+										</li>
+									</t>
+								</ul>
+							</t>
+						</t>
+					</div>
+					<div class="help-sec-box">
+						<ul class="help-sec-ul">
+							<t t-foreach="cont" t-as="item">
+								<t t-if="item[u'type'] == 'Classicalproblem'">
+									<div class="help-sec-tit">
+										<t t-esc="item[u'name']"/>
+									</div>
+									<ul class="help-sec-ul">
+										<t t-foreach="item[u'title']" t-as="pro">
+											<li>
+												<a t-att-href='"/second/?name=%s"%pro[u"secname"]' target="_blank">
+													<t t-esc="pro[u'secname']"/>
+												</a>
+											</li>
+										</t>
+									</ul>
+								</t>
+							</t>
+						</ul>
+					</div>
+				</div>
+
+				<div class="fn-clear"></div>
+			</div>
+			<div class="help-footer">
+				Copyright © 北京迪威特科技有限公司
+			</div>
+		</template>
+     </data>
+</openerp>

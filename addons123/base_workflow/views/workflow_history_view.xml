@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="workflow_history_tree_view" model="ir.ui.view"  >
+            <field name="name">处理历史列表</field>
+            <field name="model">res.workflow.history</field>
+            <field name="arch" type="xml">
+                <tree create="false" edit="false" delete="false" >
+                    <field name="into_person"/>
+                    <field name="into_time" />
+                    <field name="auditor_id" />
+                    <field name="handle_time"/>
+                    <field name="handle_result"/>
+                    <field name="handle_type"/>
+                    <field name="handle_reason"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="workflow_history_form_view" model="ir.ui.view">
+			<field name="name">处理历史编辑</field>
+			<field name="type">form</field>
+			<field name="model">res.workflow.history</field>
+			<field name="arch" type="xml">
+				<form create="false" edit="false" delete="false">
+					<sheet>
+						<group>
+                            <field name="into_person"/>
+                            <field name="into_time" />
+                            <field name="auditor_id" />
+                            <field name="handle_time"/>
+                            <field name="handle_result"/>
+                            <field name="handle_type"/>
+                            <field name="handle_reason"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+        <record id="action_viewworkflow_history" model="ir.actions.act_window">
+            <field name="name">处理历史</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.workflow.history</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('model', '=', context.get('model', False)), ('res_id', '=', context.get('res_id', False))]</field>
+        </record>
+
+
+    </data>
+</openerp>

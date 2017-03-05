@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_location_province,province user,model_res_province,base.group_user,1,0,0,0
+change_location_province,province admin,model_res_province,base.group_system,1,1,1,1
+access_location_city,city user,model_res_city,base.group_user,1,0,0,0
+change_location_city,city admin,model_res_city,base.group_system,1,1,1,1
+access_location_district,district user,model_res_district,base.group_user,1,0,0,0
+change_location_district,district admin,model_res_district,base.group_system,1,1,1,1

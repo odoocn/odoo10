@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <!--===zhy-->
+    <data>
+        <record model="ir.ui.view" id="return_vendor_form_view">
+            <field name="name">采购退货</field>
+            <field name="type">form</field>
+            <field name="model">return.vendor</field>
+			<field name="arch" type="xml">
+			    <form string="采购退货">
+                    <header>
+                        <button name="return_item" type="object" string="退货" class="btn-primary" states="draft"/>
+                        <button name="button_cancel" type="object" string="取消" class="btn" states="draft"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <h1><field name="name" placeholder="退货单号"/></h1>
+                        <group>
+                            <field name="vendor" domain="[('supplier','=',True)]"
+                                   options="{'no_create':1,'no_open':1}"/>
+                            <field name="purchase_id" domain="[('partner_id','=',vendor)]"
+                                   options="{'no_create':1,'no_open':1}"/>
+                            <field name="picking" domain="[('purchase_id','=',purchase_id)]"
+                                   options="{'no_create':1,'no_open':1}"/>
+                            <field name="warehouse" options="{'no_create':1,'no_open':1}"/>
+                            <field name="dest_loc" options="{'no_create':1,'no_open':1}"/>
+                            <field name="int_picking" attrs="{'invisible':[('state','=','draft')]}"/>
+                        </group>
+                        <label for="line_ids" string="明细"/>
+                        <field name="line_ids" nolabel="1">
+                            <tree editable="bottom" create="false" delete="false">
+                                <field name="barcode" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_qty" readonly="1"/>
+                                <field name="return_qty"/>
+                                <field name="purchase_line"  invisible="1" readonly="1"/>
+                                <field name="description"/>
+                            </tree>
+                            <form string="明细">
+                                <group>
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="product_qty" readonly="1"/>
+                                    <field name="return_qty"/>
+                                    <field name="purchase_line" invisible="1" readonly="1"/>
+                                    <field name="description"/>
+                                </group>
+                            </form>
+                        </field>
+                    </sheet>
+			    </form>
+			</field>
+        </record>
+        <record model="ir.ui.view" id="return_vendor_tree_view">
+            <field name="name">采购退货</field>
+            <field name="type">tree</field>
+            <field name="model">return.vendor</field>
+			<field name="arch" type="xml">
+                 <tree>
+                     <field name="name"/>
+                     <field name="vendor"/>
+                     <field name="purchase_id"/>
+                     <field name="picking"/>
+                     <field name="state"/>
+				 </tree>
+			</field>
+        </record>
+        <record id="view_return_vendor_filter" model="ir.ui.view">
+            <field name="name">return.vendor.select</field>
+            <field name="model">return.vendor</field>
+            <field name="arch" type="xml">
+                <search string="Search Vendor Return">
+                    <field name="name" string="退货单号"/>
+                    <field name="vendor" operator="child_of"/>
+                    <field name="purchase_id"/>
+                    <field name="warehouse"/>
+                    <filter name="draft" string="草稿" domain="[('state','=','draft')]"/>
+                    <filter name="done" string="已完成" domain="[('state','=','done')]"/>
+                    <filter name="cancel" string="已取消" domain="[('state', '=', 'cancel')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="状态" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="供应商" domain="[]" context="{'group_by':'vendor'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+	<!--定义视图动作-->
+	    <record model="ir.actions.act_window" id="return_vendor_action">
+	        <field name="name">采购退货</field>
+	        <field name="res_model">return.vendor</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="return_vendor_tree_view"/>
+            <field name="search_view_id" ref="view_return_vendor_filter"/>
+	    </record>
+	<!--定义菜单-->
+        <menuitem id="menu_vendor_return" name="采购退货"
+            parent="purchase.menu_purchase_root" sequence="2" />
+	    <menuitem action="return_vendor_action" id="menu2_vendor_return" name="采购退货" parent="menu_vendor_return"/>
+    </data>
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="menu_product" model="website.menu">
+            <field name="name">产品</field>
+            <field name="url">/product</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">1</field>
+            <field name="website_id" ref="website.default_website"/>
+        </record>
+    </data>
+</odoo>

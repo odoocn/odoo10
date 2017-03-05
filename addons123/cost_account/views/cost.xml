@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_production_form_inherit" model="ir.ui.view">
+            <field name="name">mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="before">
+                    <field name="cost_center_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="cost_root_main" name="成本核算"/>
+        <menuitem id="cost_root" name="设置分配" parent="cost_root_main"/>
+        <menuitem id="cost_append" name="填报" parent="cost_root_main"/>
+
+        <record id="cost_center_tree" model="ir.ui.view">
+            <field name="name">cost.center</field>
+            <field name="model">cost.center</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="cost_center_form" model="ir.ui.view">
+            <field name="name">cost.center</field>
+            <field name="model">cost.center</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="department_id"/>
+                            <field name="is_active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="cost_center_action" model="ir.actions.act_window">
+            <field name="name">成本中心</field>
+            <field name="res_model">cost.center</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="cost_center_tree"/>
+        </record>
+        <menuitem id="cost_center" name="成本中心" parent="cost_root" action="cost_center_action"/>
+
+
+         <record id="material_distribution_tree" model="ir.ui.view">
+            <field name="name">material.distribution</field>
+            <field name="model">material.distribution</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="material_distribution_form" model="ir.ui.view">
+            <field name="name">material.distribution</field>
+            <field name="model">material.distribution</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="cost_center_id" />
+                            <field name="type"/>
+                        </group>
+                        <field name="allocation_id" attrs="{'invisible':[('type','!=','4')]}" nolabel="1" >
+                            <tree string="分配比例" editable="bottom">
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="code"/>
+                                <field name="percent"/>
+                            </tree>
+                        </field>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="material_distribution_action" model="ir.actions.act_window">
+            <field name="name">公用材料分配</field>
+            <field name="res_model">material.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="material_distribution_tree"/>
+        </record>
+
+        <menuitem id="material_distribution" name="公用材料分配" parent="cost_root" action="material_distribution_action"/>
+
+         <record id="manual_distribution_tree" model="ir.ui.view">
+            <field name="name">manual.distribution</field>
+            <field name="model">manual.distribution</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="manual_distribution_form" model="ir.ui.view">
+            <field name="name">manual.distribution</field>
+            <field name="model">manual.distribution</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="cost_center_id" />
+                            <field name="type"/>
+                        </group>
+                        <field name="allocation_id" attrs="{'invisible':[('type','!=','4')]}" nolabel="1" >
+                            <tree string="分配比例" editable="bottom">
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="code"/>
+                                <field name="percent"/>
+                            </tree>
+                        </field>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="manual_distribution_action" model="ir.actions.act_window">
+            <field name="name">直接人工分配</field>
+            <field name="res_model">manual.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="manual_distribution_tree"/>
+        </record>
+
+        <menuitem id="manual_distribution" name="直接人工分配" parent="cost_root" action="manual_distribution_action"/>
+
+        <record id="expense_distribution_tree" model="ir.ui.view">
+            <field name="name">expense.distribution</field>
+            <field name="model">expense.distribution</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="expense_distribution_form" model="ir.ui.view">
+            <field name="name">expense.distribution</field>
+            <field name="model">expense.distribution</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="cost_center_id" />
+                            <field name="type"/>
+                        </group>
+                        <field name="allocation_id" attrs="{'invisible':[('type','!=','4')]}" nolabel="1" >
+                            <tree string="分配比例" editable="bottom">
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="code"/>
+                                <field name="percent"/>
+                            </tree>
+                        </field>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="expense_distribution_action" model="ir.actions.act_window">
+            <field name="name">折旧费用分配</field>
+            <field name="res_model">expense.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="expense_distribution_tree"/>
+        </record>
+
+        <menuitem id="expense_distribution" name="折旧费用分配" parent="cost_root" action="expense_distribution_action"/>
+
+        <record id="waste_expense_distribution_tree" model="ir.ui.view">
+            <field name="name">waste.expense.distribution</field>
+            <field name="model">waste.expense.distribution</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="waste_expense_distribution_form" model="ir.ui.view">
+            <field name="name">waste.expense.distribution</field>
+            <field name="model">waste.expense.distribution</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="cost_center_id" />
+                            <field name="type"/>
+                        </group>
+                        <field name="allocation_id" attrs="{'invisible':[('type','!=','4')]}" nolabel="1" >
+                            <tree string="分配比例" editable="bottom">
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="code"/>
+                                <field name="percent"/>
+                            </tree>
+                        </field>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="waste_expense_distribution_action" model="ir.actions.act_window">
+            <field name="name">废品费用分配</field>
+            <field name="res_model">waste.expense.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="waste_expense_distribution_tree"/>
+        </record>
+
+        <menuitem id="waste_expense_distribution" name="废品费用分配" parent="cost_root" action="waste_expense_distribution_action"/>
+
+        <record id="other_expense_distribution_tree" model="ir.ui.view">
+            <field name="name">other.expense.distribution</field>
+            <field name="model">other.expense.distribution</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="other_expense_distribution_form" model="ir.ui.view">
+            <field name="name">other.expense.distribution</field>
+            <field name="model">other.expense.distribution</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="cost_center_id" />
+                            <field name="type"/>
+                        </group>
+                        <field name="allocation_id" attrs="{'invisible':[('type','!=','4')]}" nolabel="1" >
+                            <tree string="分配比例" editable="bottom">
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="code"/>
+                                <field name="percent"/>
+                            </tree>
+                        </field>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="other_expense_distribution_action" model="ir.actions.act_window">
+            <field name="name">其他费用分配</field>
+            <field name="res_model">other.expense.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="other_expense_distribution_tree"/>
+        </record>
+
+        <menuitem id="other_expense_distribution" name="其他费用分配" parent="cost_root" action="other_expense_distribution_action"/>
+
+        <record id="cost_distribution_tree" model="ir.ui.view">
+            <field name="name">cost.distribution</field>
+            <field name="model">cost.distribution</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="cost_distribution_form" model="ir.ui.view">
+            <field name="name">cost.distribution</field>
+            <field name="model">cost.distribution</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="cost_center_id" />
+                            <field name="type"/>
+                        </group>
+                        <field name="allocation_id" attrs="{'invisible':[('type','!=','6')]}" nolabel="1" >
+                            <tree string="分配比例" editable="bottom">
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="code"/>
+                                <field name="h_percent"/>
+                                <field name="c_percent"/>
+                                <field name="m_percent"/>
+                            </tree>
+                        </field>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="cost_distribution_action" model="ir.actions.act_window">
+            <field name="name">在产品成本分配</field>
+            <field name="res_model">cost.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="cost_distribution_tree"/>
+        </record>
+
+        <menuitem id="cost_distribution" name="在产品成本分配" parent="cost_root" action="cost_distribution_action"/>
+
+        <record id="period_balance_tree" model="ir.ui.view">
+            <field name="name">period.balance</field>
+            <field name="model">period.balance</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="period_balance_form" model="ir.ui.view">
+            <field name="name">period.balance</field>
+            <field name="model">period.balance</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="cost_center_id"/>
+                                <field name="product_id"/>
+                                <field name="bom"/>
+                                <field name="number"/>
+                                <field name="total_cost"/>
+                            </group>
+                            <group>
+                                <field name="cai_expense"/>
+                                <field name="ren_gong_expense"/>
+                                <field name="zhi_zao_expense"/>
+                                <field name="other_expense"/>
+                                <field name="total_expense"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="period_balance_action" model="ir.actions.act_window">
+            <field name="name">期初余额</field>
+            <field name="res_model">period.balance</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="period_balance_tree"/>
+        </record>
+
+        <menuitem id="period_balance" name="期初余额" parent="cost_append" action="period_balance_action" sequence="98"/>
+
+        <record id="material_consumption_tree" model="ir.ui.view">
+            <field name="name">material.consumption</field>
+            <field name="model">material.consumption</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="material_consumption_form" model="ir.ui.view">
+            <field name="name">material.consumption</field>
+            <field name="model">material.consumption</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="cost_center_id" />
+                                <field name="order_id"/>
+                                <field name="product_id"/>
+                                <field name="bom"/>
+                            </group>
+                            <group>
+                                <field name="material"/>
+                                <field name="number"/>
+                                <field name="expense"/>
+                                <field name="cost"/>
+                            </group>
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="material_consumption_action" model="ir.actions.act_window">
+            <field name="name">材料耗用</field>
+            <field name="res_model">material.consumption</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="material_consumption_tree"/>
+        </record>
+
+        <!--<menuitem id="material_consumption" name="材料耗用" parent="cost_root" action="material_consumption_action"/>-->
+
+
+        <record id="time_sheet_tree" model="ir.ui.view">
+            <field name="name">time.sheet</field>
+            <field name="model">time.sheet</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="time_sheet_form" model="ir.ui.view">
+            <field name="name">time.sheet</field>
+            <field name="model">time.sheet</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="cost_center_id"/>
+                                <field name="order_id"/>
+                                <field name="product_id"/>
+                                <field name="bom"/>
+                            </group>
+                            <group>
+                                <field name="actual_time"/>
+                                <field name="quota_time"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="time_sheet_action" model="ir.actions.act_window">
+            <field name="name">工时表</field>
+            <field name="res_model">time.sheet</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="time_sheet_tree"/>
+        </record>
+
+        <menuitem id="time_sheet" name="工时表" parent="cost_append" action="time_sheet_action" sequence="99"/>
+
+        <record id="public_material_tree" model="ir.ui.view">
+            <field name="name">public.material</field>
+            <field name="model">public.material</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="public_material_form" model="ir.ui.view">
+            <field name="name">public.material</field>
+            <field name="model">public.material</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="cost_center_id"/>
+                                <field name="product_id"/>
+                                <field name="number"/>
+                            </group>
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="public_material_action" model="ir.actions.act_window">
+            <field name="name">公用材料填报</field>
+            <field name="res_model">public.material</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="public_material_tree"/>
+        </record>
+
+        <menuitem id="public_material_menu" name="公用材料填报" parent="cost_append" action="public_material_action" sequence="99"/>
+
+        <record id="finish_report_tree" model="ir.ui.view">
+            <field name="name">finish.report</field>
+            <field name="model">finish.report</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="finish_report_form" model="ir.ui.view">
+            <field name="name">finish.report</field>
+            <field name="model">finish.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="cost_center_id" />
+                                <field name="order_id" domain="[('cost_center_id','=',cost_center_id)]" options="{'no_create':True}"/>
+                                <field name="product_id"/>
+                                <field name="bom"/>
+                            </group>
+                            <group>
+                                <field name="complete_number"/>
+                                <field name="waste"/>
+                                <field name="net_production"/>
+                                <field name="in_production"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                          <page string="使用的材料">
+                            <field name="stock_move_id" nolabel="1">
+                                <tree editable="0" create="0">
+                                    <field name="state" invisible="1"/>
+                                    <field name="product_id" required="1"/>
+                                    <field name="quantity_done"/>
+                                </tree>
+                            </field>
+                          </page>
+                            <page string="报废的材料">
+                                <field name="scrap_id" nolabel="1">
+                                    <tree editable="0" create="0">
+                                        <field name="state" invisible="1"/>
+                                        <field name="product_id" required="1"/>
+                                        <field name="scrap_qty"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+
+                        <!--<field name="material_id">-->
+                            <!--<tree editable="false" create="0">-->
+                                <!--<field name="material"/>-->
+                                <!--<field name="number"/>-->
+                                <!--<field name="wast"/>-->
+                            <!--</tree>-->
+                            <!--<form>-->
+                                <!--<sheet>-->
+                                    <!--<group>-->
+                                        <!--<group>-->
+                                            <!--<field name="cost_center_id"/>-->
+                                            <!--<field name="order_id"/>-->
+                                            <!--<field name="product_id"/>-->
+                                            <!--<field name="bom"/>-->
+                                        <!--</group>-->
+                                        <!--<group>-->
+                                            <!--<field name="material"/>-->
+                                            <!--<field name="number"/>-->
+                                            <!--<field name="expense"/>-->
+                                            <!--<field name="cost"/>-->
+                                        <!--</group>-->
+                                    <!--</group>-->
+                                <!--</sheet>-->
+
+                            <!--</form>-->
+                        <!--</field>-->
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="finish_report_action" model="ir.actions.act_window">
+            <field name="name">完工产品日报表</field>
+            <field name="res_model">finish.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="finish_report_tree"/>
+        </record>
+
+        <menuitem id="finish_report" name="完工产品日报表" parent="cost_append" action="finish_report_action" sequence="100"/>
+
+
+
+
+    </data>
+</odoo>

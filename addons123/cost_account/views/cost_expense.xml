@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="labor_cost_tree" model="ir.ui.view">
+            <field name="name">labor.cost</field>
+            <field name="model">labor.cost</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="labor_cost_form" model="ir.ui.view">
+            <field name="name">labor.cost</field>
+            <field name="model">labor.cost</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="cost_center_id" />
+                            <field name="labor_expense"/>
+                            <field name="manage_expense"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="labor_cost_action" model="ir.actions.act_window">
+            <field name="name">人工费用</field>
+            <field name="res_model">labor.cost</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="labor_cost_tree"/>
+        </record>
+
+        <menuitem id="labor_cost" name="人工费用" parent="cost_append" action="labor_cost_action"/>
+
+        <record id="depreciation_expense_tree" model="ir.ui.view">
+            <field name="name">depreciation.expense</field>
+            <field name="model">depreciation.expense</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="depreciation_expense_form" model="ir.ui.view">
+            <field name="name">depreciation.expense</field>
+            <field name="model">depreciation.expense</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="cost_center_id" />
+                            <field name="old_expense"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="depreciation_expense_action" model="ir.actions.act_window">
+            <field name="name">折旧费用</field>
+            <field name="res_model">depreciation.expense</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="depreciation_expense_tree"/>
+        </record>
+
+        <menuitem id="depreciation_expense" name="折旧费用" parent="cost_append" action="depreciation_expense_action"/>
+
+        <record id="waste_expense_tree" model="ir.ui.view">
+            <field name="name">waste.expense</field>
+            <field name="model">waste.expense</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="waste_expenses_form" model="ir.ui.view">
+            <field name="name">waste.expense</field>
+            <field name="model">waste.expense</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="cost_center_id" />
+                                <field name="order_id"/>
+                                <field name="product_id"/>
+                            </group>
+                            <group>
+                                <field name="number"/>
+                                <field name="expense"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="waste_expenses_action" model="ir.actions.act_window">
+            <field name="name">废品费用</field>
+            <field name="res_model">waste.expense</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="waste_expense_tree"/>
+        </record>
+
+        <!--<menuitem id="waste_expenses" name="废品费用" parent="cost_append" action="waste_expenses_action"/>-->
+
+        <record id="other_expense_tree" model="ir.ui.view">
+            <field name="name">other.expense</field>
+            <field name="model">other.expense</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="cost_center_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="other_expense_form" model="ir.ui.view">
+            <field name="name">other.expense</field>
+            <field name="model">other.expense</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="cost_center_id"/>
+                                <!--<field name="product_id"/>-->
+                                <field name="bom"/>
+                                <field name="order_id"/>
+                            </group>
+                            <group>
+                                <field name="expense_name"/>
+                                <field name="expense"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="other_expense_action" model="ir.actions.act_window">
+            <field name="name">其他费用</field>
+            <field name="res_model">other.expense</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="other_expense_tree"/>
+        </record>
+
+        <menuitem id="other_expense" name="其他费用" parent="cost_append" action="other_expense_action"/>
+
+    </data>
+</odoo>

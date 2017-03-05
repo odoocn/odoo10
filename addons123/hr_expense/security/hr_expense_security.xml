@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!--add by liyx start-->
+        <record id="group_hr_expense_leader" model="res.groups">
+            <field name="name">组长</field>
+            <field name="category_id" ref="base.module_category_hr_expense"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <!--add by liyx end-->
+
+        <record id="group_hr_expense_user" model="res.groups">
+            <field name="name">Officer</field>
+            <field name="category_id" ref="base.module_category_hr_expense"/>
+            <field name="implied_ids" eval="[(4, ref('group_hr_expense_leader'))]"/>
+        </record>
+
+        <record id="group_hr_expense_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="base.module_category_hr_expense"/>
+            <field name="implied_ids" eval="[(4, ref('group_hr_expense_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="base.default_user" model="res.users">
+            <field name="groups_id" eval="[(4,ref('group_hr_expense_manager'))]"/>
+        </record>
+    </data>
+    <data noupdate="1">
+
+        <record id="hr_expense_comp_rule" model="ir.rule">
+            <field name="name">Expense multi company rule</field>
+            <field name="model_id" ref="model_hr_expense"/>
+            <field eval="True" name="global"/>
+            <field name="domain_force">['|',('company_id', '=', False), ('company_id', 'child_of', [user.company_id.id])]</field>
+        </record>
+
+        <!--===zhy-->
+
+        <record id="property_rule_expense_sheet_employee" model="ir.rule">
+            <field name="name">Employee Expense Sheet</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="property_rule_expense_sheet_leader" model="ir.rule">
+            <field name="name">Leader Expense Sheet</field>
+            <field name="model_id" ref="model_hr_expense_sheet" />
+            <field name="domain_force">['|',('employee_id.user_id','=',user.id), ('employee_id.coach_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_expense_leader'))]" />
+        </record>
+
+        <record id="property_rule_expense_sheet_department_leader" model="ir.rule">
+            <field name="name">Department Leader Expense Sheet</field>
+            <field name="model_id" ref="model_hr_expense_sheet" />
+            <field name="domain_force">['|',('employee_id.user_id','=',user.id), ('employee_id.parent_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_expense_user'))]" />
+        </record>
+
+        <record id="property_rule_expense_sheet_manager" model="ir.rule">
+            <field name="name">Manager Expense Sheet</field>
+            <field name="model_id" ref="model_hr_expense_sheet"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('account.group_account_user')), (4, ref('group_hr_expense_manager'))]"/>
+        </record>
+
+        <!--zhy-->
+        <!--add by liyx start-->
+        <record id="property_rule_expense_leader" model="ir.rule">
+            <field name="name">Leader Expense</field>
+            <field name="model_id" ref="model_hr_expense" />
+            <field name="domain_force">['|',('employee_id.user_id','=',user.id), ('employee_id.coach_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_expense_leader'))]" />
+        </record>
+
+        <record id="property_rule_expense_department_leader" model="ir.rule">
+            <field name="name">Department Leader Expense</field>
+            <field name="model_id" ref="model_hr_expense" />
+            <field name="domain_force">['|',('employee_id.user_id','=',user.id), ('employee_id.parent_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_hr_expense_user'))]" />
+        </record>
+        <!--add by liyx end-->
+
+        <record id="property_rule_expense_employee" model="ir.rule">
+            <field name="name">Employee Expense</field>
+            <field name="model_id" ref="model_hr_expense"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="property_rule_expense_manager" model="ir.rule">
+            <field name="name">Manager Expense</field>
+            <field name="model_id" ref="model_hr_expense"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('account.group_account_user')), (4, ref('group_hr_expense_manager'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

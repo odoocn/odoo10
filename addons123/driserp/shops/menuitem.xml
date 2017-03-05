@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem id="menu_shops" name="电商" groups="driserp.shop_user"/>
+        <!--订单菜单-->
+        <menuitem id="menu_shop_orders" name="订单" groups="driserp.shop_user" parent="menu_shops" sequence="0"/>
+        <menuitem id="menu2_orders_online" name="线上订单" parent="menu_shop_orders" sequence="0"
+                  action="action_online_order"/>
+        <menuitem id="menu2_return_order" name="回告" parent="menu_shop_orders" sequence="1" action="qty_confirm_action"/>
+        <menuitem id="menu2_sale_combine" name="合单" parent="menu_shop_orders" sequence="2" action="combine_orders"/>
+        <menuitem id="menu2_sale_split" name="拆单" parent="menu_shop_orders" sequence="3" action="split_orders"/>
+        <menuitem id="menu2_sale_track" name="数量跟踪" parent="menu_shop_orders" action="sale_order_track_action"
+                  sequence="4"/>
+        <menuitem id="menu2_return" name="退货单" parent="menu_shop_orders" action="return_action"/>
+        <!--设置菜单-->
+        <menuitem id="menu_shop_settings" name="设置" groups="driserp.shop_user" parent="menu_shops" sequence="5"/>
+        <menuitem action="shops_plate_action" id="menu2_shops_plate" name="平台" parent="menu_shop_settings"
+                  groups="base.group_system" sequence="0"/>
+        <menuitem action="shops_shop_action" id="menu2_shops_shop" name="店铺" parent="menu_shop_settings" sequence="1"/>
+        <menuitem action="shops_items_action" id="menu2_shops_items" name="商品" parent="menu_shop_settings" sequence="2"/>
+        <menuitem action="shops_items_edit" id="menu2_shops_items_edit" name="商品配置" parent="menu_shop_settings" sequence="3"/>
+        <menuitem action="ecps_box_action" id="menu2_box" name="箱单" parent="menu_shop_settings"/>
+        <menuitem action="ecps_express_action" id="menu2_express" name="快递" parent="menu_shop_settings"
+                  groups="base.group_system"/>
+        <menuitem action="error_info_action" id="menu2_error_info" name="错误列表" parent="menu_shop_settings" sequence="4"/>
+    </data>
+</openerp>

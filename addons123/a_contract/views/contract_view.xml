@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--合同单-->
+    <record model="ir.ui.view" id="cm_contract_form">
+        <field name="name">"合同"</field>
+        <field name="type">form</field>
+        <field name="model">cm.contract</field>
+        <field name="arch" type="xml">
+            <form string="合同">
+                <header>
+                    <button name="confirm_contract" string="合同生效" type="object" class="oe_highlight"
+                            help="点击该按钮试合同生效"
+                            attrs="{'invisible': [ ('state', '!=', 'draft')]}"/>
+                    <button name="send_contract" string="完成" type="object"
+                            help="点击该按钮使合同状态变为已完成"
+                            attrs="{'invisible': [ ('state', '!=', 'effective')]}"/>
+                    <button name="change_contract" string="申请变更" type="object" class="oe_highlight"
+                            help="点击该按钮申请变更合同内容"
+                            attrs="{'invisible': ['|',('state','!=','effective'),('changing','!=',False)]}"/>
+                    <button name="changing_contract" string="变更申请中。。。" type="object" class="oe_highlight"
+                            help="点击该按钮跳转到变更合同明细界面"
+                            attrs="{'invisible': [('changing','=',False)]}"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,effective,suspend,done,termination,cancel"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="create_sale_template" type="object" string="生成合同"
+                                class="oe_stat_button" icon="fa-archive">
+                        </button>
+                        <button name="create_sale" type="object" string="生成报价单"
+                                class="oe_stat_button" icon="fa-archive">
+                        </button>
+                        <button name="toggle_active" type="object"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                   options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="合同名称"/>
+                        </h1>
+                        <h2 class="o_row">
+                            <div>
+                                <label for="code" class="oe_edit_only"/>
+                                <div class="o_row">
+                                    <field name="code" placeholder="合同编号"/>
+                                    <!--<span>SO</span>-->
+                                </div>
+                            </div>
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="changing" invisible="1"/>
+                            <field name="copy_from" invisible="1"/>
+                            <field name="type" string="合同分类"/>
+                            <field name="kind" string="业务类型"/>
+                        </group>
+                        <group>
+                            <!--<field name="property" string="合同类型" widget="radio"-->
+                            <!--options="{'horizontal': true}"/>-->
+                            <field name="template_id" options="{'no_create': True}"
+                                   domain="[('model_id', '=', 'cm.contract')]" string="合同模版"/>
+
+                            <field name="category_id" string="标签" widget="many2many_tags"/>
+                        </group>
+                        <group string="对方单位">
+                            <field name="partner_id" string="对方单位"/>
+                            <field name="child_id" string="联系人"/>
+                            <field name="partner_phone" string="对方电话"/>
+                            <field name="partner_email" string="Email"/>
+                            <field name="partner_address" string="对方地址"/>
+                        </group>
+                        <!--===xuwentao-->
+                        <group string="本公司">
+                            <!--<field name="company_id" string="公司名称"/>-->
+                            <field name="user_id" string="业务员"/>
+                            <!--<field name="company_phone" string="公司电话"/>-->
+                            <!--<field name="company_email" string="Email"/>-->
+                            <!--<field name="company_address" string="公司地址"/>-->
+                        </group>
+                        <!--xuwentao-->
+                        <group>
+                            <field name="amount_total" string="合同总金额 ¥" class="oe_edit_only"/>
+                            <!--field name="amount_tax" string="合同税金 ¥"/-->
+                        </group>
+                        <group>
+                            <field name="sign_date" string="签约时间"/>
+                            <field name="start_date" string="开始日期"/>
+                            <field name="end_date" string="结束日期"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="补充与描述"/>
+                    <notebook>
+                        <page string="合同标的">
+                            <field name="contract_object" nolabel="1">
+                                <tree editable="tree">
+                                    <field name="product_id" string="标的名称"/>
+                                    <field name="name" string="说明"/>
+                                    <field name="product_qty" string="数量"/>
+                                    <field name="price_unit" string="单价"/>
+                                    <field name="tax_id" string="税" widget="many2many_tags"/>
+                                    <field name="price_tax" string="税金"/>
+                                    <field name="price_subtotal" string="无税金额"/>
+                                    <field name="price_total" string="含税金额" sum="sum" widget="monetary"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="收付款条款">
+                            <field name="contract_pay" nolabel="1">
+                                <tree editable="tree">
+                                    <field name="name" string="付款说明"/>
+                                    <field name="pay_currency" string="金额"/>
+                                    <field name="pay_ratio" string="付款比例"/>
+                                    <field name="pay_date" string="付款时间"/>
+                                    <field name="note" string="详细描述"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="条款/大事记">
+                            <field name="contract_terms" nolabel="1"/>
+                        </page>
+                        <page string="版本">
+                            <field name="contract_version" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--合同列表-->
+    <record model="ir.ui.view" id="cm_contract_tree">
+        <field name="name">合同</field>
+        <field name="type">tree</field>
+        <field name="model">cm.contract</field>
+        <field name="arch" type="xml">
+            <tree string="合同">
+                <field name="changing" invisible="1"/>
+                <field name="copy_from" invisible="1"/>
+                <field name="name" string="合同名称"/>
+                <field name="code" string="合同编号"/>
+                <field name="type" string="合同分类"/>
+                <field name="partner_id" string="对方单位"/>
+                <field name="amount_total" string="合同总金额"/>
+                <field name="user_id" string="业务员"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!--合同标的-->
+    <record model="ir.ui.view" id="cm_contract_object_form">
+        <field name="name">"标的"</field>
+        <field name="type">form</field>
+        <field name="model">cm.contract.object</field>
+        <field name="arch" type="xml">
+            <form string="标的">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id" string="标的名称"/>
+                            <field name="name" string="说明"/>
+                        </group>
+                        <group>
+                            <field name="product_qty" string="数量"/>
+                            <field name="price_unit" string="单价"/>
+                            <field name="price_tax" string="税金"/>
+                            <field name="price_subtotal" string="无税金额"/>
+                            <field name="price_total" string="含税金额"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--收付款条款-->
+    <record model="ir.ui.view" id="cm_contract_pay_form">
+        <field name="name">"收付款条款"</field>
+        <field name="type">form</field>
+        <field name="model">cm.contract.pay</field>
+        <field name="arch" type="xml">
+            <form string="收付款条款">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="付款说明"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="pay_currency" string="金额"/>
+                        <field name="pay_ratio" string="付款比例"/>
+                        <field name="pay_date" string="付款时间"/>
+                    </group>
+                    <field name="note" placeholder="详细描述"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--条款/大事记-->
+    <record model="ir.ui.view" id="cm_contract_terms_form">
+        <field name="name">"条款/大事记"</field>
+        <field name="type">form</field>
+        <field name="model">cm.contract.terms</field>
+        <field name="arch" type="xml">
+            <form string="条款/大事记">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="标题"/>
+                        </h1>
+                    </div>
+                    <field name="note" string="详细" placeholder="详细描述"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="cm_contract_terms_tree">
+        <field name="name">条款/大事记</field>
+        <field name="type">tree</field>
+        <field name="model">cm.contract.terms</field>
+        <field name="arch" type="xml">
+            <tree string="条款/大事记">
+                <field name="name" string="标题"/>
+                <field name="note" string="详细描述"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--合同版本-->
+    <record model="ir.ui.view" id="cm_contract_version_form">
+        <field name="name">"版本"</field>
+        <field name="type">form</field>
+        <field name="model">cm.contract.version</field>
+        <field name="arch" type="xml">
+            <form string="版本">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="版本说明"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="note" string="详细描述" placeholder="详细描述"/>
+                        <!--<field name="attachment" string="附件"/>-->
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="cm_contract_version_tree">
+        <field name="name">版本</field>
+        <field name="type">tree</field>
+        <field name="model">cm.contract.version</field>
+        <field name="arch" type="xml">
+            <tree string="版本">
+                <field name="name"/>
+                <field name="note"/>
+                <!--<field name="attachment"/>-->
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="email_compose_form">
+        <field name="name">mail.compose.message.form</field>
+        <field name="model">mail.compose.message</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="composition_mode" invisible="1"/>
+                <field name="model" invisible="1"/>
+                <field name="res_id" invisible="1"/>
+                <field name="is_log" invisible="1"/>
+                <field name="parent_id" invisible="1"/>
+                <field name="mail_server_id" invisible="1"/>
+                <field name="active_domain" invisible="1"/>
+                <field name="body" options="{'style-inline': true}" readonly="1"/>
+                <group col="4">
+                    <field name="template_id" options="{'no_create': True}" invisible="1"/>
+                </group>
+                <footer>
+                    <!--<button string="打印" name="send_mail_action" type="object" class="btn-primary"/>-->
+                    <button string="丢弃" class="btn-default" name="cancel_mail_action" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <!--动作-->
+    <record model="ir.actions.act_window" id="cm_contract_action">
+        <field name="name">合同单</field>
+        <field name="res_model">cm.contract</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('show','=',True)]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">在这里创建您的合同信息</p>
+        </field>
+    </record>
+
+    <record id="action_contract_tree_view1" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="cm_contract_tree"/>
+        <field name="act_window_id" ref="cm_contract_action"/>
+    </record>
+
+    <record id="action_contract_form_view2" model="ir.actions.act_window.view">
+        <field eval="3" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="cm_contract_form"/>
+        <field name="act_window_id" ref="cm_contract_action"/>
+    </record>
+
+    <!--定义菜单-->
+    <menuitem id="menu_contract" name="合同" parent="menu_contract_model" sequence="0"/>
+    <menuitem id="menu_cm_contract" name="合同单"
+              parent="menu_contract" action="cm_contract_action" sequence="0"/>
+
+    <!--弹出修改合同界面-->
+
+    <record id="cm_contract_update_from" model="ir.ui.view">
+        <field name="name">合同修改</field>
+        <field name="type">form</field>
+        <field name="model">cm.contract</field>
+        <field name="arch" type="xml">
+            <form string="合同修改" delete="false" create="false">
+                <sheet>
+                    <field name="name" calss="oe_read_only"/>
+                    <notebook>
+                        <page string="合同标的">
+                            <field name="contract_object" nolabel="1">
+                                <tree editable="tree">
+                                    <field name="product_id" string="标的名称"/>
+                                    <field name="name" string="说明"/>
+                                    <field name="product_qty" string="数量"/>
+                                    <field name="price_unit" string="单价"/>
+                                    <field name="price_tax" string="税金"/>
+                                    <field name="price_subtotal" string="无税金额"/>
+                                    <field name="price_total" string="含税金额"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="收付款条款">
+                            <field name="contract_pay" nolabel="1">
+                                <tree editable="tree">
+                                    <field name="name" string="付款说明"/>
+                                    <field name="pay_currency" string="金额"/>
+                                    <field name="pay_ratio" string="付款比例"/>
+                                    <field name="pay_date" string="付款时间"/>
+                                    <field name="note" string="详细描述"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="cm_contract_update_tree" model="ir.ui.view">
+        <field name="name">合同修改</field>
+        <field name="type">tree</field>
+        <field name="model">cm.contract</field>
+        <field name="arch" type="xml">
+            <tree string="合同修改">
+                <field name="name"/>
+                <field name="copy_to"/>
+                <field name="copy_from"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="cm_contract_update_action">
+        <field name="name">合同修改</field>
+        <field name="res_model">cm.contract</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form,tree</field>
+        <field name="target">new</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">在这里修改您的合同信息</p>
+        </field>
+    </record>
+
+    <record id="action_contract_form_view3" model="ir.actions.act_window.view">
+        <field eval="4" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="cm_contract_update_from"/>
+        <field name="act_window_id" ref="cm_contract_update_action"/>
+    </record>
+
+    <record id="action_contract_tree_view3" model="ir.actions.act_window.view">
+        <field eval="6" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="cm_contract_update_tree"/>
+        <field name="act_window_id" ref="cm_contract_update_action"/>
+    </record>
+
+    <!--<menuitem id="menu_cm_contract_update" name="合同修改" parent='menu_contract' sequence="1"-->
+    <!--action="cm_contract_update_action"/>-->
+
+
+</odoo>

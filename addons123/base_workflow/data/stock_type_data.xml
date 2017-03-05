@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <record model="type.account.relation" id="type_account_relation_00">
+      <field name="name">采购入库</field>
+      <field name="purchase_in">purchase_in</field>
+    </record>
+    <record model="type.account.relation" id="type_account_relation_01">
+      <field name="name">销售出库</field>
+      <field name="purchase_in">sale_out</field>
+    </record>
+
+    <record model="purchase.sale.type" id="purchase_sale_type_00">
+      <field name="name">普通采购</field>
+      <field name="type">purchase</field>
+        <field name="send_receive_type" eval="ref('type_account_relation_00')" />
+    </record>
+    <record model="purchase.sale.type" id="purchase_sale_type_01">
+      <field name="name">普通销售</field>
+      <field name="type">sale</field>
+        <field name="send_receive_type" eval="ref('type_account_relation_01')"/>
+    </record>
+
+  </data>
+</openerp>

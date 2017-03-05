@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!--<menuitem name="设置" id="dvthelp_hr" parent="hr.menu_hr_root" />-->
+        <!--<record id="hr_employeer_form_view" model="ir.ui.view">-->
+        <!--<field name="name">hr.employeer.form.view</field>-->
+        <!--<field name="model">hr.employee</field>-->
+        <!--<field name="inherit_id" ref="hr.view_employee_form" />-->
+        <!--<field name="arch" type="xml">-->
+            <!--<xpath expr="//field[@name='coach_id']" position="after">-->
+                    <!--<field name="p_state" readonly="1"/>-->
+            <!--</xpath>-->
+            <!--<xpath expr="//div[@name='button_box']" position="before">-->
+                <!--<div class="oe_button_box" name="button_box_1" groups="base.group_hr_user">-->
+                    <!--<button name="dvthelp_hr_history" type="action"-->
+                            <!--class="oe_stat_button" icon="fa-archive">-->
+                        <!--<field name="hr_history" widget="boolean_button"-->
+                               <!--options='{"terminology": "archive"}'/>-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</xpath>-->
+            <!--<notebook position="inside">-->
+                <!--<page string="职位记录">-->
+                    <!--<field name="hr_history" string="职位记录" nolabel="1" >-->
+                        <!--<tree create="false" edit="false" delete="false">-->
+                            <!--<field name="change_date"/>-->
+                            <!--<field name="origin_dep_h" string="部门"/>-->
+                            <!--<field name="origin_pos_h" string="职位"/>-->
+                            <!--<field name="end_data"/>-->
+                            <!--<field name="is_now"/>-->
+                        <!--</tree>-->
+                    <!--</field>-->
+                <!--</page>-->
+            <!--</notebook>-->
+        <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="dvthelp_hr_history_tree" model="ir.ui.view">-->
+            <!--<field name="name">dvthelp.hrh.istory</field>-->
+            <!--<field name="model">hr.history</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree>-->
+                    <!--<field name="change_date"/>-->
+                    <!--<field name="status"/>-->
+                    <!--<field name="employee_id"/>-->
+                    <!--<field name="is_confirm"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record id="dvthelp_hr_history_search" model="ir.ui.view">-->
+            <!--<field name="name">dvthelp.hrh.istory</field>-->
+            <!--<field name="model">hr.history</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<search>-->
+                    <!--<field name="employee_id"/>-->
+                    <!--<field name="status"/>-->
+                    <!--<field name="change_date"/>-->
+                    <!--<field name="is_confirm"/>-->
+                <!--</search>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record id="dvthelp_hr_history_form" model="ir.ui.view">-->
+            <!--<field name="name">dvthelp.hrh.istory</field>-->
+            <!--<field name="model">hr.history</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form>-->
+                    <!--<header>-->
+                        <!--&lt;!&ndash;<button name="draft" type="object" string="草稿"/>&ndash;&gt;-->
+                        <!--<button name="confirm" type="object" string="确认" attrs="{'invisible':[('state','=','confirm')]}"/>-->
+                        <!--<field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>-->
+                    <!--</header>-->
+                    <!--<sheet>-->
+                        <!--<group>-->
+                            <!--<field name="status" widget="radio" required="1" class="oe_edit_only" attrs="{'readonly':[('state','=','confirm')]}" options="{'horizontal': true}"/>-->
+                        <!--</group>-->
+                        <!--<group>-->
+                            <!--<group>-->
+                                <!--<field name="employee_id" required="1" domain="[('p_state','=','inposition')]" attrs="{'readonly':[('state','=','confirm')]}"/>-->
+                            <!--</group>-->
+                            <!--<group>-->
+                                <!--<field name="change_date" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>-->
+                            <!--</group>-->
+                        <!--</group>-->
+                        <!--<group>-->
+                            <!--<group>-->
+                                <!--<field name="origin_dep_q" readonly="1"/>-->
+                                <!--<field name="origin_pos_q" readonly="1"/>-->
+                            <!--</group>-->
+                            <!--<group>-->
+                                <!--<field name="origin_dep_h" required="1" attrs="{'readonly':[('state','=','confirm')]}"/>-->
+                                <!--<field name="origin_pos_h" required="1" domain="[('department_id','=',origin_dep_h)]" attrs="{'readonly':[('state','=','confirm')]}"/>-->
+                            <!--</group>-->
+                        <!--</group>-->
+                        <!--<group>-->
+                            <!--<field name="change_reasion" domain="[('style','=',status)]" attrs="{'readonly':[('state','=','confirm')]}"/>-->
+                            <!--<field name="note" attrs="{'readonly':[('state','=','confirm')]}"/>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="dvthelp_hr_history_action" model="ir.actions.act_window">-->
+            <!--<field name="name">变更登记</field>-->
+            <!--<field name="res_model">hr.history</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form</field>-->
+            <!--<field name="view_id" ref="dvthelp_hr_history_tree"/>-->
+        <!--</record>-->
+
+        <!--<record id="dvthelp_hr_chreasion_tree" model="ir.ui.view">-->
+            <!--<field name="name">dvthelp.hr.chreasion</field>-->
+            <!--<field name="model">hr.chreasion</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree>-->
+                    <!--<field name="name"/>-->
+                    <!--<field name="style"/>-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record id="dvthelp_hr_chreasion_form" model="ir.ui.view">-->
+            <!--<field name="name">dvthelp.hr.chreasion</field>-->
+            <!--<field name="model">hr.chreasion</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form>-->
+                    <!--<sheet>-->
+                        <!--<group>-->
+                            <!--<field name="name"/>-->
+                            <!--<field name="style" required="1"/>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="dvthelp_hr_chreasion_action" model="ir.actions.act_window">-->
+            <!--<field name="name">职位变动原因</field>-->
+            <!--<field name="res_model">hr.chreasion</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form</field>-->
+            <!--<field name="view_id" ref="dvthelp_hr_chreasion_tree"/>-->
+        <!--</record>-->
+
+        <!--<record id="dvthelp_hr_goaway_tree" model="ir.ui.view">-->
+            <!--<field name="name">dvthelp.hr.goaway</field>-->
+            <!--<field name="model">hr.goaway</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<tree>-->
+                    <!--<field name="change_date" />-->
+                    <!--<field name="employee_id" />-->
+                <!--</tree>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record id="dvthelp_hr_goaway_search" model="ir.ui.view">-->
+            <!--<field name="name">dvthelp.hr.goaway</field>-->
+            <!--<field name="model">hr.goaway</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<search>-->
+                    <!--<field name="employee_id" />-->
+                    <!--<field name="change_date"/>-->
+                    <!--<field name="is_confirm"/>-->
+                <!--</search>-->
+            <!--</field>-->
+        <!--</record>-->
+        <!--<record id="dvthelp_hr_goaway_form" model="ir.ui.view">-->
+            <!--<field name="name">dvthelp.hr.goaway</field>-->
+            <!--<field name="model">hr.goaway</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<form>-->
+                    <!--<header>-->
+                        <!--<button name="confirm" type="object" string="确认" attrs="{'invisible':[('state','=','confirm')]}"/>-->
+                        <!--<field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>-->
+                    <!--</header>-->
+                    <!--<sheet>-->
+                        <!--<group>-->
+                            <!--<field name="change_date" required="1"/>-->
+                            <!--<field name="employee_id" required="1" domain="[('p_state','=','inposition')]"/>-->
+                            <!--<field name="origin_dep_q" />-->
+                            <!--<field name="origin_pos_q" />-->
+                            <!--<field name="change_reasion" domain="[('style','=','go')]"/>-->
+                            <!--<field name="note"/>-->
+                        <!--</group>-->
+                    <!--</sheet>-->
+                <!--</form>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<record id="dvthelp_hr_goaway_action" model="ir.actions.act_window">-->
+            <!--<field name="name">离职登记</field>-->
+            <!--<field name="res_model">hr.goaway</field>-->
+            <!--<field name="view_type">form</field>-->
+            <!--<field name="view_mode">tree,form</field>-->
+            <!--<field name="view_id" ref="dvthelp_hr_goaway_tree"/>-->
+        <!--</record>-->
+
+        <!--<menuitem name="变更登记" id="dvthelp_hr_history" parent="hr.menu_hr_root" action="dvthelp_hr_history_action"/>-->
+        <!--<menuitem name="职位变动原因" id="dvthelp_hr_chreasion" parent="dvthelp_hr" action="dvthelp_hr_chreasion_action"/>-->
+        <!--<menuitem name="离职登记" id="dvthelp_hr_goaway" parent="hr.menu_hr_root" action="dvthelp_hr_goaway_action"/>-->
+    </data>
+</openerp>

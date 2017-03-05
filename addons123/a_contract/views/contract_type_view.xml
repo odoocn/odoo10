@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<!--合同分类视图-->
+	<record model="ir.ui.view" id="cm_type_form">
+		<field name="name">"合同分类"</field>
+		<field name="type">form</field>
+		<field name="model">cm.type</field>
+		<field name="arch" type="xml">
+			<form string="合同分类">
+				<sheet>
+					<h1><field name="name" string="分类名称" placeholder="分类名称"/></h1>
+					<group>
+						<group>
+							<field name="kind" string="业务类型" widget="radio"
+									options="{'horizontal': true}"/>
+						</group>
+						<group>
+							<field name="order" string="订单"/>
+							<field name="invoice" string="发票或账单"/>
+						</group>
+					</group>
+					<field name="note" placeholder="描述"/>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	
+<!--合同分类列表-->
+	<record model="ir.ui.view" id="cm_type_tree">
+		<field name="name">合同分类</field>
+		<field name="type">tree</field>
+		<field name="model">cm.type</field>
+		<field name="arch" type="xml">
+			<tree string="合同分类">
+				<field name="name" string="分类名称"/>
+				<field name="kind" string="业务类型"/>
+				<field name="order" string="订单"/>
+				<field name="invoice" string="发票或账单"/>
+			</tree>
+		</field>
+	</record>
+
+<!--动作-->
+	<record model="ir.actions.act_window"  id="cm_type_action">
+		<field name="name">合同分类</field>
+		<field name="res_model">cm.type</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">在这里创建您的合同分类信息</p>
+		</field>
+	</record>
+
+	
+<!--&lt;!&ndash;合同标的物视图&ndash;&gt;-->
+	<!--<record model="ir.ui.view" id="cm_product_form">-->
+		<!--<field name="name">"合同标的物"</field>-->
+		<!--<field name="type">form</field>-->
+		<!--<field name="model">cm.product</field>-->
+		<!--<field name="arch" type="xml">-->
+			<!--<form string="合同分类">-->
+				<!--<sheet>-->
+					<!--<h1><field name="name" string="标的物名称" placeholder="名称"/></h1>-->
+				<!--</sheet>-->
+			<!--</form>-->
+		<!--</field>-->
+	<!--</record>-->
+	<!---->
+<!--&lt;!&ndash;合同标的物列表&ndash;&gt;-->
+	<!--<record model="ir.ui.view" id="cm_product_tree">-->
+		<!--<field name="name">合同标的物</field>-->
+		<!--<field name="type">tree</field>-->
+		<!--<field name="model">cm.product</field>-->
+		<!--<field name="arch" type="xml">-->
+			<!--<tree string="标的物名称">-->
+				<!--<field name="name" string="标的物名称"/>-->
+			<!--</tree>-->
+		<!--</field>-->
+	<!--</record>-->
+
+<!--&lt;!&ndash;动作&ndash;&gt;-->
+	<!--<record model="ir.actions.act_window"  id="cm_product_action">-->
+		<!--<field name="name">合同标的物</field>-->
+		<!--<field name="res_model">cm.product</field>-->
+		<!--<field name="view_type">form</field>-->
+		<!--<field name="view_mode">tree,form</field>-->
+		<!--<field name="help" type="html">-->
+			<!--<p class="oe_view_nocontent_create">在这里创建您的合同标的物信息</p>-->
+		<!--</field>-->
+	<!--</record>-->
+
+
+<!--合同标签视图-->
+	<record model="ir.ui.view" id="cm_category_form">
+		<field name="name">"合同标签"</field>
+		<field name="type">form</field>
+		<field name="model">cm.category</field>
+		<field name="arch" type="xml">
+			<form string="标签">
+				<sheet>
+					<h1><field name="name" placeholder="标签"/></h1>
+					<group>
+						<group>
+							<field name="color" string="颜色索引"/>
+						</group>
+						<group>
+							<field name="active" string="有效"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+	<record model="ir.ui.view" id="cm_category_tree">
+		<field name="name">合同标签</field>
+		<field name="type">tree</field>
+		<field name="model">cm.category</field>
+		<field name="arch" type="xml">
+			<tree string="合同标签">
+				<field name="name" string="标签"/>
+			</tree>
+		</field>
+	</record>
+    <record model="ir.actions.act_window"  id="cm_category_action">
+		<field name="name">合同标签</field>
+		<field name="res_model">cm.category</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">在这里创建您的合同标签</p>
+		</field>
+	</record>
+	<!--菜单-->
+	<menuitem id="menu_contract_model" name="合同" sequence="5"/>
+
+	<menuitem id="menu_contract_settings" name="设置" parent="menu_contract_model"/>
+	<menuitem id="menu_cm_type" name="合同分类" parent="menu_contract_settings"
+			  action="cm_type_action"/>
+	<!--<menuitem id="menu_cm_product" name="标的物" parent="menu_contract_settings"-->
+			  <!--action="cm_product_action"/>-->
+	<menuitem id="menu_cm_category" name="标签" parent="menu_contract_settings"
+			  action="cm_category_action"/>
+
+</odoo>

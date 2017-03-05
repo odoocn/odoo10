@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <record model="ir.module.category" id="module_driserp_shop">
+        <field name="name">电商系统</field>
+        <field name="visible" eval="0" />
+    </record>
+
+    <record id="shop_user" model="res.groups">
+        <field name="name">员工</field>
+        <field name="category_id" ref="driserp.module_driserp_shop"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="sale_order_shop_user_rule" model="ir.rule">
+        <field name="name">电商员工的订单</field>
+        <field ref="model_sale_order" name="model_id"/>
+        <field name="domain_force">[('online_type','=','online'),('source_shop','in',user.shop_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_department_manager'))]"/>
+    </record>
+
+    <record id="sale_order_line_shop_user_rule" model="ir.rule">
+        <field name="name">电商员工的订单行</field>
+        <field ref="model_sale_order_line" name="model_id"/>
+        <field name="domain_force">[('online_type','=','online'),('order_id.source_shop','in',user.shop_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_leader'))]"/>
+    </record>
+
+    <record id="shop_manager" model="res.groups">
+        <field name="name">主管</field>
+        <field name="category_id" ref="driserp.module_driserp_shop"/>
+        <field name="implied_ids" eval="[(4, ref('driserp.shop_user'))]"/>
+    </record>
+
+    <record id="sale_order_shop_manager_rule" model="ir.rule">
+        <field name="name">电商主管的订单</field>
+        <field ref="model_sale_order" name="model_id"/>
+        <field name="domain_force">[('online_type','=','online')]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_department_manager'))]"/>
+    </record>
+
+    <record id="sale_order_line_shop_manager_rule" model="ir.rule">
+        <field name="name">电商主管的订单行</field>
+        <field ref="model_sale_order_line" name="model_id"/>
+        <field name="domain_force">[('online_type','=','online')]</field>
+        <field name="groups" eval="[(4, ref('sales_team.group_sale_leader'))]"/>
+    </record>
+
+    <record id="shop_admin" model="res.groups">
+        <field name="name">管理员</field>
+        <field name="category_id" ref="driserp.module_driserp_shop"/>
+        <field name="implied_ids" eval="[(4, ref('driserp.shop_manager'))]"/>
+    </record>
+
+    <record model="res.users" id="base.user_root">
+        <field eval="[(4,ref('driserp.shop_admin'))]" name="groups_id"/>
+    </record>
+    <!--自己的销售订单-->
+    <record id="sale.sale_order_personal_rule" model="ir.rule">
+        <field name="domain_force">['&amp;',('online_type','=','offline'),'|',('user_id','=',user.id),('user_id','=',False)]</field>
+    </record>
+    <record id="sale.sale_order_line_personal_rule" model="ir.rule">
+        <field name="domain_force">['&amp;',('order_id.online_type','=','offline'),'|',('order_id.user_id','=',user.id),('order_id.user_id','=',False)]</field>
+    </record>
+    <!--自己和组员的销售订单-->
+    <record id="sale.sale_order_personal_crew_rule" model="ir.rule">
+        <field name="domain_force">['&amp;',('online_type','=','offline'),'|','|',('user_id','=',user.id),('user_id','=',False), ('user_id.employee_id.coach_id.user_id', '=', user.id)]</field>
+    </record>
+    <record id="sale.sale_order_line_personal_crow_rule" model="ir.rule">
+        <field name="domain_force">['&amp;',('order_id.online_type','=','offline'),'|','|',('order_id.user_id','=',user.id),('order_id.user_id','=',False),('order_id.user_id.employee_id.coach_id.user_id', '=', user.id)]</field>
+    </record>
+    <!--自己和部门的销售订单-->
+    <record id="sale.sale_order_personal_department_rule" model="ir.rule">
+        <field name="domain_force">['&amp;',('online_type','=','offline'),'|','|',('user_id','=',user.id),('user_id','=',False), ('user_id.employee_id.parent_id.user_id', '=', user.id)]</field>
+    </record>
+    <record id="sale.sale_order_line_personal_department_rule" model="ir.rule">
+        <field name="domain_force">['&amp;',('order_id.online_type','=','offline'),'|','|',('order_id.user_id','=',user.id),('order_id.user_id','=',False),('order_id.user_id.employee_id.parent_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="ecps_shop_personal_rule" model="ir.rule">
+        <field name="name">自己所在的店铺</field>
+        <field ref="model_ecps_shop" name="model_id"/>
+        <field name="domain_force">[('id','in',user.shop_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_user'))]"/>
+    </record>
+
+    <record id="ecps_shop_all_rule" model="ir.rule">
+        <field name="name">全部的店铺</field>
+        <field ref="model_ecps_shop" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_manager'))]"/>
+    </record>
+
+    <record id="ecps_items_personal_rule" model="ir.rule">
+        <field name="name">自己所在的店铺商品</field>
+        <field ref="model_ecps_items" name="model_id"/>
+        <field name="domain_force">[('shop_id','in',user.shop_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_user'))]"/>
+    </record>
+
+    <record id="ecps_items_all_rule" model="ir.rule">
+        <field name="name">全部的店铺商品</field>
+        <field ref="model_ecps_items" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_manager'))]"/>
+    </record>
+
+    <record id="return_order_personal_rule" model="ir.rule">
+        <field name="name">自己所在的店铺退货单</field>
+        <field ref="model_return_order" name="model_id"/>
+        <field name="domain_force">[('source_shop','in',user.shop_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_user'))]"/>
+    </record>
+
+    <record id="return_order_all_rule" model="ir.rule">
+        <field name="name">全部的店铺退货单</field>
+        <field ref="model_return_order" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_manager'))]"/>
+    </record>
+
+    <record id="qty_confirm_personal_rule" model="ir.rule">
+        <field name="name">自己所在的店铺回告</field>
+        <field ref="model_qty_confirm" name="model_id"/>
+        <field name="domain_force">[('order_id.source_shop','in',user.shop_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_user'))]"/>
+    </record>
+
+    <record id="qty_confirm_all_rule" model="ir.rule">
+        <field name="name">全部的店铺回告</field>
+        <field ref="model_qty_confirm" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_manager'))]"/>
+    </record>
+
+    <record id="order_track_personal_rule" model="ir.rule">
+        <field name="name">自己所在的店铺数量跟踪</field>
+        <field ref="model_order_track" name="model_id"/>
+        <field name="domain_force">[('sale_id.source_shop','in',user.shop_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_user'))]"/>
+    </record>
+
+    <record id="order_track_all_rule" model="ir.rule">
+        <field name="name">全部的店铺数量跟踪</field>
+        <field ref="model_order_track" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_manager'))]"/>
+    </record>
+
+    <record id="ecps_box_personal_rule" model="ir.rule">
+        <field name="name">自己所在的店铺箱单</field>
+        <field ref="model_ecps_box" name="model_id"/>
+        <field name="domain_force">[('order_line_id.order_id.source_shop','in',user.shop_ids.ids)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_user'))]"/>
+    </record>
+
+    <record id="ecps_box_all_rule" model="ir.rule">
+        <field name="name">全部的店铺箱单</field>
+        <field ref="model_ecps_box" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('driserp.shop_manager'))]"/>
+    </record>
+</data>
+</openerp>

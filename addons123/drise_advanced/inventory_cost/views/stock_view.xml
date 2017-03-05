@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!--库存移动-->
+        <record id="inventory_inherit_stock_move_tree" model="ir.ui.view">
+            <field name="name">库存移动</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                    <field name="send_receive_type" />
+                </field>
+            </field>
+        </record>
+
+        <!--<record model="ir.ui.view" id="inventory_inherit_stock_move_picking_tree">-->
+            <!--<field name="name">inherit.stock.move.picking.tree</field>-->
+            <!--<field name="model">stock.move</field>-->
+            <!--<field name="inherit_id" ref="stock.view_move_picking_tree"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//field[@name='state']" position="before">-->
+                    <!--<field name="send_receive_type" options="{'no_create': True, 'no_open': True}"/>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record model="ir.ui.view" id="inventory_inherit_stock_picking_form">
+            <field name="name">stocking.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='backorder_id']" position="before">
+                    <field name="send_receive_type" options="{'no_create': True, 'no_open': True}"/>
+                </xpath>
+            </field>
+        </record>
+   </data>
+</openerp>

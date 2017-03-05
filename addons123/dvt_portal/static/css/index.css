@@ -1,0 +1,33 @@
+.banner img{ width:100%;}
+.r-con{width:1100px; margin:30px auto;}
+.r-con .r-lf{width:224px;}
+.r-con .r-lf .r-lfh2{ background:url(../img/lftit.png) no-repeat center top; width:224px; text-align:center; height:54px;line-height:45px; color:#fff;}
+.r-con .r-lf .r-lful{ width:222px; border-left:1px solid #d7d7d7; border-right:1px solid #d7d7d7;padding:5px 0 0 0;}
+.r-con .r-lf .r-lful li a{ height:41px; line-height:41px; color:#333; text-align:center; font-size:14px; display:block; margin:5px 0 0 0;}
+.r-con .r-lf .r-lful li a.active,
+.r-con .r-lf .r-lful li a:hover{height:40px;border-bottom:1px solid #ff8130; background:#f1f1f1;}
+.r-con .r-lf .r-lfbot{ background:url(../img/lfbot.png) no-repeat center bottom; width:224px; height:9px; display:block;}
+.r-con .r-rg{ width:800px; margin:0 0 0 30px;}
+.r-con .r-rg .r-rgtit{ width:800px; height:60px; line-height:60px; border-bottom:2px solid #cacaca;}
+.r-con .r-rg .r-rgtit h2.r-rgtith2 span,.r-con .r-rg .r-rgtit h2.r-rgtith2 a,.r-con .r-rg .r-rgtit h2.r-rgtith2 em{ font-size:14px; margin:0 5px; display:block; line-height:60px; float:left;}
+.r-con .r-rg .r-rgtit h2.r-rgtith2 .r-rgimg{ float:left; vertical-align:middle; margin:18px 5px 0 0;}
+.r-con .r-rg .r-rgtit h2.r-rgtith2 a:hover,.r-con .r-rg .r-rgtit h2.r-rgtith2 a.active{color:#ff8130;}
+.r-con .r-rg .r-rgtop{ height:95px; border-bottom:1px solid #cacaca;}
+.r-con .r-rg .r-rgtop span,.r-con .r-rg .r-rgtop em{ line-height:95px; font-size:14px; display:block; float:left;}
+.r-con .r-rg .r-rgtop span.r-rgspan1{ font-size:24px;}
+.r-con .r-rg .r-rgtop em{ font-size:36px; color:#959595; font-family:"宋体";}
+.r-rgcontit{ background:#eaeaea; border:1px solid #cacaca; border-bottom:1px solid #ff8130; margin:10px 0 0 0; height:40px;}
+.r-rgcontit a{color:#333;display:block; text-align:center; width:128px;height:40px; line-height:40px; font-size:14px;}
+.r-rgcontit a.active{ background:#ff8130; color:#fff;}
+.r-rgcon .r-rgconimg{ text-align:center; margin:20px 0;}
+.r-rgcon .r-rgconimg .r-rgconcl img{ border:1px solid #ddd; padding:10px; margin:10px 15px 0 0;}
+.r-rgcon .r-rgconimg .r-rgconcl1 img{ border:1px solid #ddd; padding:10px; margin:10px 20px 0 0;}
+.r-rgcon .r-rgconfont p{ text-indent:2em; font-size:14px; color:#333; line-height:30px; margin:5px 0 0 0;}
+.r-rgcon .r-rgconimg .r-rgconcl2 img{ border:none; padding:0; margin:5px 20px 0 0;}
+.r-rgcon .r-rgconfont1 p{ font-size:14px; line-height:40px; text-align:left;ffont-family:"微软雅黑";}
+.r-rgcon .r-rgconfont1 p font{ font-size:24px;}
+.r-rgul{ margin:20px 0 0 0;}
+.r-rgul li{ height:52px; line-height:52px; border-bottom:1px solid #ddd;}
+.r-rgul li a font{ color:#333;}
+.r-page{ margin:15px 0 0 0;}
+.r-pagelist a{ padding:3px 5px; border:1px solid #ddd;}

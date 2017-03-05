@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="action_payments_payable_from_req" model="ir.actions.act_window">
+            <field name="name">付款</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+            <field name="context">{'default_payment_type': 'outbound', 'default_purchase_id': po_id,
+                'default_amount':reg_pay, 'default_requisition_id': active_id,'default_journal_id':journal_id,
+                'default_partner_id':vendor_id}</field>
+            <field name="view_id" ref="account.view_account_payment_form"/>
+        </record>
+
+        <record id="action_paybills_from_req" model="ir.actions.act_window">
+            <field name="name">供应商帐单</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="account.invoice_supplier_form"/>
+            <field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase', 'default_purchase_id': po_id}</field>
+        </record>
+
+        <record id="requisition_pay_reg_view" model="ir.ui.view">
+            <field name="name">付款申请</field>
+            <field name="model">requisition.pay</field>
+            <field name="arch" type="xml">
+                <form string="付款申请">
+                    <h1><field name="name" placeholder="说明" required="1"/></h1>
+                    <group>
+                        <group>
+                            <field name="vendor_id"/>
+                        </group>
+                        <group>
+                            <field name="journal_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="req_amount" required="1"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="amount" readonly="1"/>
+                            <field name="last_amount" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="采购订单">
+                            <field name="purchase_ids" domain="[('state','in',('purchase','done'))]"
+                                   options="{'no_create': 1, 'no_open': 1}"/>
+                        </page>
+                        <page string="备注">
+                            <field name="description" placeholder="备注..." nolabel="1"/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="finish" string="完成并提交" type="object"
+                                class="btn btn-sm btn-primary oe_express_print">
+                            完成并提交
+                        </button>
+                        <button string="取消" class="btn btn-sm btn-default" special="cancel">
+                            取消
+                        </button>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="requisition_pay_view_tree" model="ir.ui.view">
+            <field name="name">付款申请</field>
+            <field name="model">requisition.pay</field>
+            <field name="arch" type="xml">
+                <tree create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="vendor_id"/>
+                    <field name="create_uid" string="申请人"/>
+                    <field name="create_date" string="申请时间"/>
+                    <field name="purchase_ids" widget="many2many_tags"/>
+                    <field name="req_amount"/>
+                    <field name="paid"/>
+                    <field name="state" invisible="context.get('undone')"/>
+                    <field name="undone_state" invisible="not context.get('undone')"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="requisition_pay_watch_view" model="ir.ui.view">
+            <field name="name">付款申请</field>
+            <field name="model">requisition.pay</field>
+            <field name="arch" type="xml">
+                <form string="付款申请" create="false" delete="false">
+                    <header>
+                        <button name="%(action_payments_payable_from_req)d" type="action" string="登记付款" class="btn-primary"
+                                context="{'po_id': purchase_id,'reg_pay':req_amount,'vendor_id':vendor_id,'journal_id':journal_id}" groups="account.group_account_invoice"
+                                attrs="{'invisible':['|','|',('payment','!=',False),('state','!=','done'),('account_cancel','=',True)]}"/>
+                        <button name="create_bills" type="object" string="创建供应商帐单" class="btn-primary" states="done" groups="account.group_account_invoice"/>
+                        <!--<button name="create_payment" type="object" string="登记付款" class="btn-primary" states="done" groups="account.group_account_invoice"/>-->
+                        <button name="button_submit" type="object" string="提交" states="draft,cancel,reject"/>
+                        <button name="button_cancel" type="object" string="取消" states="checking"/>
+                        <button name="close_undone" type="object" string="关闭待办"
+                                attrs="{'invisible':['|','|',('undone_state','=',False),('state','!=','done')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,checking,cancel,done" statusbar_colors='{"submit":"blue","cancel":"red"}'/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_invoice"
+                                type="button" attrs="{'invisible':[('state','!=','done')]}"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                                <field name="undone_state" widget="boolean_button" options='{"terminology": "undone"}'/>
+                            </button>
+                            <button name="view_bills"
+                                type="object" attrs="{'invisible':[('state','!=','done')]}"
+                                class="oe_stat_button" string="供应商账单"
+                                icon="fa-pencil-square-o">
+                            </button>
+                        </div>
+                        <div class="oe_title"><h1><field name="name" class="oe_inline" attrs="{'readonly':[('state','in',('checking','done'))]}"/></h1></div>
+                        <group>
+                            <group>
+                                <field name="create_uid" string="申请人" attrs="{'readonly':[('state','in',('checking','done'))]}"/>
+                                <field name="vendor_id"/>
+                                <field name="req_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="purchase_id" invisible="1"/>
+                                <field name="id" invisible="1" />
+                            </group>
+                            <group>
+                                <field name="create_date" string="申请时间" attrs="{'readonly':[('state','in',('checking','done'))]}"/>
+                                <field name="journal_id"/>
+                                <field name="paid" readonly="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="last_amount" readonly="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <group>
+                            <field name="account_cancel" invisible="1"/>
+                            <field name="payment" attrs="{'readonly':[('state','in',('checking','done'))]}"/>
+                            <div attrs="{'invisible':[('account_cancel','=',False)]}">
+                                待办被取消
+                            </div>
+                        </group>
+                        <notebook>
+                            <page string="采购订单">
+                                <field name="purchase_ids" options="{'no_create': 1, 'no_open': 1}"/>
+                            </page>
+                            <page string="备注">
+                                <field name="description" placeholder="备注..." nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_requisition_pay_filter" model="ir.ui.view">
+            <field name="name">requisition.pay.filter</field>
+            <field name="model">requisition.pay</field>
+            <field name="arch" type="xml">
+                <search string="开票申请">
+                    <field name="name" string="开票申请" filter_domain="[('name','ilike',self)]"/>
+                    <field name="purchase_id" string="采购订单" filter_domain="[('purchase_id','ilike',self)]"/>
+                    <filter string="待办" domain="[('undone_state','=',True)]" name="undone_requisition_pay"/>
+                    <separator/>
+                    <filter string="审核完成" domain="[('state','=','done')]" name="done_requisition_pay"/>
+                    <group expand="0" string="Group By">
+                        <filter string="采购订单" domain="[]" context="{'group_by':'purchase_id'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_requisition_reg" model="ir.actions.act_window">
+            <field name="name">付款申请</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.pay</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="requisition_pay_reg_view"/>
+            <field name="context">{'default_purchase_ids': active_ids}</field>
+        </record>
+        <!-- 待办 -->
+        <record id="action_requisition_all" model="ir.actions.act_window">
+            <field name="name">付款申请</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.pay</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_requisition_pay_filter"/>
+            <field name="context">{'search_default_undone_requisition_pay':1, 'undone':1}</field>
+            <field name="domain">[('state','=','done')]</field>
+            <!--<field name="context">{'search_default_undone_requisition_pay':1,-->
+                <!--'search_default_done_requisition_pay':1}</field>-->
+        </record>
+
+        <record id="action_requisition_watch_tree" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="requisition_pay_view_tree"/>
+            <field name="act_window_id" ref="action_requisition_all"/>
+        </record>
+
+        <record id="action_requisition_watch_form" model="ir.actions.act_window.view">
+            <field eval="3" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="requisition_pay_watch_view"/>
+            <field name="act_window_id" ref="action_requisition_all"/>
+        </record>
+
+        <menuitem name="付款申请" action="action_requisition_all" parent="account.menu_finance_payables" id="menu_account_reqpay"/>
+        <!-- 采购订单 -->
+        <record id="action_requisition_po" model="ir.actions.act_window">
+            <field name="name">付款申请</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.pay</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'form_no_edit': ['|', ('state','=','checking'), ('state', '=', 'done')]}</field>
+            <field name="domain">[('purchase_ids','in',active_id)]</field>
+        </record>
+
+        <record id="action_requisition_po_watch_tree" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="requisition_pay_view_tree"/>
+            <field name="act_window_id" ref="action_requisition_po"/>
+        </record>
+
+        <record id="action_requisition_po_watch_form" model="ir.actions.act_window.view">
+            <field eval="3" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="requisition_pay_watch_view"/>
+            <field name="act_window_id" ref="action_requisition_po"/>
+        </record>
+        <menuitem id="req_advance_payment_menu" name="付款申请" parent="purchase.menu_purchase_root"/>
+        <!-- 自己的 -->
+        <record id="action_requisition_self" model="ir.actions.act_window">
+            <field name="name">我的付款申请</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.pay</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_requisition_pay_filter"/>
+            <field name="domain">[('create_uid','=',uid)]</field>
+            <field name="context">{'form_no_edit': ['|', ('state','=','checking'), ('state', '=', 'done')]}</field>
+            <!--<field name="context">{'search_default_undone_requisition_pay':1,-->
+                <!--'search_default_done_requisition_pay':1}</field>-->
+        </record>
+
+        <record id="action_requisition_watch_tree_self" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="requisition_pay_view_tree"/>
+            <field name="act_window_id" ref="action_requisition_self"/>
+        </record>
+
+        <record id="action_requisition_watch_form_self" model="ir.actions.act_window.view">
+            <field eval="3" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="requisition_pay_watch_view"/>
+            <field name="act_window_id" ref="action_requisition_self"/>
+        </record>
+
+        <menuitem id="req_payment_self_menu" name="我的付款申请" parent="req_advance_payment_menu" action="action_requisition_self" sequence="0"/>
+
+        <record id="inherit_req_advance_payment_form" model="ir.ui.view">
+            <field name="name">Invoice Orders</field>
+            <field name="model">sale.advance.payment.inv</field>
+            <field name="inherit_id" ref="sale.view_sale_advance_payment_inv"/>
+            <field name="arch" type="xml">
+                <xpath expr="//footer" position="replace">
+                    <footer>
+                        <button name="create_invoices_by_req" string="创建并查看发票" type="object"
+                            context="{'open_invoices': True}" class="btn-primary"/>
+                        <button string="取消" class="btn-default" special="cancel"/>
+                    </footer>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_view_req_advance_payment_inv" model="ir.actions.act_window">
+            <field name="name">开票</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.advance.payment.inv</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'req_id': active_id, 'default_req_id': active_id}</field>
+        </record>
+
+        <record id="requisition_invoice_reg_view" model="ir.ui.view">
+            <field name="name">开票申请</field>
+            <field name="model">requisition.invoice</field>
+            <field name="arch" type="xml">
+                <form string="开票申请">
+                    <h1><field name="name" placeholder="说明" required="1"/></h1>
+                    <group>
+                        <field name="customer"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="req_amount" required="1"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="销售订单">
+                            <field name="order_ids" domain="[('state','in',('sale','done'))]"
+                                   options="{'no_create': 1, 'no_open': 1}"/>
+                        </page>
+                        <page string="备注">
+                            <field name="description" placeholder="备注..." nolabel="1"/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="finish" string="完成并提交" type="object"
+                                class="btn btn-sm btn-primary oe_express_print">
+                            完成并提交
+                        </button>
+                        <button string="取消" class="btn btn-sm btn-default" special="cancel">
+                            取消
+                        </button>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="requisition_invoice_view_tree" model="ir.ui.view">
+            <field name="name">开票申请</field>
+            <field name="model">requisition.invoice</field>
+            <field name="arch" type="xml">
+                <tree create="false" edit="false" delete="false">
+                    <field name="name"/>
+                    <field name="customer"/>
+                    <field name="create_uid" string="申请人"/>
+                    <field name="create_date" string="申请时间"/>
+                    <field name="order_ids" widget="many2many_tags"/>
+                    <field name="req_amount"/>
+                    <field name="state" invisible="context.get('undone')"/>
+                    <field name="undone_state" invisible="not context.get('undone')"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="requisition_invoice_watch_view" model="ir.ui.view">
+            <field name="name">开票申请</field>
+            <field name="model">requisition.invoice</field>
+            <field name="arch" type="xml">
+                <form string="开票申请" create="false" delete="false">
+                    <header>
+                        <button name="%(action_view_req_advance_payment_inv)d" string="创建发票"
+                            type="action" class="btn-primary" groups="account.group_account_invoice"
+                            attrs="{'invisible': ['|','|','|',('invoice_status','!=','to invoice'),('state','!=','done'),('invoice_id','!=',False),('account_cancel','=',True)]}"/>
+                        <button name="button_submit" type="object" string="提交" states="draft,cancel,reject"/>
+                        <button name="button_cancel" type="object" string="取消" states="checking"/>
+                        <button name="close_undone" type="object" string="关闭待办"
+                                attrs="{'invisible':['|',('state','!=','done'),('undone_state','=',False)]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,checking,cancel,done" statusbar_colors='{"submit":"blue","cancel":"red"}'/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_invoice"
+                                type="button" attrs="{'invisible':[('state','!=','done')]}"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                                <field name="undone_state" widget="boolean_button" options='{"terminology": "undone"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title"><h1><field name="name" class="oe_inline" attrs="{'readonly':[('state','in',('checking','done'))]}"/></h1></div>
+                        <group>
+                            <field name="invoice_status" invisible="1"/>
+                            <group>
+                                <field name="create_uid" string="创建人" attrs="{'readonly':[('state','in',('checking','done'))]}"/>
+                                <field name="customer"/>
+                                <field name="id" invisible="1" />
+                                <!--<field name="order_id" attrs="{'readonly':[('state','in',('checking','done'))]}"/>-->
+                            </group>
+                            <group>
+                                <field name="create_date" string="创建时间" attrs="{'readonly':[('state','in',('checking','done'))]}"/>
+                                <field name="req_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="account_cancel" invisible="1"/>
+                            <field name="invoice_id" attrs="{'readonly':[('state','in',('checking','done'))]}"/>
+                            <div attrs="{'invisible':[('account_cancel','=',False)]}">
+                                待办被取消
+                            </div>
+                        </group>
+                        <notebook>
+                            <page string="销售订单">
+                                <field name="order_ids" options="{'no_create': 1, 'no_open': 1}"/>
+                            </page>
+                            <page string="备注">
+                                <field name="description" placeholder="备注..." nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_requisition_invoice_filter" model="ir.ui.view">
+            <field name="name">requisition.invoice.filter</field>
+            <field name="model">requisition.invoice</field>
+            <field name="arch" type="xml">
+                <search string="开票申请">
+                    <field name="name" string="开票申请" filter_domain="[('name','ilike',self)]"/>
+                    <field name="order_ids" string="销售订单" filter_domain="[('order_ids','in',self)]"/>
+                    <field name="invoice_id" string="客户开票" filter_domain="[('invoice_id','ilike',self)]"/>
+                    <filter string="待办" domain="[('undone_state','=',True)]" name="undone_requisition_invoice"/>
+                    <separator/>
+                    <filter string="审核完成" domain="[('state','=','done')]" name="done_requisition_invoice"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_invoice_id" string="客户开票" domain="[]" context="{'group_by':'invoice_id'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_requisition_invoice_reg" model="ir.actions.act_window">
+            <field name="name">开票申请</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="requisition_invoice_reg_view"/>
+            <field name="context">{'default_order_ids': active_ids}</field>
+        </record>
+        <!-- 待办 -->
+        <record id="action_requisition_invoice_all" model="ir.actions.act_window">
+            <field name="name">开票待办</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_requisition_invoice_filter"/>
+            <field name="context">{'search_default_undone_requisition_invoice':1, 'undone': 1}</field>
+            <field name="domain">[('state','=','done')]</field>
+            <!--<field name="context">{'search_default_undone_requisition_invoice': 1,-->
+                <!--'search_default_done_requisition_invoice':1}</field>-->
+        </record>
+
+
+
+        <record id="action_requisition_invoice_watch_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="requisition_invoice_view_tree"/>
+            <field name="act_window_id" ref="action_requisition_invoice_all"/>
+        </record>
+
+        <record id="action_requisition_invoice_watch_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="requisition_invoice_watch_view"/>
+            <field name="act_window_id" ref="action_requisition_invoice_all"/>
+        </record>
+
+        <menuitem name="开票申请" action="action_requisition_invoice_all" parent="account.menu_finance_receivables" id="menu_account_reqinv"/>
+        <!-- 销售订单 -->
+        <record id="action_requisition_invoice_so" model="ir.actions.act_window">
+            <field name="name">开票申请</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('order_ids','in',active_id)]</field>
+            <field name="context">{'form_no_edit': ['|', ('state','=','checking'), ('state', '=', 'done')]}</field>
+        </record>
+
+        <record id="action_requisition_so_watch_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="requisition_invoice_view_tree"/>
+            <field name="act_window_id" ref="action_requisition_invoice_so"/>
+        </record>
+
+        <record id="action_requisition_so_watch_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="requisition_invoice_watch_view"/>
+            <field name="act_window_id" ref="action_requisition_invoice_so"/>
+        </record>
+
+        <menuitem id="requisition_invoice_menu" name="开票申请" parent="sales_team.menu_base_partner" sequence="5"/>
+        <menuitem action="sale.action_orders_to_invoice"
+            id="sale.menu_sale_order_invoice" parent="requisition_invoice_menu"
+            sequence="0"/>
+        <!-- 自己的 -->
+        <record id="action_requisition_invoice_self" model="ir.actions.act_window">
+            <field name="name">我的开票申请</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">requisition.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_requisition_invoice_filter"/>
+            <field name="context">{'form_no_edit': ['|', ('state','=','checking'), ('state', '=', 'done')]}</field>
+            <field name="domain">[('create_uid','=',uid)]</field>
+        </record>
+
+        <record id="action_requisition_invoice_watch_tree_self" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="requisition_invoice_view_tree"/>
+            <field name="act_window_id" ref="action_requisition_invoice_self"/>
+        </record>
+
+        <record id="action_requisition_invoice_watch_form_self" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="requisition_invoice_watch_view"/>
+            <field name="act_window_id" ref="action_requisition_invoice_self"/>
+        </record>
+
+        <menuitem id="requisition_invoice_self_menu" name="我的开票申请" parent="requisition_invoice_menu" sequence="5"
+                  action="action_requisition_invoice_self"/>
+    </data>
+</openerp>

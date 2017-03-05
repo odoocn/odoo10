@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="equipment_check_result_tree" model="ir.ui.view">
+        <field name="name">equipment.check.result.tree</field>
+        <field name="model">equipment.check.result</field>
+        <field name="arch" type="xml">
+            <tree string="设备点检结果">
+                <field name="equipment_check_id"/>
+                <field name="state"/>
+                <field name="check_user"/>
+                <field name="check_time"/>
+                <field name="note" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_check_result_action" model="ir.actions.act_window">
+        <field name="name">设备点检结果</field>
+        <field name="res_model">equipment.check.result</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_check_result_tree"/>
+        <field name="domain"></field>
+    </record>
+
+
+    <!--设备检查点-->
+    <record id="equipment_check_view_form" model="ir.ui.view">
+        <field name="name">equipment.check.form</field>
+        <field name="model">equipment.check</field>
+        <field name="arch" type="xml">
+            <form string="设备检查点">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(equipment_check_result_action)d"
+                                type="action"
+                                class="oe_stat_button"
+                                icon="fa-ticket">
+                            <field string="巡检结果" name="result_count" widget="statinfo" domain="[('equipment_check_id', '=', active_id)]"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" string="检查点名称"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="equipment"/>
+                        </group>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="place"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <group string="检查任务"/>
+                    <field name="description">
+                        <tree editable="bottom">
+                            <field name="name"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_check_view_tree" model="ir.ui.view">
+        <field name="name">equipment.check.tree</field>
+        <field name="model">equipment.check</field>
+        <field name="arch" type="xml">
+            <tree string="设备检查点">
+                <field name="name" />
+                <field name="equipment"/>
+                <field name="code"/>
+                <field name="place"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id='equipment_check_view_kanban' model='ir.ui.view'>
+        <field name="name">equipment.check.kanban</field>
+        <field name="model">equipment.check</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="color"/>
+                <field name="equipment"/>
+                <field name="code"/>
+                <field name="place"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                            <div>
+                                <div class="o_dropdown_kanban dropdown">
+
+                                    <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                                        <span class="fa fa-bars fa-lg"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <t t-if="widget.editable">
+                                            <li>
+                                                <a type="edit">编辑...</a>
+                                            </li>
+                                        </t>
+                                        <t t-if="widget.deletable">
+                                            <li>
+                                                <a type="delete">删除</a>
+                                            </li>
+                                        </t>
+                                        <li>
+                                            <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div>
+                                        <b>
+                                            <field name="name"/>
+                                        </b>
+                                    </div>
+                                    <div class="mt4">
+                                        <div t-if="record.code.raw_value">
+                                            <field name="code"/>
+                                        </div>
+                                    </div>
+                                    <div class="mt4 label label-danger"
+                                         t-if="record.state.raw_value=='0'">
+                                        <field name="state"/>
+                                    </div>
+                                    <div class="mt4 label label-green" style="background-color: #24ab24;"
+                                         t-if="record.state.raw_value=='1'">
+                                        <field name="state"/>
+                                    </div>
+                                </div>
+                                <div class="oe_clear"></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="equipment_check_view_pivot" model="ir.ui.view">
+        <field name="name">equipment.check.pivot</field>
+        <field name="model">maintenance.check</field>
+        <field name="arch" type="xml">
+            <pivot string="巡检点">
+                <field name="name"/>
+                <field name="state"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="equipment_check_view_graph" model="ir.ui.view">
+        <field name="name">equipment.check.graph</field>
+        <field name="model">maintenance.check</field>
+        <field name="arch" type="xml">
+            <graph string="巡检点">
+                <field name="name"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+
+
+
+    <record id="equipment_check_action" model="ir.actions.act_window">
+        <field name="name">设备检查点</field>
+        <field name="res_model">equipment.check</field>
+        <field name="view_mode">kanban,pivot,graph,tree,form</field>
+        <field name="view_id" ref="equipment_check_view_kanban"/>
+    </record>
+
+    <!--设备巡检线路-->
+    <record id="equipment_line_view_form" model="ir.ui.view">
+        <field name="name">equipment.line.form</field>
+        <field name="model">equipment.line</field>
+        <field name="arch" type="xml">
+            <form string="设备巡检线路">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="check_user"/>
+                        </group>
+                    </group>
+
+                    <notebook string="路线详情">
+                        <page string="检查点">
+                            <field name="check_point"/>
+                        </page>
+                        <page string="巡查计划">
+                            <field name="plan">
+                                <tree editable="bottom">
+                                    <field name="week"/>
+                                    <field name="hour_from"  widget="float_time"/>
+                                    <field name="hour_to"  widget="float_time"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_line_view_tree" model="ir.ui.view">
+        <field name="name">equipment.line.tree</field>
+        <field name="model">equipment.line</field>
+        <field name="arch" type="xml">
+            <tree string="设备巡检线路">
+                <field name="name"/>
+                <field name="check_user"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_line_action" model="ir.actions.act_window">
+        <field name="name">设备巡检线路</field>
+        <field name="res_model">equipment.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_line_view_tree"/>
+    </record>
+
+    <!--设备巡检计划-->
+    <record id="equipment_plan_view_form" model="ir.ui.view">
+        <field name="name">equipment.plan.form</field>
+        <field name="model">equipment.plan</field>
+        <field name="arch" type="xml">
+            <form string="设备巡检计划">
+                <sheet>
+                    <group>
+                        <field name="week"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="hour_from" widget="float_time"/>
+                            <field name="hour_to" widget="float_time"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="equipment_plan_view_tree" model="ir.ui.view">
+        <field name="name">equipment.plan.tree</field>
+        <field name="model">equipment.plan</field>
+        <field name="arch" type="xml">
+            <tree string="设备巡检计划">
+                <field name="week"/>
+                <field name="hour_from"/>
+                <field name="hour_to"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_plan_action" model="ir.actions.act_window">
+        <field name="name">设备巡检计划</field>
+        <field name="res_model">equipment.plan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="equipment_plan_view_tree"/>
+    </record>
+
+
+    <!--设备点检结果-->
+    <record id="equipment_check_result_form" model="ir.ui.view">
+        <field name="name">equipment.check.result.form</field>
+        <field name="model">equipment.check.result</field>
+        <field name="arch" type="xml">
+            <form string="设备点检结果">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="equipment_check_id" placeholder="设备名称"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="check_user"/>
+                        </group>
+                        <group>
+                            <field name="check_time"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="note"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+</odoo>
